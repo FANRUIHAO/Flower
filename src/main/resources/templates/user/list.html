@@ -1,0 +1,235 @@
+<html>
+<head>
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        /* 新拟态按钮样式 */
+        /* 定义按钮的基础样式 */
+        .neumorphic-btn {
+            background-color: #007bff; /* 蓝色背景 */
+            color: #ffffff; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            padding: 10px 20px; /* 内边距 */
+            font-size: 16px; /* 字体大小 */
+            border-radius: 25px; /* 圆角 */
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */
+            transition: all 0.3s ease; /* 过渡效果 */
+            cursor: pointer; /* 鼠标指针 */
+        }
+
+        /* 鼠标悬停时的样式 */
+        .neumorphic-btn:hover {
+            background-color: #0056b3; /* 深蓝色背景 */
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */
+        }
+
+        /* 鼠标按下时的样式 */
+        .neumorphic-btn:active {
+            background-color: #003d80; /* 更深的蓝色背景 */
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */
+        }
+        /* 红色按钮样式 */
+        .neumorphic-btn-red {
+            background-color: #dc3545; /* 红色背景 */
+            color: #ffffff; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            padding: 10px 20px; /* 内边距 */
+            font-size: 16px; /* 字体大小 */
+            border-radius: 25px; /* 圆角 */
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */
+            transition: all 0.3s ease; /* 过渡效果 */
+            cursor: pointer; /* 鼠标指针 */
+        }
+
+        /* 红色按钮鼠标悬停时的样式 */
+        .neumorphic-btn-red:hover {
+            background-color: #c82333; /* 深红色背景 */
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */
+        }
+
+        /* 红色按钮鼠标按下时的样式 */
+        .neumorphic-btn-red:active {
+            background-color: #bd2130; /* 更深的红色背景 */
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */
+        }
+    </style>
+</head>
+<body>
+    <form class="form-inline">
+        <a>用户名</a>
+        <div class="form-group mb-2">
+            <label for="exampleInputName2" class="sr-only">Name</label>
+            <input type="text" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">
+        </div>
+        <button type="submit" class="neumorphic-btn">Search</button>
+        <button type="button" class="neumorphic-btn" data-toggle="modal" data-target="#addModal">Add</button>
+    </form>
+
+
+    <table class="table table-bordered" >
+        <thead>
+        <tr>
+            <th scope="col">序号</th>
+            <th scope="col">用户名</th>
+            <th scope="col">密码</th>
+            <th scope="col">备注</th>
+            <th scope="col">删除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td><button type="submit" class="neumorphic-btn-red">Delete</button></td>
+
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+            <td><button type="submit" class="neumorphic-btn-red">Delete</button></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+            <td><button type="submit" class="neumorphic-btn-red">Delete</button></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">添加用户信息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="userName">用户名</label>
+                            <input type="text" class="form-control" id="userName" placeholder="请输入用户名">
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">邮箱</label>
+                            <input type="email" class="form-control" id="userEmail" placeholder="请输入邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="userPassword">密码</label>
+                            <input type="password" class="form-control" id="userPassword" placeholder="请输入密码">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <script src="/jquery-2.1.4.js"></script>
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>用户管理</title>-->
+<!--    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">-->
+<!--    <style>-->
+<!--        /* 新拟态按钮样式 */-->
+<!--        .neumorphic-btn {-->
+<!--            background-color: #007bff; /* 蓝色背景 */-->
+<!--            color: #ffffff; /* 白色文字 */-->
+<!--            border: none; /* 去掉边框 */-->
+<!--            padding: 10px 20px; /* 内边距 */-->
+<!--            font-size: 16px; /* 字体大小 */-->
+<!--            border-radius: 25px; /* 圆角 */-->
+<!--            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */-->
+<!--            transition: all 0.3s ease; /* 过渡效果 */-->
+<!--            cursor: pointer; /* 鼠标指针 */-->
+<!--            margin-right: 10px; /* 按钮间距 */-->
+<!--        }-->
+
+<!--        .neumorphic-btn:hover {-->
+<!--            background-color: #0056b3; /* 深蓝色背景 */-->
+<!--            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */-->
+<!--        }-->
+
+<!--        .neumorphic-btn:active {-->
+<!--            background-color: #003d80; /* 更深的蓝色背景 */-->
+<!--            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */-->
+<!--        }-->
+
+<!--        .neumorphic-btn-red {-->
+<!--            background-color: #dc3545; /* 红色背景 */-->
+<!--            color: #ffffff; /* 白色文字 */-->
+<!--            border: none; /* 去掉边框 */-->
+<!--            padding: 10px 20px; /* 内边距 */-->
+<!--            font-size: 16px; /* 字体大小 */-->
+<!--            border-radius: 25px; /* 圆角 */-->
+<!--            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */-->
+<!--            transition: all 0.3s ease; /* 过渡效果 */-->
+<!--            cursor: pointer; /* 鼠标指针 */-->
+<!--        }-->
+
+<!--        .neumorphic-btn-red:hover {-->
+<!--            background-color: #c82333; /* 深红色背景 */-->
+<!--            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */-->
+<!--        }-->
+
+<!--        .neumorphic-btn-red:active {-->
+<!--            background-color: #bd2130; /* 更深的红色背景 */-->
+<!--            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container mt-5">-->
+<!--    <form class="form-inline">-->
+<!--        <a>用户名</a>-->
+<!--        <div class="form-group mb-2">-->
+<!--            <label for="exampleInputName2" class="sr-only">Name</label>-->
+<!--            <input type="text" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">-->
+<!--        </div>-->
+<!--        <button type="submit" class="neumorphic-btn">Search</button>-->
+<!--        &lt;!&ndash; 修改按钮类型为button，并添加data-toggle和data-target属性 &ndash;&gt;-->
+<!--        <button type="button" class="neumorphic-btn-red" data-toggle="modal" data-target="#addModal">Add</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!-- 模态框 -->
+
+
+<!--&lt;!&ndash; 引入 jQuery &ndash;&gt;-->
+<!--<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
+<!--&lt;!&ndash; 引入 Bootstrap JS &ndash;&gt;-->
+<!--<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

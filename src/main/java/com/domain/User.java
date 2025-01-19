@@ -1,16 +1,16 @@
-package domain;
+package com.domain;
 
 public class User {
     private Integer id;
-    private String user_name;
+    private String username;
     private String password;
 
     public Integer getId() {
         return id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
@@ -22,7 +22,7 @@ public class User {
     }
 
     public void setUser_name(String user_name) {
-        this.user_name = user_name;
+        this.username = user_name;
     }
 
     public void setPassword(String password) {
@@ -33,7 +33,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", user_name='" + user_name + '\'' +
+                ", user_name='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
