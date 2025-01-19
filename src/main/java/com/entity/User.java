@@ -1,4 +1,4 @@
-package com.domain;
+package com.entity;
 
 public class User {
     private Integer id;
@@ -21,8 +21,8 @@ public class User {
         this.id = id;
     }
 
-    public void setUser_name(String user_name) {
-        this.username = user_name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
@@ -33,7 +33,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", user_name='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
