@@ -1,22 +1,31 @@
 package com.service;
 
+import com.Mapper.UserMapper;
 import com.entity.User;
 import org.apache.ibatis.jdbc.Null;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
+    @Autowired
+    private UserMapper userMapper;
     public List<User> selectUser(){
-        List<User> list=new ArrayList<>();
-        User u=new User();
-        u.setId(2);
-        u.setUsername("tom");
-        u.setPassword("123456");
-        list.add(u);
+        List<User> list=userMapper.selectUser();
         return list;
+    }
+    public void deleteUser(Integer id) {
+        userMapper.deleteUser(id);
+    }
+
+    public void saveUser(User u) {
+        userMapper.insertUser(u);
+    }
+
+    public User selectUserById(Integer id) {
+        return userMapper.selectUserById(id);
     }
 
 }
