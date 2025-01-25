@@ -6,42 +6,52 @@ import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @RequestMapping("/login")
+    public String login(String username, String password, HttpSession session){
+        boolean b=userService.check(username,password, session);
+        if(b){
+            return "redirect:/";
+        }
+        return "login";
+    }
     @RequestMapping("/list")
-    public String  list(Model model){
-        List<User> list=userService.selectUser();
+    public String  list(String keyword,Model model){
+        List<User> list=userService.selectUser(keyword);
         model.addAttribute("users",list);
 
         return "user/list";
     }
-    @RequestMapping("/add")
-    public String add(){
-        return "user/add";
-    }
+
     @RequestMapping("/delete")
     public String delete(@RequestParam Integer id){
         userService.deleteUser(id);
 
         return "redirect:/user/list";
     }
+    @RequestMapping("/add")
+    public String add(){
+        return "user/add";
+    }
     @RequestMapping("/edit")
     public String edit(@RequestParam Integer id,Model model){
         User u=userService.selectUserById(id);
         model.addAttribute("u",u);
-        return "user/add";
+        //把查到的那条数据带回到list页面
+        return "user/edit";
     }
-    @RequestMapping("/save")
+    @RequestMapping("/save")//添加
     public String save(User u){
         System.out.println("1");
         userService.saveUser(u);

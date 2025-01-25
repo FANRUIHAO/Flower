@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.Mapper")
+@MapperScan(basePackages = "com.mapper")
 //把包中所有的接口用过动态代理的方式创建对象
 public class flowerApplication {
     public static void main(String[]args){

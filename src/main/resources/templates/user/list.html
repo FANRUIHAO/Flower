@@ -57,11 +57,11 @@
     </style>
 </head>
 <body>
-    <form class="form-inline">
+    <form class="form-inline" action="/user/list">
         <a>用户名</a>
         <div class="form-group mb-2">
             <label for="exampleInputName2" class="sr-only">Name</label>
-            <input type="text" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">
+            <input type="text" name="keyword" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">
         </div>
         <button type="submit" class="neumorphic-btn">Search</button>
         <button type="button" class="neumorphic-btn" id="addUserButton">Add</button>
@@ -73,6 +73,7 @@
         <tr>
             <th scope="col">序号</th>
             <th scope="col">用户名</th>
+            <th scope="col">性别</th>
             <th scope="col">密码</th>
             <th scope="col">编辑</th>
             <th scope="col">删除</th>
@@ -82,9 +83,10 @@
         <tr th:each="u : ${users}">
             <th scope="row" th:text="${u.id}"></th> <!-- 确保u对象不为空 -->
             <td th:text="${u.username}"></td>
+            <td th:text="${u.sex}"></td>
             <td th:text="${u.password}"></td>
             <td>
-                <a th:href="@{/user/edit(id=${u.id})}" class="neumorphic-btn" style="display: inline-block; text-align: center; padding: 10px 20px; font-size: 16px; border-radius: 25px;">Edit</a>
+                <a th:href="@{/user/edit(id=${u.id})}" class="neumorphic-btn editUserButton" data-id="${u.id}" style="display: inline-block; text-align: center; padding: 10px 20px; font-size: 16px; border-radius: 25px;">Edit</a>
             </td>
 
             <td><a th:href="@{/user/delete(id=${u.id})}" class="neumorphic-btn-red" style="display: inline-block; text-align: center; padding: 10px 20px; font-size: 16px; border-radius: 25px;">Delete</a></td>
@@ -111,27 +113,42 @@
     <script src="/jquery-2.1.4.js"></script>
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
-
-    <script><!-- 通过以下代码实现通过Add按钮加载出添加用户信息的页面 -->
+    <script>
         $(document).ready(function() {
             $('#addUserButton').click(function() {
                 $.ajax({
-                    url: '/user/add', // add.html 文件路径
+                    url: '/user/add', // add.html file path
                     method: 'GET',
                     success: function(response) {
-                        // 将返回的 HTML 内容插入到页面
                         $('body').append(response);
-                        // 显示模态框
                         $('#addModal').modal('show');
                     },
                     error: function() {
-                        alert('无法加载 Add 用户页面');
+                        alert('Unable to load Add User page');
                     }
                 });
             });
+
+
+            $('.editUserButton').click(function() {
+                var id = $(this).data('id'); // 获取按钮的数据属性
+                $.ajax({
+                    url: '/user/edit?id=' + u.id, // 修改为实际的编辑页面 URL
+                    method: 'GET',
+                    success: function(response) {
+                        $('body').append(response); // 将响应内容添加到页面
+                        $('#editModal').modal('show'); // 显示模态框
+                    },
+                    error: function() {
+                        alert('Unable to load Edit User page');
+                    }
+                });
+            });
+
         });
     </script>
-
+    <script src="/jquery-2.1.4.js"></script>
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
 
 

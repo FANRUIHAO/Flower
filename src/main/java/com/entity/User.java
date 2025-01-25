@@ -4,6 +4,15 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    private String sex;
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getSex() {
+        return sex;
+    }
 
     public Integer getId() {
         return id;
@@ -21,6 +30,7 @@ public class User {
         this.id = id;
     }
 
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -35,6 +45,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
                 '}';
     }
 }
