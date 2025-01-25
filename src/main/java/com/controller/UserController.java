@@ -3,6 +3,7 @@ package com.controller;
 import com.entity.User;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.service.UserService;
+import com.vo.SexVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,7 +58,15 @@ public class UserController {
         userService.saveUser(u);
         return "redirect:/user/list";
     }
-
+    @RequestMapping("/stat")
+    @ResponseBody//不找页面一定要加
+    public List<SexVO> stat(){
+//        List<User> list=userService.selectUser("");
+//        Map<String, Long> map = list.stream().collect(Collectors.groupingBy(User::getSex, Collectors.counting()));
+//        model.addAttribute("map",map);
+//        return "user/stat";
+        return userService.stat();
+    }
 
 
 }

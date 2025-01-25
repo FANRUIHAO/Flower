@@ -2,6 +2,7 @@ package com.service;
 
 import com.mapper.UserMapper;
 import com.entity.User;
+import com.vo.SexVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +41,19 @@ public class UserService {
         if(u==null){
             return false;
         }
+
+
         boolean b=u.getPassword().equals(password); //密码是否正确
         if(b){
             session.setAttribute("current",u);
         }
+
+
         return b;
     }
 
 
+    public List<SexVO> stat() {
+        return userMapper.stat();
+    }
 }

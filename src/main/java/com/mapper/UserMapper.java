@@ -1,6 +1,7 @@
 package com.mapper;
 
 import com.entity.User;
+import com.vo.SexVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -18,5 +19,6 @@ public interface UserMapper{
     User selectUserById(Integer id);
     @Select("select * from user where username=#{username}")
     User selectUserByUsername(String username);
-
+    @Select("SELECT sex as 'name',count(id) as 'value' FROM USER GROUP BY sex")
+    List<SexVO> stat();
 }
