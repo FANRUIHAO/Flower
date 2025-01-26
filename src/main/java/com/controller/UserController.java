@@ -52,6 +52,7 @@ public class UserController {
         //把查到的那条数据带回到list页面
         return "user/edit";
     }
+
     @RequestMapping("/save")//添加
     public String save(User u){
         System.out.println("1");
@@ -61,10 +62,6 @@ public class UserController {
     @RequestMapping("/stat")
     @ResponseBody//不找页面一定要加
     public List<SexVO> stat(){
-//        List<User> list=userService.selectUser("");
-//        Map<String, Long> map = list.stream().collect(Collectors.groupingBy(User::getSex, Collectors.counting()));
-//        model.addAttribute("map",map);
-//        return "user/stat";
         return userService.stat();
     }
 

@@ -51,9 +51,8 @@ public class UserService {
 
         return b;
     }
-
-
     public List<SexVO> stat() {
         return userMapper.stat();
     }
+
 }
