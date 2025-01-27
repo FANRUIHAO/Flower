@@ -26,7 +26,7 @@ public class UserController {
     public String login(String username, String password, HttpSession session){
         boolean b=userService.check(username,password, session);
         if(b){
-            return "redirect:/";
+            return "index";
         }
         System.out.println("用户名密码错误");
         return "login";

@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -121,20 +125,20 @@
 <div class="login-container">
     <div class="login-box">
         <h2>用户登录</h2>
-        <form action="/user/login">
+        <form action="/user/login" method="post">
             <div class="input-group">
                 <input type="text" id="username" name="username" required>
-                <label for="username">用户名</label>
+                <label for="username">Username</label>
             </div>
             <div class="input-group">
                 <input type="password" id="password" name="password" required>
-                <label for="password">密码</label>
+                <label for="password">Password</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" name="remember" id="remember">
-                <label for="remember">记住我</label>
+                <label for="remember">Remember me</label>
             </div>
-            <input type="submit" value="登录">
+            <input type="submit" value="Login">
         </form>
     </div>
 </div>
