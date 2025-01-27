@@ -22,10 +22,10 @@ public class ProductController {
         model.addAttribute("products", list);
         return "product/list";
     }
-    @RequestMapping("/add")
-    public String add(){
-        return "product/list";
-    }
+//    @RequestMapping("/add")
+//    public String add(){
+//        return "product/add";
+//    }
 
 
 }

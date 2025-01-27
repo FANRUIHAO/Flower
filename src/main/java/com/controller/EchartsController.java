@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/echarts")
 public class EchartsController {
     @RequestMapping("/toECharts")
-    public String echart(){
-        return "echarts/toECharts";
+    public String page(){
+        return "genderStats";
     }
 }

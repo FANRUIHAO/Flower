@@ -21,9 +21,21 @@
                         <input type="text" name="username" class="form-control" th:value="${u != null ? u.username : ''}" id="userName" placeholder="请输入用户名">
                     </div>
                     <div class="form-group">
-                        <label for="userPassword">性别</label>
-                        <input type="password" name="password" class="form-control" th:value="${u != null ? u.sex : ''}" id="sex" placeholder="请输入密码">
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" checked id="inlineRadio1" value="male"> male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" checked id="inlineRadio2" value="female"> female
+                        </label>
                     </div>
+
+                    <div class="form-group">
+                        <label for="deptSelect">部门</label>
+                        <select id="deptSelect" class="form-control">
+                            <option th:each="dept: ${depts}" th:text="${dept.name}"></option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="userPassword">密码</label>
                         <input type="password" name="password" class="form-control" th:value="${u != null ? u.password : ''}" id="userPassword" placeholder="请输入密码">

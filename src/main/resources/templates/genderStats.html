@@ -4,31 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gender Statistics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/echarts.min.js"></script>
 </head>
 <body>
-<h2>Gender Statistics</h2>
-<canvas id="genderChart" width="400" height="200"></canvas>
-<script>
-    fetch('/user/genderStats')
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('genderChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        label: 'Gender Distribution',
-                        data: Object.values(data),
-                        backgroundColor: ['#36A2EB', '#FF6384'],
-                    }]
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script src="/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        $.get("/user/stat", function (result) {
+            // Assuming result is an array containing gender statistics data, e.g., [{name: 'male', value: 10}, {name: 'female', value: 20}]
+            var categories = result.map(function(item) { return item.name; });
+            var values = result.map(function(item) { return item.value; });
+
+            // Specify the chart configuration and data
+            var option = {
+                title: {
+                    text: 'Gender Statistics',
+                    left: 'center',
+                    textStyle: {
+                        color: '#333',
+                        fontSize: 20
+                    }
                 },
-                options: {
-                    responsive: true,
-                }
-            });
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['Count'],
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: categories,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333'
+                        }
+                    },
+                    axisLabel: {
+                        fontSize: 12
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333'
+                        }
+                    },
+                    axisLabel: {
+                        fontSize: 12
+                    }
+                },
+                series: [
+                    {
+                        name: 'Count',
+                        type: 'bar',
+                        data: values,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#83bff6' },
+                                { offset: 0.5, color: '#188df0' },
+                                { offset: 1, color: '#188df0' }
+                            ])
+                        },
+                        barWidth: '20%', // Adjusted bar width to make it thinner
+                        label: {
+                            show: true,
+                            position: 'insideTop', // Position the label inside the top of the bar
+                            distance: 10, // Add some padding to avoid overlap
+                            color: '#333',
+                            fontSize: 12
+                        }
+                    }
+                ]
+            };
+
+            // Use the specified configuration and data to display the chart
+            myChart.setOption(option);
         });
-</script>
+    </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.controller;
 
 import com.entity.User;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.service.DeptService;
 import com.service.UserService;
 import com.vo.SexVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private DeptService deptService;
 
     @RequestMapping("/login")
     public String login(String username, String password, HttpSession session){
@@ -25,6 +28,7 @@ public class UserController {
         if(b){
             return "redirect:/";
         }
+        System.out.println("用户名密码错误");
         return "login";
     }
     @RequestMapping("/list")
@@ -42,7 +46,10 @@ public class UserController {
         return "redirect:/user/list";
     }
     @RequestMapping("/add")
-    public String add(){
+    public String add(Model model){
+
+        model.addAttribute("depts",deptService.allDept());
+
         return "user/add";
     }
     @RequestMapping("/edit")

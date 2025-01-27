@@ -1,93 +1,36 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>商品管理</title>
-    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <style>
-        /* 新拟态按钮样式 */
-        /* 定义按钮的基础样式 */
-        .neumorphic-btn {
-            background-color: #007bff; /* 蓝色背景 */
-            color: #ffffff; /* 白色文字 */
-            border: none; /* 去掉边框 */
-            padding: 10px 20px; /* 内边距 */
-            font-size: 16px; /* 字体大小 */
-            border-radius: 25px; /* 圆角 */
-            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */
-            transition: all 0.3s ease; /* 过渡效果 */
-            cursor: pointer; /* 鼠标指针 */
-        }
-
-        /* 鼠标悬停时的样式 */
-        .neumorphic-btn:hover {
-            background-color: #0056b3; /* 深蓝色背景 */
-            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */
-        }
-
-        /* 鼠标按下时的样式 */
-        .neumorphic-btn:active {
-            background-color: #003d80; /* 更深的蓝色背景 */
-            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */
-        }
-        /* 红色按钮样式 */
-        .neumorphic-btn-red {
-            background-color: #dc3545; /* 红色背景 */
-            color: #ffffff; /* 白色文字 */
-            border: none; /* 去掉边框 */
-            padding: 10px 20px; /* 内边距 */
-            font-size: 16px; /* 字体大小 */
-            border-radius: 25px; /* 圆角 */
-            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.3); /* 新拟态阴影效果 */
-            transition: all 0.3s ease; /* 过渡效果 */
-            cursor: pointer; /* 鼠标指针 */
-        }
-
-        /* 红色按钮鼠标悬停时的样式 */
-        .neumorphic-btn-red:hover {
-            background-color: #c82333; /* 深红色背景 */
-            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.3); /* 内阴影效果 */
-        }
-
-        /* 红色按钮鼠标按下时的样式 */
-        .neumorphic-btn-red:active {
-            background-color: #bd2130; /* 更深的红色背景 */
-            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.3); /* 更深的内阴影效果 */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
 </head>
-<body>
-<form class="form-inline" action="/product/list"><!-- 这个是跳转service中对应的方法名list  -->
-    <a>商品名称</a>
-    <div class="form-group mb-2">
-        <label for="exampleInputName2" class="sr-only">Name</label>
-        <input type="text" name="keyword" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">
+<body class="text-left mt-0 m-1">
+<h1 class="mb-4">Product Management</h1>
+<form class="form-inline mb-4" action="/product/list">
+    <div class="form-group mr-2">
+        <label for="keyword" class="sr-only">Product Name</label>
+        <input type="text" name="keyword" class="form-control" id="keyword" placeholder="Product Name">
     </div>
-    <button type="submit" class="neumorphic-btn">Search</button>
-    <button type="button" class="neumorphic-btn" id="addProuctButton">Add</button>
+    <button type="submit" class="btn btn-primary mr-2">Search</button>
+    <button type="button" class="btn btn-success" id="addProductButton">Add New Product</button>
 </form>
-
-
-<table class="table table-bordered" >
+<table class="table table-striped">
     <thead>
     <tr>
-        <th scope="col">序号</th>
-        <th scope="col">商品名称</th>
-        <th scope="col">数量</th>
-        <th scope="col">编辑</th>
-        <th scope="col">删除</th>
+        <th>ID</th>
+        <th>Name</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="p : ${products}">
-        <th scope="row" th:text="${p.id}"></th> <!-- 确保u对象不为空 -->
-        <td th:text="${p.productname}"></td>
-        <td th:text="${p.num}"></td>
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.proname}"></td>
         <td>
-            <a th:href="@{/product/edit(id=${u.id})}" class="neumorphic-btn editUserButton" data-id="${p.id}" style="display: inline-block; text-align: center; padding: 10px 20px; font-size: 16px; border-radius: 25px;">Edit</a>
+            <a th:href="@{/product/edit(id=${p.id})}" class="btn btn-primary btn-sm">Edit</a>
+            <a th:href="@{/product/delete(id=${p.id})}" class="btn btn-danger btn-sm">Delete</a>
         </td>
-
-        <td><a th:href="@{/product/delete(id=${u.id})}" class="neumorphic-btn-red" style="display: inline-block; text-align: center; padding: 10px 20px; font-size: 16px; border-radius: 25px;">Delete</a></td>
     </tr>
     </tbody>
 </table>
@@ -108,34 +51,9 @@
         </li>
     </ul>
 </nav>
-<script src="/jquery-2.1.4.js"></script>
-<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $('#addUserButton').click(function() {
-            $.ajax({
-                url: '/product/add', // add.html file path
-                method: 'GET',
-                success: function(response) {
-                    $('body').append(response);
-                    $('#addModal').modal('show');
-                },
-                error: function() {
-                    alert('Unable to load Add Product page');
-                }
-            });
-        });
-
-
-
-
-    });
-</script>
-<script src="/jquery-2.1.4.js"></script>
-<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
-
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
