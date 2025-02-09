@@ -2,6 +2,7 @@ package com.controller;
 
 import com.entity.User;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.pagehelper.PageInfo;
 import com.service.DeptService;
 import com.service.UserService;
 import com.vo.SexVO;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -32,12 +35,22 @@ public class UserController {
         return "login";
     }
     @RequestMapping("/list")
-    public String  list(String keyword,Model model){
-        List<User> list=userService.selectUser(keyword);
-        model.addAttribute("users",list);
-
+    public String list(@RequestParam(defaultValue = "1") int pageNum,
+                       @RequestParam(defaultValue = "10") int pageSize,
+                       @RequestParam(required = false) String keyword,
+                       Model model) {
+        PageInfo<User> pageInfo = userService.selectUser(keyword, pageNum, pageSize);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("users", pageInfo.getList());
         return "user/list";
     }
+//    public String  list(String keyword,Model model){
+//        List<User> list=userService.selectUser(keyword);
+//        model.addAttribute("users",list);
+//
+//        return "user/list";
+//    }
+
 
     @RequestMapping("/delete")
     public String delete(@RequestParam Integer id){

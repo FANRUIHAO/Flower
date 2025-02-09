@@ -1,5 +1,7 @@
 package com.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mapper.UserMapper;
 import com.entity.User;
 import com.vo.SexVO;
@@ -15,10 +17,16 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     private UserMapper userMapper;
-    public List<User> selectUser(String keyword){
-        List<User> list=userMapper.selectUser(keyword);
-        return list;
+    public PageInfo<User> selectUser(String keyword, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> list = userMapper.selectUser(keyword);
+        return new PageInfo<>(list);
     }
+//    public List<User> selectUser(String keyword){
+//        List<User> list=userMapper.selectUser(keyword);
+//        return list;
+//    }
+
     public void deleteUser(Integer id) {
         userMapper.deleteUser(id);
     }

@@ -21,12 +21,14 @@
     <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>Sum</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="p : ${products}">
         <td th:text="${p.id}"></td>
         <td th:text="${p.proname}"></td>
+        <td th:text="${p.num}"></td>
         <td>
             <a th:href="@{/product/edit(id=${p.id})}" class="btn btn-primary btn-sm">Edit</a>
             <a th:href="@{/product/delete(id=${p.id})}" class="btn btn-danger btn-sm">Delete</a>
@@ -36,21 +38,38 @@
 </table>
 <nav aria-label="Page navigation example">
     <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
+        <li class="page-item" th:classappend="${pageInfo.hasPreviousPage} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/product/list(pageNum=${pageInfo.prePage}, pageSize=${pageInfo.pageSize})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
+        <li class="page-item" th:each="i : ${#numbers.sequence(1, pageInfo.pages)}" th:classappend="${i == pageInfo.pageNum} ? 'active'">
+            <a class="page-link" th:href="@{/product/list(pageNum=${i}, pageSize=${pageInfo.pageSize})}" th:text="${i}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${pageInfo.hasNextPage} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{/product/list(pageNum=${pageInfo.nextPage}, pageSize=${pageInfo.pageSize})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
     </ul>
 </nav>
+<!--<nav aria-label="Page navigation example">-->
+<!--    <ul class="pagination">-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" href="#" aria-label="Previous">-->
+<!--                <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--        <li class="page-item">-->
+<!--            <a class="page-link" href="#" aria-label="Next">-->
+<!--                <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
