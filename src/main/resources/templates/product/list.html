@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
 </head>
 <body class="text-left mt-0 m-1">
-<h1 class="mb-4">Product Management</h1>
 <form class="form-inline mb-4" action="/product/list">
     <div class="form-group mr-2">
         <label for="keyword" class="sr-only">Product Name</label>
@@ -53,26 +52,51 @@
         </li>
     </ul>
 </nav>
-<!--<nav aria-label="Page navigation example">-->
-<!--    <ul class="pagination">-->
-<!--        <li class="page-item">-->
-<!--            <a class="page-link" href="#" aria-label="Previous">-->
-<!--                <span aria-hidden="true">&laquo;</span>-->
-<!--            </a>-->
-<!--        </li>-->
-<!--        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
-<!--        <li class="page-item"><a class="page-link" href="#">2</a></li>-->
-<!--        <li class="page-item"><a class="page-link" href="#">3</a></li>-->
-<!--        <li class="page-item">-->
-<!--            <a class="page-link" href="#" aria-label="Next">-->
-<!--                <span aria-hidden="true">&raquo;</span>-->
-<!--            </a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</nav>-->
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/product/save" method="post">
+                    <div class="form-group">
+                        <label for="proname">Product Name</label>
+                        <input type="text" class="form-control" id="proname" name="proname" placeholder="Enter product name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="num">Quantity</label>
+                        <input type="number" class="form-control" id="num" name="num" placeholder="Enter quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#addProductButton').click(function() {
+            $('#addModal').modal('show');
+        });
+    });
+</script>
 </body>
 </html>

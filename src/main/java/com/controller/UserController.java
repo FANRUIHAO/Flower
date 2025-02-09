@@ -44,12 +44,6 @@ public class UserController {
         model.addAttribute("users", pageInfo.getList());
         return "user/list";
     }
-//    public String  list(String keyword,Model model){
-//        List<User> list=userService.selectUser(keyword);
-//        model.addAttribute("users",list);
-//
-//        return "user/list";
-//    }
 
 
     @RequestMapping("/delete")
@@ -58,7 +52,7 @@ public class UserController {
 
         return "redirect:/user/list";
     }
-    @RequestMapping("/add")
+    @RequestMapping("/add")//添加部门信息
     public String add(Model model){
 
         model.addAttribute("depts",deptService.allDept());
@@ -75,7 +69,6 @@ public class UserController {
 
     @RequestMapping("/save")//添加
     public String save(User u){
-        System.out.println("1");
         userService.saveUser(u);
         return "redirect:/user/list";
     }
@@ -87,3 +80,18 @@ public class UserController {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

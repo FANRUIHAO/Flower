@@ -21,8 +21,9 @@ public class ProductController {
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize,
+                       @RequestParam(required = false) String keyword,
                        Model model) {
-        PageInfo<Product> pageInfo = productService.selectProduct(pageNum, pageSize);
+        PageInfo<Product> pageInfo = productService.selectProduct(keyword,pageNum, pageSize);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("products", pageInfo.getList());
         return "product/list";
@@ -32,6 +33,21 @@ public class ProductController {
 //        model.addAttribute("products", list);
 //        return "product/list";
 //    }
+    @RequestMapping("/add")
+    public String addProduct() {
+        return "product/add"; // 返回添加商品的页面（如 add.html 或模态框内容）
+    }
+    @RequestMapping("/save")//添加操作
+    public String save(Product p){
+        productService.saveProduct(p);
+        return "redirect:/product/list";
+    }
+    @RequestMapping("/edit")
+    public String edit(@RequestParam Integer id, Model model){
+        Product p=productService.selectProductById(id);
+        model.addAttribute("p", p);
+        return "product/edit";
+    }
     @RequestMapping("/delete")
     public String delete(@RequestParam Integer id){
         productService.deleteProduct(id);
@@ -40,3 +56,13 @@ public class ProductController {
     }
 
 }
+
+
+
+
+
+
+
+
+
+

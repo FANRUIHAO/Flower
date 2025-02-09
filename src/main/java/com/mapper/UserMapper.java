@@ -22,3 +22,16 @@ public interface UserMapper{
     @Select("SELECT sex as 'name',count(id) as 'value' FROM USER GROUP BY sex")
     List<SexVO> stat();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
