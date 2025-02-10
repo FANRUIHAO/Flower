@@ -11,9 +11,9 @@ public interface UserMapper{
     List<User> selectUser(String keyword);
     @Delete("delete from user where id= #{id}")
     void deleteUser(Integer id);
-    @Insert("insert into user(username,password,sex) values(#{username},#{password},#{sex})")
+    @Insert("insert into user(username,password,sex,grade) values(#{username},#{password},#{sex},#{grade})")
     void insertUser(User u);
-    @Update("update user set username=#{username}, password=#{password}, sex=#{sex} where id=#{id}")
+    @Update("update user set username=#{username}, password=#{password}, sex=#{sex}, grade=#{grade} where id=#{id}")
     void updateUser(User u);
     @Select("select * from user where id=#{id}")
     User selectUserById(Integer id);

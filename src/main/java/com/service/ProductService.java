@@ -28,7 +28,7 @@ public class ProductService {
 
     public void saveProduct(Product p) {
         if (p.getId() != null) {
-//            productMapper.updateProduct(product);
+            productMapper.updateProduct(p);
         } else {
             productMapper.insertProduct(p);
         }

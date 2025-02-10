@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.entity.User;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.pagehelper.PageInfo;
 import com.service.DeptService;
 import com.service.UserService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -34,6 +32,13 @@ public class UserController {
         System.out.println("用户名密码错误");
         return "login";
     }
+
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "/user/register"; // This should match the name of your register.html file
+    }
+
+
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize,

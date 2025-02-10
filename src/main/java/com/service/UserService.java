@@ -22,10 +22,6 @@ public class UserService {
         List<User> list = userMapper.selectUser(keyword);
         return new PageInfo<>(list);
     }
-//    public List<User> selectUser(String keyword){
-//        List<User> list=userMapper.selectUser(keyword);
-//        return list;
-//    }
 
     public void deleteUser(Integer id) {
         userMapper.deleteUser(id);

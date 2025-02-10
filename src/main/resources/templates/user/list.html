@@ -70,6 +70,7 @@
             <th scope="col">ID</th>
             <th scope="col">Username</th>
             <th scope="col">Sex</th>
+            <th scope="col">Grade</th>
             <th scope="col">Password</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
@@ -80,6 +81,7 @@
             <th scope="row" th:text="${u.id}"></th>
             <td th:text="${u.username}"></td>
             <td th:text="${u.sex}"></td>
+            <td th:text="${u.grade}"></td>
             <td th:text="${u.password}"></td>
             <td>
                 <a th:href="@{/user/edit(id=${u.id})}" class="btn-custom editUserButton" th:data-id="${u.id}">Edit</a>

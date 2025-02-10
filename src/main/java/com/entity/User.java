@@ -5,6 +5,15 @@ public class User {
     private String username;
     private String password;
     private String sex;
+    private Integer grade;
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
 
     public void setSex(String sex) {
         this.sex = sex;
@@ -46,6 +55,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", sex='" + sex + '\'' +
+                ", grade=" + grade +
                 '}';
     }
 }
