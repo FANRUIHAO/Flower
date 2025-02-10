@@ -46,7 +46,17 @@
                 <a class="nav-link" href="#">Contact</a>
             </li>
             <li class="nav-item">
-                <a class="btn btn-primary" href="/login">Login</a>
+<!--                <a class="btn btn-primary" href="/login">Login</a>-->
+                <div th:if="${username == '游客'}">
+                    <p>游客您好，请 <a href="/user/login">登录</a> 以享受更多服务。</p>
+                </div>
+                <div th:if="${username != '游客'}">
+                    <p>欢迎回来，<span th:text="${username}"></span>！</p>
+                    <div th:if="${showAdminButton}">
+                        <a href="/user/index">后台管理</a>
+                    </div>
+                    <a href="/user/logout">注销</a>
+                </div>
             </li>
         </ul>
     </div>

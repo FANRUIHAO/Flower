@@ -22,15 +22,26 @@ public class UserController {
     private UserService userService;
     @Autowired
     private DeptService deptService;
-
     @RequestMapping("/login")
-    public String login(String username, String password, HttpSession session){
-        boolean b=userService.check(username,password, session);
-        if(b){
-            return "index";
+    public String login(String username, String password, HttpSession session, Model model) {
+        boolean b = userService.check(username, password, session);
+        if (b) {
+            System.out.println("登录成功");
+            return "redirect:/shopping/list"; // 登录成功后跳转回商城页面
         }
+        model.addAttribute("error", "用户名密码错误");
         System.out.println("用户名密码错误");
         return "login";
+    }
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        // 销毁Session
+        session.invalidate();
+        return "redirect:/shopping/list"; // 跳转回商城页面
+    }
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/register")

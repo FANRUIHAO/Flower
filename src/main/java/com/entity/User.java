@@ -6,6 +6,9 @@ public class User {
     private String password;
     private String sex;
     private Integer grade;
+    public static class Grade {
+        public static final int ADMIN = 2; // 管理员
+    }
 
     public Integer getGrade() {
         return grade;

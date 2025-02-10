@@ -40,23 +40,36 @@ public class UserService {
         return userMapper.selectUserById(id);
     }
 
+//    public boolean check(String username, String password, HttpSession session) {
+//        User u=userMapper.selectUserByUsername(username);
+//        if(u==null){
+//            return false;
+//        }
+//        boolean b=u.getPassword().equals(password); //密码是否正确
+//        if(b){
+//            session.setAttribute("current",u);
+//        }
+//        return b;
+//    }
     public boolean check(String username, String password, HttpSession session) {
         User u=userMapper.selectUserByUsername(username);
         if(u==null){
             return false;
         }
-
-
-        boolean b=u.getPassword().equals(password); //密码是否正确
-        if(b){
-            session.setAttribute("current",u);
+        boolean isPasswordCorrect=u.getPassword().equals(password); //密码是否正确
+        if(isPasswordCorrect){
+            session.setAttribute("currentUser",u);
         }
-
-
-        return b;
+        return isPasswordCorrect;
     }
     public List<SexVO> stat() {
         return userMapper.stat();
     }
 
 }
+
+
+
+
+
+
