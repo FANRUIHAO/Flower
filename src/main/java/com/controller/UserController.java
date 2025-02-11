@@ -26,11 +26,11 @@ public class UserController {
     public String login(String username, String password, HttpSession session, Model model) {
         boolean b = userService.check(username, password, session);
         if (b) {
-            System.out.println("登录成功");
+            User user = userService.findByUsername(username); // 获取用户对象
+            session.setAttribute("currentUser", user); // 存入 Session
             return "redirect:/shopping/list"; // 登录成功后跳转回商城页面
         }
         model.addAttribute("error", "用户名密码错误");
-        System.out.println("用户名密码错误");
         return "login";
     }
     @RequestMapping("/logout")
