@@ -37,4 +37,8 @@ public class ShoppingController {
         }
         return "shopping/list"; // 返回商城页面
     }
+    @RequestMapping("/shop")
+    public String shop() {
+        return "shopping/shop"; // 返回购物页面
+    }
 }
