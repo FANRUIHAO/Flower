@@ -6,6 +6,8 @@
     <title>Flower Shop</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
         body {
             background: url('/images/flower-background.jpg') no-repeat center center fixed;
@@ -51,6 +53,13 @@
                 <p class="mb-0">游客您好，请 <a href="/user/login" class="btn btn-primary btn-sm">登录</a> 以享受更多服务。</p>
             </div>
             <div th:if="${username != '游客' and username != null}" class="d-flex align-items-center">
+                <div class="navbar-right ml-auto d-flex align-items-center">
+                    <div class="cart-button">
+                        <a href="/shopping/cart">
+                            <i class="fas fa-shopping-cart cart-icon"></i>
+                        </a>
+                    </div>
+                </div>
                 <p class="mb-0 mr-3">欢迎回来，<span th:text="${username}"></span>！</p>
                 <a href="/user/logout" class="btn btn-danger">注销</a>
                 <div class="admin-buttons mr-3" th:if="${showAdminButton}">

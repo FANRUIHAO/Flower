@@ -146,3 +146,21 @@ nav ul li:hover::after {
 .placeholder {
     height: 30vh; /* 与背景图片高度相同 */
 }
+.cart-button {
+    width: 50px; /* Adjust the width to match the height of the pink navigation bar */
+    height: 50px; /* Adjust the height to match the height of the pink navigation bar */
+    background-color: #f44566; /* Set the button background color to pink */
+    border-radius: 50%; /* Make the button round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    margin-left: 15px; /* Keep distance from other elements */
+}
+
+.cart-icon {
+    font-size: 24px; /* Shopping cart icon size */
+    color: #fff; /* Set the icon color to white */
+    display: block; /* Ensure the icon is treated as a block element */
+    line-height: 1; /* 确保图标垂直居中 */
+}
