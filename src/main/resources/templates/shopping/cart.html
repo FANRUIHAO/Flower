@@ -6,6 +6,18 @@
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
     <style>
+        body {
+            background: url('/images/f6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.8); /* Optional: to make the text more readable */
+            padding: 20px;
+            border-radius: 10px;
+        }
         .cart-item {
             display: flex;
             align-items: center;
@@ -24,13 +36,23 @@
         .cart-item-price {
             margin-left: 20px;
         }
+        .btn-super-pink{
+            background-color: #ff69b4;
+            border-color: #ff69b4;
+            color: white;
+        }
+        .btn-super-pink:hover {
+            background-color: #ff1493;
+            border-color: #ff1493;
+        }
     </style>
 </head>
 <body>
 <div class="container mt-5">
+    <a href="/shopping/list" class="btn btn-super-pink mb-4">Return to Home</a>
     <h1 class="mb-4">Shopping Cart</h1>
     <div class="cart-item">
-        <img src="/images/product1.jpg" alt="Product 1">
+        <img src="/images/f3.jpg" alt="Product 1">
         <div class="cart-item-details">
             <h5>Product 1</h5>
         </div>
@@ -42,7 +64,7 @@
         </div>
     </div>
     <div class="cart-item">
-        <img src="/images/product2.jpg" alt="Product 2">
+        <img src="/images/f1.jpg" alt="Product 2">
         <div class="cart-item-details">
             <h5>Product 2</h5>
         </div>
@@ -54,7 +76,7 @@
         </div>
     </div>
     <div class="cart-item">
-        <img src="/images/product3.jpg" alt="Product 3">
+        <img src="/images/f2.jpg" alt="Product 3">
         <div class="cart-item-details">
             <h5>Product 3</h5>
         </div>

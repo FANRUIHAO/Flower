@@ -30,11 +30,22 @@
             <label for="num">Quantity</label>
             <input type="number" class="form-control" id="num" name="num" th:value="${p.num}" required>
         </div>
-
-<!--        <div class="form-group">-->
-<!--            <label for="description">Description</label>-->
-<!--            <textarea class="form-control" id="description" name="description" rows="3" th:text="${product.description}"></textarea>-->
-<!--        </div>-->
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price" th:value="${p.price}" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-control" id="category" name="category" required>
+                <option value="Flower" th:selected="${p.category == 'Flower'}">Flower</option>
+                <option value="Plant" th:selected="${p.category == 'Plant'}">Plant</option>
+                <option value="Accessory" th:selected="${p.category == 'Accessory'}">Accessory</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea type="text" class="form-control" id="description" name="description" rows="3" th:text="${p.description}" required></textarea>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
         <a href="/product/list" class="btn btn-secondary">Cancel</a>
     </form>

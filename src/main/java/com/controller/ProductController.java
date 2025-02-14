@@ -28,15 +28,7 @@ public class ProductController {
         model.addAttribute("products", pageInfo.getList());
         return "product/list";
     }
-//    public String list(Model model){
-//        List<Product> list=productService.selectProduct();
-//        model.addAttribute("products", list);
-//        return "product/list";
-//    }
-    @RequestMapping("/add")
-    public String addProduct() {
-        return "product/add"; // 返回添加商品的页面（如 add.html 或模态框内容）
-    }
+
     @RequestMapping("/save")//添加操作
     public String save(Product p){
         productService.saveProduct(p);
