@@ -1,6 +1,10 @@
 package com.entity;
 
-public class Car {
+public class Cart {
+//    private Integer productId;
+//    private String productName;
+//    private Integer quantity;
+//    private Double price;
     private Integer id;
     private String cname;
     private Integer cprice;
@@ -40,11 +44,13 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Car{" +
+        return "Cart{" +
                 "id=" + id +
                 ", cname='" + cname + '\'' +
                 ", cprice=" + cprice +
                 ", cnum=" + cnum +
                 '}';
     }
+
+
 }
