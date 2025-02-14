@@ -82,5 +82,24 @@ public class ShoppingController {
         return "shopping/cart"; // 返回购物车页面
     }
 
+    @PostMapping("/addToCart")
+    public String addToCart(@RequestParam String productName, @RequestParam String productPrice, @RequestParam String productImage, HttpSession session) {
+        List<Map<String, String>> cart = (List<Map<String, String>>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+        Map<String, String> item = new HashMap<>();
+        item.put("name", productName);
+        item.put("price", productPrice);
+        cart.add(item);
+        session.setAttribute("cart", cart);
+        return "redirect:/shopping/cart";
+    }
+    @GetMapping("/cart")
+    public String showCart(HttpSession session, Model model) {
+        List<Map<String, String>> cart = (List<Map<String, String>>) session.getAttribute("cart");
+        model.addAttribute("cart", cart);
+        return "shopping/cart";
+    }
 
 }

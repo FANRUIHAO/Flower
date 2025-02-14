@@ -51,41 +51,29 @@
 <div class="container mt-5">
     <a href="/shopping/list" class="btn btn-super-pink mb-4">Return to Home</a>
     <h1 class="mb-4">Shopping Cart</h1>
-    <div class="cart-item">
-        <img src="/images/f3.jpg" alt="Product 1">
-        <div class="cart-item-details">
-            <h5>Product 1</h5>
-        </div>
-        <div class="cart-item-quantity">
-            <input type="number" value="1" min="1" class="form-control">
-        </div>
-        <div class="cart-item-price">
-            <span>$10.00</span>
-        </div>
-    </div>
-    <div class="cart-item">
-        <img src="/images/f1.jpg" alt="Product 2">
-        <div class="cart-item-details">
-            <h5>Product 2</h5>
-        </div>
-        <div class="cart-item-quantity">
-            <input type="number" value="2" min="1" class="form-control">
-        </div>
-        <div class="cart-item-price">
-            <span>$20.00</span>
+    <div th:if="${cart != null}">
+        <div th:each="item : ${cart}" class="cart-item card mb-3">
+            <div class="row no-gutters">
+<!--                <div class="col-md-4">-->
+<!--                    <img th:src="${item.image}" class="card-img" alt="Product Image"> &lt;!&ndash; 显示商品图片 &ndash;&gt;-->
+<!--                </div>-->
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${item.name}">Product Name</h5>
+                        <p class="card-text"><small class="text-muted">Available</small></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-body text-right">
+                        <span class="text-danger" th:text="${item.price}">$0.00</span>
+                        <button class="btn btn-outline-danger btn-sm ml-2">Remove</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="cart-item">
-        <img src="/images/f2.jpg" alt="Product 3">
-        <div class="cart-item-details">
-            <h5>Product 3</h5>
-        </div>
-        <div class="cart-item-quantity">
-            <input type="number" value="3" min="1" class="form-control">
-        </div>
-        <div class="cart-item-price">
-            <span>$30.00</span>
-        </div>
+    <div th:if="${cart == null}">
+        <p>Your cart is empty.</p>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

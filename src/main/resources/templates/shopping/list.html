@@ -82,7 +82,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Peony flowers</h5>
                     <p class="card-text">$10.00</p>
-                    <a href="#" class="btn btn-primary">Buy Now</a>
+                    <form action="/shopping/addToCart" method="post">
+                        <input type="hidden" name="productName" value="Peony flowers">
+                        <input type="hidden" name="productPrice" value="10.00">
+                        <button type="submit" class="btn btn-primary">Buy Now</button>
+                    </form>
                 </div>
             </div>
         </div>
