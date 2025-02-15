@@ -59,7 +59,7 @@
                 <h5 class="card-title" th:text="${item.cname}">Product Name</h5>
                 <span class="text-danger" th:text="${item.cprice}">$0.00</span>
                 <span th:text="${item.cnum}">1</span>
-                <button class="btn btn-outline-danger btn-sm">Remove</button>
+                <a th:href="@{/shopping/removeFromCart(id=${item.id})}" class="btn btn-outline-danger btn-sm">Remove</a>
             </div>
         </div>
     </div>

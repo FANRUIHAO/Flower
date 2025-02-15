@@ -110,8 +110,19 @@ public class ShoppingController {
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("showAdminButton", user.getGrade() == User.Grade.ADMIN);
-
         return "shopping/cart";
+
+    }
+
+    @GetMapping("/removeFromCart")
+    public String removeFromCart(@RequestParam Long id, HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        cartService.deleteCartItem(id);
+        return "redirect:/shopping/cart";
     }
 //    @RequestMapping("/cart")//实现购物车页面用户登陆状态显示
 //    public String cart(HttpSession session, Model model) {
