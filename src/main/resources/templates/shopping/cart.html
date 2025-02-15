@@ -30,13 +30,14 @@
             margin-right: 20px;
         }
         .cart-item-details {
+            display: flex;
+            align-items: center;
             flex-grow: 1;
         }
-        .cart-item-quantity,
-        .cart-item-price {
-            margin-left: 20px;
+        .cart-item-details > * {
+            margin-right: 20px;
         }
-        .btn-super-pink{
+        .btn-super-pink {
             background-color: #ff69b4;
             border-color: #ff69b4;
             color: white;
@@ -51,28 +52,18 @@
 <div class="container mt-5">
     <a href="/shopping/list" class="btn btn-super-pink mb-4">Return to Home</a>
     <h1 class="mb-4">Shopping Cart</h1>
-    <div th:if="${cart != null}">
-        <div th:each="item : ${cart}" class="cart-item card mb-3">
-            <div class="row no-gutters">
-<!--                <div class="col-md-4">-->
-<!--                    <img th:src="${item.image}" class="card-img" alt="Product Image"> &lt;!&ndash; 显示商品图片 &ndash;&gt;-->
-<!--                </div>-->
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${item.name}">Product Name</h5>
-                        <p class="card-text"><small class="text-muted">Available</small></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-body text-right">
-                        <span class="text-danger" th:text="${item.price}">$0.00</span>
-                        <button class="btn btn-outline-danger btn-sm ml-2">Remove</button>
-                    </div>
-                </div>
+    <div th:if="${cartItems != null}">
+        <div th:each="item : ${cartItems}" class="cart-item card mb-3">
+            <img th:src="${item.image_url}" class="card-img" alt="Product Image">
+            <div class="cart-item-details">
+                <h5 class="card-title" th:text="${item.cname}">Product Name</h5>
+                <span class="text-danger" th:text="${item.cprice}">$0.00</span>
+                <span th:text="${item.cnum}">1</span>
+                <button class="btn btn-outline-danger btn-sm">Remove</button>
             </div>
         </div>
     </div>
-    <div th:if="${cart == null}">
+    <div th:if="${cartItems == null || cartItems.isEmpty()}">
         <p>Your cart is empty.</p>
     </div>
 </div>

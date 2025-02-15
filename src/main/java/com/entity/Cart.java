@@ -9,6 +9,24 @@ public class Cart {
     private String cname;
     private Integer cprice;
     private Integer cnum;
+    private Integer user_id;
+    private  String image_url;
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
 
     public Integer getId() {
         return id;
@@ -49,8 +67,8 @@ public class Cart {
                 ", cname='" + cname + '\'' +
                 ", cprice=" + cprice +
                 ", cnum=" + cnum +
+                ", user_id=" + user_id +
+                ", image_url='" + image_url + '\'' +
                 '}';
     }
-
-
 }
