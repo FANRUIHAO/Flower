@@ -21,6 +21,8 @@ public interface UserMapper{
     User selectUserByUsername(String username);
     @Select("SELECT sex as 'name',count(id) as 'value' FROM USER GROUP BY sex")
     List<SexVO> stat();
+    @Insert("insert into user(username,password,sex,grade) values(#{username},#{password},#{sex},1)")
+    void registUser(User u);
 }
 
 

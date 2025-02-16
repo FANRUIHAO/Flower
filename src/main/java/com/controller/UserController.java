@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.util.List;
 
 @Controller
@@ -44,11 +45,39 @@ public class UserController {
         return "index";
     }
 
+//    @GetMapping("/register")
+//    public String showRegisterPage(Session session, Model model, HttpSession httpSession, User user, String code, String password2, String username, String password) {
+//        return "/user/register"; // This should match the name of your register.html file
+//    }
+    @PostMapping("/register")
+    public String register(@RequestParam String username, @RequestParam String password, @RequestParam String sex,@RequestParam String confirmPassword, Model model) {
+        // Check if passwords match
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("error", "Passwords do not match");
+            return "user/register";
+        }
+
+        // Check if username already exists
+        if (userService.findByUsername(username) != null) {
+            model.addAttribute("error", "Username already exists");
+            return "user/register";
+        }
+
+        // Create new user and save to database
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(password); // Assuming password is already encrypted
+        newUser.setSex(sex);
+        userService.registerUser(newUser);
+
+        // Redirect to login page after successful registration
+        return "redirect:/user/login";
+
+    }
     @GetMapping("/register")
     public String showRegisterPage() {
-        return "/user/register"; // This should match the name of your register.html file
+        return "user/register"; // 返回注册页面
     }
-
 
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,

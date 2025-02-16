@@ -58,6 +58,10 @@ public class UserService {
     public User findByUsername(String username) {
         return userMapper.selectUserByUsername(username);
     }
+
+    public void registerUser(User u) {
+        userMapper.registUser(u);
+    }
 }
 
 
