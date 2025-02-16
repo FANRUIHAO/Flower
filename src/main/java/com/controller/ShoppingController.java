@@ -66,12 +66,16 @@ public class ShoppingController {
 
         return "shopping/shop"; // 返回购物页面
     }
-
     @PostMapping("/addToCart")
-    public String addToCart(@RequestParam String productName, @RequestParam String productPrice, @RequestParam String productImage, @RequestParam Integer quantity, HttpSession session) {
+    @ResponseBody
+    public Map<String, String> addToCart(@RequestParam String productName, @RequestParam String productPrice, @RequestParam String productImage, @RequestParam Integer quantity, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
+        Map<String, String> response = new HashMap<>();
         if (user == null) {
-            return "redirect:/user/login";
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+
         }
 
         Cart cart = new Cart();
@@ -82,22 +86,32 @@ public class ShoppingController {
         cart.setCnum(quantity); // 设置数量
         cartService.save(cart);
 
-        return "redirect:/shopping/cart";
+        response.put("status", "success");
+        response.put("message", "Item added to cart");
+        return response;
     }
-//    @PostMapping("/addToCart")
-//    public String addToCart(@RequestParam String productName, @RequestParam String productPrice, @RequestParam String productImage, HttpSession session) {
-//        List<Map<String, String>> cart = (List<Map<String, String>>) session.getAttribute("cart");
-//        if (cart == null) {
-//            cart = new ArrayList<>();
-//        }
-//        Map<String, String> item = new HashMap<>();
-//        item.put("name", productName);
-//        item.put("price", productPrice);
-//        item.put("image", productImage); // Ensure image URL is added
-//        cart.add(item);
-//        session.setAttribute("cart", cart);
-//        return "redirect:/shopping/cart";
-//    }
+    @RequestMapping("/collect")
+    public String collect(HttpSession session, Model model) {
+        // 从 Session 中获取当前用户
+        User u = (User) session.getAttribute("currentUser");
+        if (u != null) {
+            // 如果用户已登录，显示用户信息
+            model.addAttribute("username", u.getUsername());
+            // 根据用户等级判断是否显示后台管理按钮
+            if (u.getGrade() == User.Grade.ADMIN) {
+                model.addAttribute("showAdminButton", true);
+            } else {
+                model.addAttribute("showAdminButton", false);
+            }
+        } else {
+            // 如果未登录，显示游客欢迎信息
+            model.addAttribute("username", "游客");
+            model.addAttribute("showAdminButton", false);
+        }
+
+        return "shopping/collect"; // 返回收藏页面
+    }
+
 
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model) {

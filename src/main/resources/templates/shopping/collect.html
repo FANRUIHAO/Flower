@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Collect</title>
+    <link rel="stylesheet" href="/css/collect.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background: url('/images/flower-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+        .background-image {
+            background: url('/images/f6.jpg') no-repeat center bottom; /* 图片底部对齐 */
+            background-size: cover;  /* 使图片覆盖整个容器 */
+            position: fixed;         /* 固定定位 */
+            top: 0;                  /* 顶部扩展到网页顶部 */
+            left: 0;                 /* 左侧对齐 */
+            width: 100%;             /* 宽度占满整个页面 */
+            height: 100vh;           /* 高度占满整个视口 */
+            z-index: -1;             /* 位于最下层 */
+            margin: 0;               /* 去除默认的外边距 */
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand">
+        <img src="/images/flogo.jpg" alt="Logo" style="height: 40px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div>
+            <nav class="cc">
+                <ul>
+                    <li><a href="/shopping/list" class="navtext">首页</a></li>
+                    <li><a href="/shopping/shop" class="navtext">选购</a></li>
+                    <li><a href="/shopping/collect" class="navtext">收藏</a></li>
+                    <li><a href="/shopping/orders" class="navtext">订单</a></li>
+                    <li><a href="/shopping/profile" class="navtext">个人中心</a></li>
+                </ul>
+            </nav>
+
+        </div>
+        <div class="navbar-right ml-auto d-flex align-items-center">
+            <div th:if="${username == '游客' or username == null}">
+                <p class="mb-0">游客您好，请 <a href="/user/login" class="btn btn-primary btn-sm">登录</a> 以享受更多服务。</p>
+            </div>
+            <div th:if="${username != '游客' and username != null}" class="d-flex align-items-center">
+                <div class="navbar-right ml-auto d-flex align-items-center">
+                    <div class="cart-button">
+                        <a href="/shopping/cart">
+                            <i class="fas fa-shopping-cart cart-icon"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="mb-0 mr-3">欢迎回来，<span th:text="${username}"></span>！</p>
+                <a href="/user/logout" class="btn btn-danger">注销</a>
+                <div class="admin-buttons mr-3" th:if="${showAdminButton}">
+                    <a href="/user/index" class="btn btn-secondary">后台管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="background-image"></div>
+
+<!-- 添加占位符 -->
+<div class="placeholder"></div>
+
+
+<div class="footer">
+    <p>&copy; 2025 Flower Shop. All rights reserved.</p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+.navtext {
+    color: inherit;
+    text-decoration: none;
+}
+.navtext:hover {
+    color: inherit;         /* 确保在 hover 时颜色不变 */
+    text-decoration: none;  /* 确保 hover 时不显示下划线 */
+}
+.card {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+.footer {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    text-align: center;
+}
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.cc {
+    background: #ffbdc9;
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 25px 20px -20px rgba(0, 0, 0, 0.4);
+}
+nav ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+nav ul li {
+    list-style: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fcfcfc;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+nav ul li::after {
+    content: "";
+    background: #f44566;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0;
+    transition: top 0.5s, opacity 0.5s;
+}
+nav ul li:hover {
+    color: #fff;
+}
+nav ul li:hover::after {
+    top: 50%;
+    opacity: 1;
+}
+.navbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+/* 更新了 navbar-right 部分的按钮样式 */
+
+
+/* 更新登录按钮样式 */
+.navbar-right .btn-primary {
+    background-color: #f44566; /* 使用与导航栏悬浮效果一致的背景色 */
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* 更新注销按钮样式 */
+.navbar-right .btn-danger,
+.navbar-right .btn-secondary {
+    background-color: #ff6f61; /* Set a consistent background color */
+    border: none;
+    color: #fff;
+    padding: 10px 20px; /* Increase padding for larger buttons */
+    font-size: 16px; /* Increase font size */
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 25px; /* Softer rounded corners */
+    margin-left: 10px; /* Add spacing between buttons */
+}
+.navbar-right .btn-secondary {
+    background-color: #6c757d; /* Set a consistent background color for the admin button */
+}
+/* 调整按钮在较小屏幕下的响应式布局 */
+.navbar-right .btn {
+    margin-left: 10px;
+    border-radius: 20px; /* 更柔和的圆角效果 */
+}
+
+.navbar-right .admin-buttons .btn {
+    background-color: #6c757d; /* 中性色按钮，与后台管理按钮样式一致 */
+    border: none;
+    color: #fff;
+}
+.navbar-right p {
+    margin: 0;
+    padding: 0 10px;
+    font-size: 1rem;
+    color: #f44566; /* 设置为主题粉色 */
+}
+
+.navbar-right p a {
+    color: #f44566; /* 修改链接颜色为主题粉色 */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.navbar-right p a:hover {
+    text-decoration: underline; /* 在 hover 时添加下划线 */
+}
+
+.navbar-right p span {
+    color: #f44566; /* 设置用户名称的颜色为主题粉色 */
+    font-weight: 600;
+}
+
+/* 添加占位符样式 */
+.placeholder {
+    height: 30vh; /* 与背景图片高度相同 */
+}
+.cart-button {
+    width: 50px; /* Adjust the width to match the height of the pink navigation bar */
+    height: 50px; /* Adjust the height to match the height of the pink navigation bar */
+    background-color: #f44566; /* Set the button background color to pink */
+    border-radius: 50%; /* Make the button round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    margin-left: 15px; /* Keep distance from other elements */
+}
+
+.cart-icon {
+    font-size: 24px; /* Shopping cart icon size */
+    color: #fff; /* Set the icon color to white */
+    display: block; /* Ensure the icon is treated as a block element */
+    line-height: 1; /* 确保图标垂直居中 */
+}

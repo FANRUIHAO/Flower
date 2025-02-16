@@ -47,6 +47,7 @@
                     <li><a href="/shopping/profile" class="navtext">个人中心</a></li>
                 </ul>
             </nav>
+
         </div>
         <div class="navbar-right ml-auto d-flex align-items-center">
             <div th:if="${username == '游客' or username == null}">
@@ -73,8 +74,11 @@
 
 <!-- 添加占位符 -->
 <div class="placeholder"></div>
-
+<div id="message" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #28a745; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+    Item added to cart
+</div>
 <div class="container mt-5">
+
     <div class="row">
         <div class="col-md-4">
             <div class="card mb-4">
@@ -82,7 +86,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Peony flowers</h5>
                     <p class="card-text">$1.00</p>
-                    <form action="/shopping/addToCart" method="post">
+                    <form action="/shopping/addToCart" method="post" class="add-to-cart">
                         <input type="hidden" name="productName" value="Peony flowers">
                         <input type="hidden" name="productPrice" value="1.00">
                         <input type="hidden" name="productImage" value="/images/f1.jpg">
@@ -98,7 +102,7 @@
                 <div class="card-body">
                     <h5 class="card-title">White roses</h5>
                     <p class="card-text">$2.00</p>
-                    <form action="/shopping/addToCart" method="post">
+                    <form action="/shopping/addToCart" method="post" class="add-to-cart">
                         <input type="hidden" name="productName" value="White roses">
                         <input type="hidden" name="productPrice" value="2.00">
                         <input type="hidden" name="productImage" value="/images/f2.jpg">
@@ -114,9 +118,9 @@
                 <div class="card-body">
                     <h5 class="card-title">Small daisies</h5>
                     <p class="card-text">$2.00</p>
-                    <form action="/shopping/addToCart" method="post">
+                    <form action="/shopping/addToCart" method="post" class="add-to-cart">
                         <input type="hidden" name="productName" value="Small daisies">
-                        <input type="hidden" name="productPrice" value="2.00">
+                        <input type="hidden" name="productPrice" value="1.00">
                         <input type="hidden" name="productImage" value="/images/f3.jpg">
                         <input type="number" name="quantity" value="1" min="1">
                         <button type="submit" class="btn btn-primary">Buy Now</button>
@@ -130,9 +134,38 @@
 <div class="footer">
     <p>&copy; 2025 Flower Shop. All rights reserved.</p>
 </div>
-
+<!--<div id="message" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #28a745; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">-->
+<!--    Item added to cart-->
+<!--</div>-->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("form.add-to-cart").submit(function(event) {
+            event.preventDefault(); // 阻止表单默认提交
+
+            var form = $(this);
+            $.ajax({
+                type: form.attr("method"),
+                url: form.attr("action"),
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.status === "success") {
+                        $("#message").fadeIn().delay(2000).fadeOut();
+                    } else if (response.status === "redirect") {
+                        window.location.href = response.url;
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while adding the item to the cart.");
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
