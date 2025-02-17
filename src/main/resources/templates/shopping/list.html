@@ -25,6 +25,12 @@
             z-index: -1;             /* 位于最下层 */
             margin: 0;               /* 去除默认的外边距 */
         }
+        .user-avatar {
+            width: 50px; /* Adjust the width as needed */
+            height: 50px; /* Adjust the height as needed */
+            border-radius: 50%; /* Make the avatar circular */
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +68,8 @@
                     </div>
                 </div>
                 <p class="mb-0 mr-3">欢迎回来，<span th:text="${username}"></span>！</p>
+                <img th:src="@{${userImage}}" alt="User Image" class="user-avatar">
+
                 <a href="/user/logout" class="btn btn-danger">注销</a>
                 <div class="admin-buttons mr-3" th:if="${showAdminButton}">
                     <a href="/user/index" class="btn btn-secondary">后台管理</a>

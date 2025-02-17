@@ -15,14 +15,24 @@
 		.layui-logo a:hover {
 			background-color: #0056b3; /* Darker blue on hover */
 		}
+		.user-avatar {
+			width: 40px; /* Adjust the width as needed */
+			height: 40px; /* Adjust the height as needed */
+			border-radius: 50%;
+			margin-right: 10px;
+		}
 	</style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header">
 		<div class="layui-logo"><a th:href="@{/shopping/list}">Shopping</a></div>
-		<ul class="layui-nav layui-layout-left">   </ul>
+		<ul class="layui-nav layui-layout-left">
+		</ul>
 		<ul class="layui-nav layui-layout-right">
+			<li class="layui-nav-item">
+				<img th:src="@{${userImage}}" alt="User Image" class="user-avatar">
+			</li>
 			<li class="layui-nav-item">
 				<a href="javascript:;" th:text="|${session.currentUser.username}|"></a>
 			</li>

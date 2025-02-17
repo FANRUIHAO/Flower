@@ -40,15 +40,24 @@ public class UserController {
         session.invalidate();
         return "redirect:/shopping/list"; // 跳转回商城页面
     }
+//    @RequestMapping("/index")
+//    public String index() {
+//
+//        return "index";
+//    }
     @RequestMapping("/index")
-    public String index() {
+    public String index(HttpSession session, Model model) {
+        User u = (User) session.getAttribute("currentUser");
+        if (u != null) {
+            model.addAttribute("username", u.getUsername());
+            model.addAttribute("userImage", u.getUser_image());
+        } else {
+            model.addAttribute("username", "游客");
+//            model.addAttribute("userImage", "/static/images/person/p1.jpg");
+        }
         return "index";
     }
 
-//    @GetMapping("/register")
-//    public String showRegisterPage(Session session, Model model, HttpSession httpSession, User user, String code, String password2, String username, String password) {
-//        return "/user/register"; // This should match the name of your register.html file
-//    }
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String sex,@RequestParam String confirmPassword, Model model) {
         // Check if passwords match
@@ -68,6 +77,7 @@ public class UserController {
         newUser.setUsername(username);
         newUser.setPassword(password); // Assuming password is already encrypted
         newUser.setSex(sex);
+        newUser.setUser_image("/images/person/p1.jpg");
         userService.registerUser(newUser);
 
         // Redirect to login page after successful registration

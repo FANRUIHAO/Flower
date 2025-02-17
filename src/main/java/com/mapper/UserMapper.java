@@ -7,13 +7,12 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface UserMapper{
-//    @Select("select * from user where instr(username, #{keyword})>0")
     List<User> selectUser(String keyword);
     @Delete("delete from user where id= #{id}")
     void deleteUser(Integer id);
-    @Insert("insert into user(username,password,sex,grade) values(#{username},#{password},#{sex},#{grade})")
+    @Insert("insert into user(username,password,sex,grade,user_image) values(#{username},#{password},#{sex},#{grade},#{user_image})")
     void insertUser(User u);
-    @Update("update user set username=#{username}, password=#{password}, sex=#{sex}, grade=#{grade} where id=#{id}")
+    @Update("update user set username=#{username}, password=#{password}, sex=#{sex}, grade=#{grade}, user_image=#{user_image} where id=#{id}")
     void updateUser(User u);
     @Select("select * from user where id=#{id}")
     User selectUserById(Integer id);
@@ -21,7 +20,7 @@ public interface UserMapper{
     User selectUserByUsername(String username);
     @Select("SELECT sex as 'name',count(id) as 'value' FROM USER GROUP BY sex")
     List<SexVO> stat();
-    @Insert("insert into user(username,password,sex,grade) values(#{username},#{password},#{sex},1)")
+    @Insert("insert into user(username,password,sex,grade,user_image) values(#{username},#{password},#{sex},1,#{user_image})")
     void registUser(User u);
 }
 
