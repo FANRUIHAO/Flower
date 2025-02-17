@@ -6,8 +6,17 @@ public class User {
     private String password;
     private String sex;
     private Integer grade;
+    private String user_image;
     public static class Grade {
         public static final int ADMIN = 2; // 管理员
+    }
+
+    public String getUser_image() {
+        return user_image;
+    }
+
+    public void setUser_image(String user_image) {
+        this.user_image = user_image;
     }
 
     public Integer getGrade() {
@@ -59,6 +68,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", sex='" + sex + '\'' +
                 ", grade=" + grade +
+                ", user_image='" + user_image + '\'' +
                 '}';
     }
 }
