@@ -49,7 +49,7 @@ public class ShoppingController {
         return response;
     }
     @GetMapping("/list")
-    public String shoppingList(HttpSession session, Model model,@RequestParam(value = "user_image", required = false, defaultValue = "/static/images/default-avatar.png") String user_image) {
+    public String shoppingList(HttpSession session, Model model, @RequestParam(value = "user_image", required = false, defaultValue = "/static/images/person/p1.jpg") String user_image) {
         // 从 Session 中获取当前用户
         User u = (User) session.getAttribute("currentUser");
         if (u != null) {
