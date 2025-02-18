@@ -22,6 +22,8 @@ public interface UserMapper{
     List<SexVO> stat();
     @Insert("insert into user(username,password,sex,grade,user_image) values(#{username},#{password},#{sex},1,#{user_image})")
     void registUser(User u);
+    @Update("update user set user_image=#{user_image} where id=#{id}")
+    void updateUserImage(User user);
 }
 
 

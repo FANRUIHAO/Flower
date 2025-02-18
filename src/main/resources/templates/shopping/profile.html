@@ -74,7 +74,28 @@
 
 <!-- 添加占位符 -->
 <div class="placeholder"></div>
-
+<div class="container mt-5">
+    <h2>个人中心</h2>
+    <div class="row">
+        <div th:if="${session.currentUser != null}" class="col-md-4">
+            <div>
+                <img th:src="@{${session.currentUser.user_image}}" alt="User Image" class="img-thumbnail">
+            </div>
+            <div class="col-md-8">
+                <form action="/shopping/update-avatar" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="avatar">上传新头像</label>
+                        <input type="file" class="form-control-file" id="avatar" name="avatar">
+                        <button type="submit" class="btn btn-primary">上传</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div th:unless="${session.currentUser != null}">
+            <p>User is not logged in.</p>
+        </div>
+    </div>
+</div>
 
 <div class="footer">
     <p>&copy; 2025 Flower Shop. All rights reserved.</p>

@@ -62,6 +62,10 @@ public class UserService {
     public void registerUser(User u) {
         userMapper.registUser(u);
     }
+
+    public void updateUserImage(User user) {
+        userMapper.updateUserImage(user);
+    }
 }
 
 

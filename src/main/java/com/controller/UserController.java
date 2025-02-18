@@ -11,9 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private DeptService deptService;
+
     @RequestMapping("/login")
     public String login(String username, String password, HttpSession session, Model model) {
         boolean b = userService.check(username, password, session);
@@ -40,11 +44,6 @@ public class UserController {
         session.invalidate();
         return "redirect:/shopping/list"; // 跳转回商城页面
     }
-//    @RequestMapping("/index")
-//    public String index() {
-//
-//        return "index";
-//    }
     @RequestMapping("/index")
     public String index(HttpSession session, Model model) {
         User u = (User) session.getAttribute("currentUser");
@@ -53,7 +52,6 @@ public class UserController {
             model.addAttribute("userImage", u.getUser_image());
         } else {
             model.addAttribute("username", "游客");
-//            model.addAttribute("userImage", "/static/images/person/p1.jpg");
         }
         return "index";
     }

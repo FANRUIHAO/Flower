@@ -7,6 +7,9 @@ public class User {
     private String sex;
     private Integer grade;
     private String user_image = "/images/person/p1.jpg";
+
+
+
     public static class Grade {
         public static final int ADMIN = 2; // 管理员
     }
