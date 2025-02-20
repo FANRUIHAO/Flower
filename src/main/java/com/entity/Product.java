@@ -7,6 +7,15 @@ public class Product {
     private Integer price;
     private String category;
     private String description;
+    private String pro_image;
+
+    public String getPro_image() {
+        return pro_image;
+    }
+
+    public void setPro_image(String pro_image) {
+        this.pro_image = pro_image;
+    }
 
     public void setPrice(Integer price) {
         this.price = price;
@@ -65,6 +74,7 @@ public class Product {
                 ", price=" + price +
                 ", category='" + category + '\'' +
                 ", description='" + description + '\'' +
+                ", pro_image='" + pro_image + '\'' +
                 '}';
     }
 }

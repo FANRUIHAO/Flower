@@ -2,24 +2,63 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
 	<meta charset="UTF-8">
-	<title>后台管理</title>
+	<title>Admin Dashboard</title>
 	<div th:replace="header::common"></div>
 	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f9;
+		}
 		.layui-logo a {
 			color: #ffffff; /* White text color */
-			background-color: #007bff; /* Blue background color */
+			background-color: #4CAF50; /* Green background color */
 			padding: 10px 20px;
 			text-decoration: none;
 			border-radius: 5px;
 		}
 		.layui-logo a:hover {
-			background-color: #0056b3; /* Darker blue on hover */
+			background-color: #45a049; /* Darker green on hover */
 		}
 		.user-avatar {
 			width: 40px; /* Adjust the width as needed */
 			height: 40px; /* Adjust the height as needed */
 			border-radius: 50%;
 			margin-right: 10px;
+		}
+		.layui-nav-item a {
+			color: #ffffff; /* White text color */
+			padding: 10px 20px;
+			text-decoration: none;
+			display: block;
+		}
+		.layui-nav-item a:hover {
+			background-color: #45a049; /* Darker green on hover */
+		}
+		.layui-nav-item {
+			margin-right: 10px; /* Add margin between items */
+		}
+		.layui-side {
+			background-color: #333; /* Dark background color */
+		}
+		.layui-side-scroll {
+			padding: 20px;
+		}
+		.layui-header {
+			background-color: #4CAF50; /* Green background color */
+			color: #ffffff; /* White text color */
+		}
+		.layui-footer {
+			background-color: #333; /* Dark background color */
+			color: #ffffff; /* White text color */
+			text-align: center;
+			padding: 10px 0;
+		}
+		.layui-body {
+			padding: 20px;
+		}
+		.layui-nav-tree .layui-nav-item a {
+			border-radius: 5px;
+			margin-bottom: 10px;
 		}
 	</style>
 </head>
@@ -37,54 +76,33 @@
 				<a href="javascript:;" th:text="|${session.currentUser.username}|"></a>
 			</li>
 			<li class="layui-nav-item">
-				<a href="javascript:logout()">注销</a>
+				<a href="javascript:logout()">Logout</a>
 			</li>
 		</ul>
 	</div>
-	<div class="layui-side layui-bg-black">
+	<div class="layui-side">
 		<div class="layui-side-scroll">
-			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-			<ul class="layui-nav layui-nav-tree" >
-				<li class="layui-nav-item layui-nav-itemed">
-					<a href="javascript:;">信息维护</a>
-					<dl class="layui-nav-child">
-						<dd>
-							<a href="javascript:;"
-							   data-url="/user/list"
-							   class="site-demo-active">管理员管理</a>
-						</dd>
-						<dd>
-							<a href="javascript:;"
-							   data-url="/product/list"
-							   class="site-demo-active">商品管理</a>
-						</dd>
-						<dd>
-							<a href="javascript:;"
-							   data-url="/echarts/toECharts"
-							   class="site-demo-active">统计图表</a>
-						</dd>
-
-					</dl>
+			<!-- Left navigation area -->
+			<ul class="layui-nav layui-nav-tree">
+				<li class="layui-nav-item">
+					<a href="javascript:;" data-url="/user/list" class="site-demo-active">Admin Management</a>
 				</li>
 				<li class="layui-nav-item">
-					<a href="javascript:;">订单管理</a>
-					<dl class="layui-nav-child">
-						<dd>
-							<a href="javascript:;"
-							   class="site-demo-active"
-							   data-url="/com.situ.web/page/dict/dictlist.jsp">
-								订单管理</a>
-						</dd>
-
-					</dl>
+					<a href="javascript:;" data-url="/product/list" class="site-demo-active">Product Management</a>
+				</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;" data-url="/echarts/toECharts" class="site-demo-active">Statistics</a>
+				</li>
+				<li class="layui-nav-item">
+					<a href="javascript:;" data-url="/com.situ.web/page/dict/dictlist.jsp" class="site-demo-active">Order Management</a>
 				</li>
 			</ul>
 		</div>
 	</div>
-	<div class="layui-body"><!-- 内容主体区域 -->
+	<div class="layui-body"><!-- Main content area -->
 		<iframe name="rightframe" width="99%" height="97%" src="/echarts/toECharts"></iframe>
 	</div>
-	<div class="layui-footer">© JAVA - 底部固定区域</div>
+	<div class="layui-footer">© JAVA - Footer fixed area</div>
 </div>
 <script type="text/javascript">
 	var $ = layui.jquery;
@@ -100,7 +118,7 @@
 
 	function logout() {
 		layer.confirm(
-				'您确认要退出么',
+				'Are you sure you want to logout?',
 				{icon:3},
 				function() {
 					location.href = '/user/logout'

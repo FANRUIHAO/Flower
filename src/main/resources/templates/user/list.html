@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User List</title>
+<!--    <link rel="stylesheet" href="/static/css/userlist.css">-->
     <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <style>
         body {
@@ -15,6 +16,12 @@
             top: 20px;
             left: 20px;
             width: calc(100% - 40px);
+        }
+        .user-image {
+            width: 50px; /* Adjust the width as needed */
+            height: 50px; /* Set a fixed height to maintain consistency */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+            border-radius: 5px; /* Optional: add rounded corners */
         }
         .btn-custom {
             background-color: #1e90ff;
@@ -68,6 +75,7 @@
         <thead>
         <tr>
             <th scope="col">ID</th>
+            <th scope="col">UserImage</th>
             <th scope="col">Username</th>
             <th scope="col">Sex</th>
             <th scope="col">Grade</th>
@@ -79,6 +87,9 @@
         <tbody>
         <tr th:each="u : ${users}">
             <th scope="row" th:text="${u.id}"></th>
+            <td>
+                <img th:src="@{${u.user_image}}" alt="User Image" class="user-image">
+            </td>
             <td th:text="${u.username}"></td>
             <td th:text="${u.sex}"></td>
             <td th:text="${u.grade}"></td>

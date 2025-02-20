@@ -38,4 +38,10 @@ public class ProductService {
         return productMapper.selectProductById(id);
 
     }
+
+    public void updateProduct(Product p) {
+        productMapper.updateProduct(p);
+    }
+
+
 }

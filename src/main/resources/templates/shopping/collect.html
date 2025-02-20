@@ -75,6 +75,11 @@
 <!-- 添加占位符 -->
 <div class="placeholder"></div>
 
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="avatar" name="avatar" accept="image/*">
+    <button type="button" onclick="uploadImage()">Upload</button>
+</form>
+<img id="uploadImage" src="" alt="Uploaded Image">
 
 <div class="footer">
     <p>&copy; 2025 Flower Shop. All rights reserved.</p>
@@ -84,5 +89,25 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 
+<script>
+    function uploadImage() {
+        var formData = new FormData();
+        var avatarFile = document.getElementById("avatar").files[0];
+        formData.append("uploadImage", avatarFile);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/shopping/uploadImage", true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                document.getElementById("currentAvatar").src = response.avatarUrl;
+                document.getElementById("uploadImage").src = response.avatarUrl;
+            } else {
+                console.error("Avatar upload failed.");
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
 </body>
 </html>

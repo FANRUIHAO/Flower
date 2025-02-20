@@ -114,42 +114,67 @@
     <!-- 右侧商品展示区域 -->
     <div class="right-content">
         <!-- 商品卡片 -->
-        <div class="product-card">
-            <img src="/images/f1.jpg" alt="Peony">
-            <h5>Peony Flowers</h5>
-            <p>$10.00</p>
-            <button class="btn btn-primary">加入购物车</button>
-        </div>
-
-        <div class="product-card">
-            <img src="/images/f2.jpg" alt="White Roses">
-            <h5>White Roses</h5>
-            <p>$8.00</p>
-            <button class="btn btn-primary">加入购物车</button>
-        </div>
-
-        <div class="product-card">
-            <img src="/images/f3.jpg" alt="Small Daisies">
-            <h5>Small Daisies</h5>
-            <p>$5.00</p>
-            <button class="btn btn-primary">加入购物车</button>
-        </div>
-
-        <!-- 更多商品卡片 -->
-        <div class="product-card">
-            <img src="/images/f4.jpg" alt="Red Tulips">
-            <h5>Red Tulips</h5>
-            <p>$12.00</p>
-            <button class="btn btn-primary">加入购物车</button>
-        </div>
-
-        <div class="product-card">
-            <img src="/images/f5.jpg" alt="Orchids">
-            <h5>Orchids</h5>
-            <p>$15.00</p>
-            <button class="btn btn-primary" onclick="addToCart(1)">加入购物车</button>
+        <div class="product-card" th:each="product : ${products}">
+            <img th:src="@{${product.pro_image}}" alt="Product Image">
+            <h5>ProductName: <span th:text="${product.proname}"></span></h5>
+            <p>Price: <span th:text="${product.price}"></span></p>
+            <button class="btn btn-primary" onclick="addToCart([[${product.id}]])">加入购物车</button>
         </div>
     </div>
+<!--    <div class="container">-->
+<!--        <h2 class="text-center mb-4">Shop</h2>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-4" th:each="product : ${products}">-->
+<!--                <div class="card mb-4">-->
+<!--                    <img th:src="@{${product.pro_image}}" class="card-img-top" alt="Product Image">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title" th:text="${product.proname}"></h5>-->
+<!--                        <p class="card-text" th:text="${product.description}"></p>-->
+<!--                        <p class="card-text"><strong>Price: </strong><span th:text="${product.price}"></span></p>-->
+<!--                        <a href="#" class="btn btn-primary">Add to Cart</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="right-content">-->
+<!--        &lt;!&ndash; 商品卡片 &ndash;&gt;-->
+<!--        <div class="product-card">-->
+<!--            <img src="/images/f1.jpg" alt="Peony">-->
+<!--            <h5>Peony Flowers</h5>-->
+<!--            <p>$10.00</p>-->
+<!--            <button class="btn btn-primary">加入购物车</button>-->
+<!--        </div>-->
+
+<!--        <div class="product-card">-->
+<!--            <img src="/images/f2.jpg" alt="White Roses">-->
+<!--            <h5>White Roses</h5>-->
+<!--            <p>$8.00</p>-->
+<!--            <button class="btn btn-primary">加入购物车</button>-->
+<!--        </div>-->
+
+<!--        <div class="product-card">-->
+<!--            <img src="/images/f3.jpg" alt="Small Daisies">-->
+<!--            <h5>Small Daisies</h5>-->
+<!--            <p>$5.00</p>-->
+<!--            <button class="btn btn-primary">加入购物车</button>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 更多商品卡片 &ndash;&gt;-->
+<!--        <div class="product-card">-->
+<!--            <img src="/images/f4.jpg" alt="Red Tulips">-->
+<!--            <h5>Red Tulips</h5>-->
+<!--            <p>$12.00</p>-->
+<!--            <button class="btn btn-primary">加入购物车</button>-->
+<!--        </div>-->
+
+<!--        <div class="product-card">-->
+<!--            <img src="/images/f5.jpg" alt="Orchids">-->
+<!--            <h5>Orchids</h5>-->
+<!--            <p>$15.00</p>-->
+<!--            <button class="btn btn-primary" onclick="addToCart(1)">加入购物车</button>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 <div class="footer">

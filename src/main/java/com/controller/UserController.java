@@ -55,7 +55,6 @@ public class UserController {
         }
         return "index";
     }
-
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String sex,@RequestParam String confirmPassword, Model model) {
         // Check if passwords match
@@ -86,7 +85,6 @@ public class UserController {
     public String showRegisterPage() {
         return "user/register"; // 返回注册页面
     }
-
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize,
