@@ -144,9 +144,11 @@ public class UserController {
         }
 
         userService.updateUser(u);
+
+        // 更新会话中的用户信息
+        session.setAttribute("currentUser", u);
         return "redirect:/user/list";
     }
-
     @RequestMapping("/save")//添加
     public String save(User u){
         userService.saveUser(u);
