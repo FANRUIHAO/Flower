@@ -121,60 +121,8 @@
             <button class="btn btn-primary" onclick="addToCart([[${product.id}]])">加入购物车</button>
         </div>
     </div>
-<!--    <div class="container">-->
-<!--        <h2 class="text-center mb-4">Shop</h2>-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-4" th:each="product : ${products}">-->
-<!--                <div class="card mb-4">-->
-<!--                    <img th:src="@{${product.pro_image}}" class="card-img-top" alt="Product Image">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title" th:text="${product.proname}"></h5>-->
-<!--                        <p class="card-text" th:text="${product.description}"></p>-->
-<!--                        <p class="card-text"><strong>Price: </strong><span th:text="${product.price}"></span></p>-->
-<!--                        <a href="#" class="btn btn-primary">Add to Cart</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="right-content">-->
-<!--        &lt;!&ndash; 商品卡片 &ndash;&gt;-->
-<!--        <div class="product-card">-->
-<!--            <img src="/images/f1.jpg" alt="Peony">-->
-<!--            <h5>Peony Flowers</h5>-->
-<!--            <p>$10.00</p>-->
-<!--            <button class="btn btn-primary">加入购物车</button>-->
-<!--        </div>-->
 
-<!--        <div class="product-card">-->
-<!--            <img src="/images/f2.jpg" alt="White Roses">-->
-<!--            <h5>White Roses</h5>-->
-<!--            <p>$8.00</p>-->
-<!--            <button class="btn btn-primary">加入购物车</button>-->
-<!--        </div>-->
 
-<!--        <div class="product-card">-->
-<!--            <img src="/images/f3.jpg" alt="Small Daisies">-->
-<!--            <h5>Small Daisies</h5>-->
-<!--            <p>$5.00</p>-->
-<!--            <button class="btn btn-primary">加入购物车</button>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; 更多商品卡片 &ndash;&gt;-->
-<!--        <div class="product-card">-->
-<!--            <img src="/images/f4.jpg" alt="Red Tulips">-->
-<!--            <h5>Red Tulips</h5>-->
-<!--            <p>$12.00</p>-->
-<!--            <button class="btn btn-primary">加入购物车</button>-->
-<!--        </div>-->
-
-<!--        <div class="product-card">-->
-<!--            <img src="/images/f5.jpg" alt="Orchids">-->
-<!--            <h5>Orchids</h5>-->
-<!--            <p>$15.00</p>-->
-<!--            <button class="btn btn-primary" onclick="addToCart(1)">加入购物车</button>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 
 <div class="footer">
@@ -186,14 +134,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function addToCart(id) {
+    function addToCart(productName, productPrice, productImage, quantity) {
         $.ajax({
-            url: '/cart/add',
+            url: '/shopping/addToCart',
             type: 'POST',
-            data: { id: id },
+            data: {
+                productName: productName,
+                productPrice: productPrice,
+                productImage: productImage,
+                quantity: quantity
+            },
             success: function(response) {
-                alert(response.message);
-                updateCartCount(); // 更新购物车数量
+                if (response.status === 'success') {
+                    alert(response.message);
+                    updateCartCount(); // Update cart count
+                } else if (response.status === 'redirect') {
+                    window.location.href = response.url; // Redirect to login page
+                } else {
+                    alert("Error: " + response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while adding the item to the cart.');
             }
         });
     }

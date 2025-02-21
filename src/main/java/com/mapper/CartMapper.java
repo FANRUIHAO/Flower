@@ -2,10 +2,7 @@ package com.mapper;
 
 import com.entity.Cart;
 import com.entity.Product;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,4 +15,5 @@ public interface CartMapper {
     List<Cart> findByUserId(Long userId);
     @Delete("delete from cart where id=#{id}")
     void deleteCartItem(Long id);
+
 }

@@ -38,27 +38,59 @@ public class ShoppingController {
     }
     @PostMapping("/addToCart")
     @ResponseBody
-    public Map<String, String> addToCart(@RequestParam String productName, @RequestParam String productPrice, @RequestParam String productImage, @RequestParam Integer quantity, HttpSession session) {
+    public Map<String, String> addToCart(
+            @RequestParam String productName,
+            @RequestParam String productPrice,
+            @RequestParam String productImage,
+            @RequestParam Integer quantity,
+            HttpSession session) {
+
         User user = (User) session.getAttribute("currentUser");
         Map<String, String> response = new HashMap<>();
+
+        // 检查用户是否登录
         if (user == null) {
             response.put("status", "redirect");
             response.put("url", "/user/login");
             return response;
-
         }
 
+        // 创建购物车对象并设置属性
         Cart cart = new Cart();
         cart.setUser_id(user.getId());
         cart.setCname(productName);
-        cart.setCprice(new BigDecimal(productPrice).intValue());
+        cart.setCprice(new BigDecimal(productPrice).intValue()); // 注意：这里将价格转为整数
         cart.setImage_url(productImage);
         cart.setCnum(quantity); // 设置数量
+
+        // 保存购物车数据
         cartService.save(cart);
 
+        // 返回成功响应
         response.put("status", "success");
         response.put("message", "Item added to cart");
         return response;
+    }
+    @RequestMapping("/order")
+    public String order(HttpSession session, Model model) {
+        // 从 Session 中获取当前用户
+        User u = (User) session.getAttribute("currentUser");
+        if (u != null) {
+            // 如果用户已登录，显示用户信息
+            model.addAttribute("username", u.getUsername());
+            // 根据用户等级判断是否显示后台管理按钮
+            if (u.getGrade() == User.Grade.ADMIN) {
+                model.addAttribute("showAdminButton", true);
+            } else {
+                model.addAttribute("showAdminButton", false);
+            }
+        } else {
+            // 如果未登录，显示游客欢迎信息
+            model.addAttribute("username", "游客");
+            model.addAttribute("showAdminButton", false);
+        }
+
+        return "shopping/order"; // 返回订单页面
     }
     @GetMapping("/list")
     public String shoppingList(HttpSession session, Model model, @RequestParam(value = "user_image", required = false, defaultValue = "/static/images/person/p1.jpg") String user_image) {
@@ -214,10 +246,6 @@ public class ShoppingController {
         }
         return "redirect:/shopping/profile"; // If upload fails, redirect to the profile page
     }
-
-
-
-
     @PostMapping("/uploadImage")
     @ResponseBody
     public Map<String, String> uploadImage(@RequestParam("uploadImage") MultipartFile uploadImage, HttpSession session) {
