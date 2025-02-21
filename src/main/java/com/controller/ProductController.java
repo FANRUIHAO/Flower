@@ -83,29 +83,23 @@ public class ProductController {
     public String update(Product p, @RequestParam("image") MultipartFile image) {
         if (!image.isEmpty()) {
             try {
-                // 获取文件名
-                String fileName = image.getOriginalFilename();
                 // 设置文件存储目录
-                String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
+                String uploadDir = new File("target/classes/static/images/").getAbsolutePath();
                 File uploadDirFile = new File(uploadDir);
-
                 // 如果目录不存在，创建目录
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
-
                 // 设置文件存储路径
-                String filePath = uploadDir + File.separator + fileName;
+                String filePath = uploadDir + File.separator + image.getOriginalFilename();
                 File dest = new File(filePath);
-
                 // 将文件写入目标路径
                 image.transferTo(dest);
-
                 // 更新商品的图片路径
-                p.setPro_image("/images/" + fileName);
+                p.setPro_image("/images/" + image.getOriginalFilename() + "?t=" + System.currentTimeMillis());
             } catch (IOException e) {
                 e.printStackTrace();
-                // 处理文���上传错误
+                // 处理文文件上传错误
                 return "redirect:/product/list?error=upload";
             }
         } else {

@@ -34,7 +34,7 @@
 <body>
 <div class="container">
     <h2 class="text-center">Edit User</h2>
-    <form action="/user/save" method="post">
+    <form action="/user/update" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" th:value="${u.id}">
         <div class="form-group">
             <label for="userName">Username</label>
@@ -57,6 +57,10 @@
         <div class="form-group">
             <label for="userPassword">Password</label>
             <input type="password" name="password" class="form-control" th:value="${u.password}" id="userPassword" placeholder="Enter password">
+        </div>
+        <div class="form-group">
+            <label for="userImage">UserImage</label>
+            <input type="file" name="image" class="form-control-file" id="userImage">
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Save</button>

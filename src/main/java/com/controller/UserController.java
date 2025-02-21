@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.service.DeptService;
 import com.service.UserService;
 import com.vo.SexVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,8 +96,6 @@ public class UserController {
         model.addAttribute("users", pageInfo.getList());
         return "user/list";
     }
-
-
     @RequestMapping("/delete")
     public String delete(@RequestParam Integer id){
         userService.deleteUser(id);
@@ -116,6 +115,36 @@ public class UserController {
         model.addAttribute("u",u);
         //把查到的那条数据带回到list页面
         return "user/edit";
+    }
+    @RequestMapping("/update")
+    public String update(User u, @RequestParam("image") MultipartFile image, HttpSession session, Model model) {
+        if (!image.isEmpty()) {
+            try {
+                String fileName = image.getOriginalFilename();
+                String uploadDir = new File("target/classes/static/images/person/").getAbsolutePath();
+                File uploadDirFile = new File(uploadDir);
+
+                if (!uploadDirFile.exists()) {
+                    uploadDirFile.mkdirs();
+                }
+
+                String filePath = uploadDir + File.separator + fileName;
+                File dest = new File(filePath);
+                image.transferTo(dest);
+
+                String newImagePath = "/images/person/" + fileName + "?t=" + System.currentTimeMillis();
+                u.setUser_image(newImagePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "redirect:/user/list?error=upload";
+            }
+        } else {
+            User existingUser = userService.selectUserById(u.getId());
+            u.setUser_image(existingUser.getUser_image());
+        }
+
+        userService.updateUser(u);
+        return "redirect:/user/list";
     }
 
     @RequestMapping("/save")//添加
