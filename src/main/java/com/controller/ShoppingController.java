@@ -38,37 +38,34 @@ public class ShoppingController {
     }
     @PostMapping("/addToCart")
     @ResponseBody
-    public Map<String, String> addToCart(
-            @RequestParam String productName,
-            @RequestParam String productPrice,
-            @RequestParam String productImage,
-            @RequestParam Integer quantity,
-            HttpSession session) {
-
+    public Map<String, Object> addToCart(@RequestParam String productName,
+                                         @RequestParam Double productPrice,
+                                         @RequestParam String productImage,
+                                         @RequestParam Integer quantity,
+                                         HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        if (productPrice.isNaN() || productPrice.isInfinite()) {
+            response.put("status", "error");
+            response.put("message", "Invalid product price!");
+            return response;
+        }
         User user = (User) session.getAttribute("currentUser");
-        Map<String, String> response = new HashMap<>();
-
-        // 检查用户是否登录
         if (user == null) {
             response.put("status", "redirect");
             response.put("url", "/user/login");
             return response;
         }
+        // Add product to cart logic
+        Cart cartItem = new Cart();
+        cartItem.setUser_id(user.getId());
+        cartItem.setCname(productName);
+        cartItem.setCprice(new BigDecimal(productPrice).intValue());
+        cartItem.setImage_url(productImage);
+        cartItem.setCnum(quantity);
+        cartService.save(cartItem);
 
-        // 创建购物车对象并设置属性
-        Cart cart = new Cart();
-        cart.setUser_id(user.getId());
-        cart.setCname(productName);
-        cart.setCprice(new BigDecimal(productPrice).intValue()); // 注意：这里将价格转为整数
-        cart.setImage_url(productImage);
-        cart.setCnum(quantity); // 设置数量
-
-        // 保存购物车数据
-        cartService.save(cart);
-
-        // 返回成功响应
         response.put("status", "success");
-        response.put("message", "Item added to cart");
+        response.put("message", "Product added to cart successfully!");
         return response;
     }
     @RequestMapping("/order")
@@ -154,7 +151,8 @@ public class ShoppingController {
             model.addAttribute("username", "游客");
             model.addAttribute("showAdminButton", false);
         }
-
+        List<Product> products = shoppingService.getAllProducts();
+        model.addAttribute("products", products);
         return "shopping/collect"; // 返回收藏页面
     }
 

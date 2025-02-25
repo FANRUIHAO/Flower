@@ -33,7 +33,7 @@ public class ProductController {
         model.addAttribute("products", pageInfo.getList());
         return "product/list";
     }
-    String uploadDir = "src/main/resources/static/images/";
+    String uploadDir = new File("target/classes/static/images/").getAbsolutePath();
     File uploadDirFile = new File(uploadDir);
     @RequestMapping("/save")
     public String save(Product p, @RequestParam("image") MultipartFile image) {
