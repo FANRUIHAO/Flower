@@ -4,11 +4,9 @@ import com.entity.Cart;
 import com.entity.Product;
 import com.entity.User;
 import com.service.CartService;
-import com.service.ProductService;
 import com.service.ShoppingService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +34,20 @@ public class ShoppingController {
     public String home() {
         return "redirect:/shopping/list"; // 根路径跳转到购物列表页面
     }
+
+    @PostMapping("/identifyFlower")
+    @ResponseBody
+    public Product identifyFlower(@RequestParam("image") MultipartFile file) {
+        try {
+            System.out.println("Uploaded file name: " + file.getOriginalFilename());
+            return shoppingService.identifyFlower(file);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     @GetMapping("/filter")
     @ResponseBody
     public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
