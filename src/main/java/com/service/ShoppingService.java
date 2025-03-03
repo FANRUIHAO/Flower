@@ -19,4 +19,8 @@ public class ShoppingService {
     public  List<Product> getAllProducts() {
         return shoppingMapper.findAll();
     }
+
+    public List<Product> filterProducts(String category, double price) {
+        return shoppingMapper.filterProducts(category, price);
+    }
 }

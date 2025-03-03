@@ -36,6 +36,11 @@ public class ShoppingController {
     public String home() {
         return "redirect:/shopping/list"; // 根路径跳转到购物列表页面
     }
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
+        return shoppingService.filterProducts(category, price);
+    }
     @PostMapping("/addToCart")
     @ResponseBody
     public Map<String, Object> addToCart(@RequestParam String productName,
@@ -68,6 +73,7 @@ public class ShoppingController {
         response.put("message", "Product added to cart successfully!");
         return response;
     }
+
     @RequestMapping("/order")
     public String order(HttpSession session, Model model) {
         // 从 Session 中获取当前用户

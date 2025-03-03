@@ -217,31 +217,20 @@
     }
 </script>
 <script>
-    function uploadImage() {
-        var formData = new FormData();
-        var avatarFile = document.getElementById("avatar").files[0];
-        formData.append("uploadImage", avatarFile);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/shopping/uploadImage", true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                document.getElementById("currentAvatar").src = response.avatarUrl;
-                document.getElementById("uploadImage").src = response.avatarUrl;
-            } else {
-                console.error("Avatar upload failed.");
-            }
-        };
-        xhr.send(formData);
-    }
-</script>
-<script>
     $(document).ready(function() {
-        $('#refresh-button').click(function() {
+        $('#filter-form').submit(function(event) {
+            event.preventDefault(); // 阻止表单默认提交
+
+            const category = $('#category').val();
+            const price = $('#price').val();
+
             $.ajax({
-                url: '/shop/products',
+                url: '/shop/filter',
                 type: 'GET',
+                data: {
+                    category: category,
+                    price: price
+                },
                 success: function(products) {
                     var productList = $('#product-list');
                     productList.empty();
@@ -253,6 +242,11 @@
                                     <div class="card-body">
                                         <h5 class="card-title">${product.proname}</h5>
                                         <p class="card-text">$${product.price}</p>
+                                        <button class="btn btn-primary add-to-cart-btn"
+                                                data-product-name="${product.proname}"
+                                                data-product-price="${product.price}"
+                                                data-product-image="${product.pro_image}"
+                                                data-quantity="1">Add to Cart</button>
                                     </div>
                                 </div>
                             </div>`;

@@ -12,4 +12,6 @@ import java.util.Map;
 public interface ShoppingMapper{
     @Select("select * from product")
     List<Product> findAll();
+    @Select("select * from product where category = #{category} and price < #{price}")
+    List<Product> filterProducts(String category, double price);
 }
