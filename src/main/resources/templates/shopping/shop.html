@@ -253,7 +253,7 @@
                 data: { productName: productName },
                 success: function(response) {
                     const favoriteButton = $('#addToFavoritesBtn');
-                    if (response.isCollect) {
+                    if (response.isCollected) { // 使用 isCollected
                         favoriteButton.text('已收藏');
                         favoriteButton.off('click').on('click', function() {
                             removeFromFavorite(productName);
@@ -272,11 +272,39 @@
         }
 
         function addToFavorite(productName) {
-            // Add to favorite logic
+            $.ajax({
+                url: '/shopping/addToFavorite',
+                type: 'POST',
+                data: { productName: productName },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        checkFavoriteStatus(productName);
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while adding the item to favorites.');
+                }
+            });
         }
 
         function removeFromFavorite(productName) {
-            // Remove from favorite logic
+            $.ajax({
+                url: '/shopping/removeFromFavorite',
+                type: 'POST',
+                data: { productName: productName },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        checkFavoriteStatus(productName);
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while removing the item from favorites.');
+                }
+            });
         }
 
         function loadProductReviews(productName) {

@@ -164,3 +164,28 @@ nav ul li:hover::after {
     display: block; /* Ensure the icon is treated as a block element */
     line-height: 1; /* 确保图标垂直居中 */
 }
+.user-avatar {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    border-radius: 50%; /* Make the avatar circular */
+    margin-right: 10px;
+}
+.product-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 20px;
+}
+.product-item {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    text-align: center;
+}
+.product-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.product-item button {
+    margin-top: 10px;
+}

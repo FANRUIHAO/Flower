@@ -1,13 +1,13 @@
 package com.controller;
 
-import com.entity.Cart;
-import com.entity.Comment;
-import com.entity.Product;
-import com.entity.User;
+import com.entity.*;
 import com.service.CartService;
 import com.service.CommentsService;
 import com.service.ShoppingService;
 import com.service.UserService;
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +63,9 @@ public class ShoppingController {
         return commentService.getCommentsByProductName(productName);
     }
 
+
+
+
     @GetMapping("/checkCollect")
     @ResponseBody
     public Map<String, Object> checkCollect(@RequestParam String productName, HttpSession session) {
@@ -75,21 +78,21 @@ public class ShoppingController {
             return response;
         }
         // Check if the product is already in the favorite list
-        boolean isCollected = shoppingService.isProductCollected(user.getId(), productName);
+        System.out.println("222");
+        boolean isCollected = shoppingService.isProductCollected(user.getUsername(), productName);
+        System.out.println("333");
         response.put("status", "success");
         response.put("isCollected", isCollected);
         return response;
     }
-
-
     @GetMapping("/addToFavorite")
     @ResponseBody
-    public Map<String , Object> addToFavorite(@RequestParam String productName,
-                                              @RequestParam Double productPrice,
+    public Map<String, Object> addToFavorite(@RequestParam String productName,
+                                              @RequestParam Integer productPrice,
                                               @RequestParam String productImage,
                                               HttpSession session) {
         Map<String, Object> response = new HashMap<>();
-        if (productPrice.isNaN() || productPrice.isInfinite()) {
+        if (productPrice == null || productPrice <= 0) {
             response.put("status", "error");
             response.put("message", "Invalid product price!");
             return response;
@@ -100,12 +103,30 @@ public class ShoppingController {
             response.put("url", "/user/login");
             return response;
         }
-        shoppingService.addToFavorite(user.getId().longValue(), productName, productPrice, productImage);
+        shoppingService.addToFavorite(user.getUsername(), productName, productPrice, productImage);
         // Add product to favorite logic
         response.put("status", "success");
         response.put("message", "Product added to favorite successfully!");
         return response;
     }
+    @PostMapping("removeFromFavorite")
+    @ResponseBody
+    public Map<String, Object> removeFromFavorite(@RequestParam String productName, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+        // Remove product from favorite logic
+        shoppingService.removeFromFavorite(user.getUsername(), productName);
+        response.put("status", "success");
+        response.put("message", "Product removed from favorite successfully!");
+        return response;
+    }
+
+
 
     @PostMapping("/addToCart")
     @ResponseBody
@@ -138,6 +159,29 @@ public class ShoppingController {
         response.put("status", "success");
         response.put("message", "Product added to cart successfully!");
         return response;
+    }
+
+    @GetMapping("/collect")
+    public String showCollectPage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+            model.addAttribute("userImage", user.getUser_image());
+            model.addAttribute("showAdminButton", user.getGrade() == User.Grade.ADMIN);
+
+        } else {
+            model.addAttribute("username", "游客");
+            model.addAttribute("showAdminButton", false);
+            return "redirect:/user/login";
+        }
+        List<Collect> favoriteProducts = shoppingService.listcollect(user.getUsername());
+        model.addAttribute("favoriteProducts", favoriteProducts);
+        for (Collect c : favoriteProducts) {
+            System.out.println("Product Name: " + c.getProduct());
+            System.out.println("Product Image Path: " + c.getImage());
+        }
+
+        return "shopping/collect";
     }
 
 

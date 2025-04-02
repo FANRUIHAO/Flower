@@ -1,5 +1,6 @@
 package com.service;
 
+import com.entity.Collect;
 import com.entity.Product;
 import com.entity.User;
 import com.mapper.ShoppingMapper;
@@ -24,37 +25,7 @@ public class ShoppingService {
     @Autowired
     private  ShoppingMapper shoppingMapper;
     private static final String FLASK_API_URL = "http://localhost:5000/predict";
-//    public String identifyFlower(MultipartFile file) {
-//        try {
-//            // 构建请求体
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-//            Resource resource = new ByteArrayResource(file.getBytes()) {
-//                @Override
-//                public String getFilename() {
-//                    return file.getOriginalFilename();
-//                }
-//            };
-//            body.add("file", resource);
-//
-//            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-//
-//            // 发送请求到 Flask API
-//            RestTemplate restTemplate = new RestTemplate();
-//            ResponseEntity<String> response = restTemplate.postForEntity(FLASK_API_URL, requestEntity, String.class);
-//
-//            // 解析响应结果
-//            if (response.getStatusCode() == HttpStatus.OK) {
-//                return response.getBody(); // 返回花卉名称
-//            } else {
-//                throw new RuntimeException("Failed to call Flask API");
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error processing the image", e);
-//        }
-//    }
+
 public Product identifyFlower(MultipartFile file) {
     try {
         // 构建请求体
@@ -116,12 +87,21 @@ public Product identifyFlower(MultipartFile file) {
         shoppingMapper.showComment(comment, cproduct);
     }
 
-    public void addToFavorite(long l, String productName, Double productPrice, String productImage) {
-        shoppingMapper.addToFavorite(l, productName, productPrice, productImage);
+    public void addToFavorite(String arg1, String productName, Integer productPrice, String productImage) {
+        shoppingMapper.addToFavorite(arg1, productName, productPrice, productImage);
     }
 
-    public boolean isProductCollected(Integer l, String productName) {
-        return shoppingMapper.isProductCollected(l, productName) > 0;
+    public boolean isProductCollected(String arg1, String productName) {
+    System.out.println("123");
+        return shoppingMapper.isProductCollected(arg1, productName) > 0;
+    }
+
+    public void removeFromFavorite(String arg1, String productName) {
+        shoppingMapper.removeFromFavorite(arg1, productName);
+    }
+
+    public List<Collect> listcollect(String username) {
+        return shoppingMapper.listcollect(username);
     }
 
 
