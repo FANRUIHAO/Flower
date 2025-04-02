@@ -297,3 +297,42 @@ nav ul li:hover::after {
     display: block; /* Ensure the icon is treated as a block element */
     line-height: 1; /* 确保图标垂直居中 */
 }
+ .review {
+     display: flex;
+     align-items: flex-start;
+     margin-bottom: 15px;
+     padding: 10px;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+     background-color: #f9f9f9;
+ }
+
+.review h6 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.review p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.review small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.floating-alert {
+    display: inline-block;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1050;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

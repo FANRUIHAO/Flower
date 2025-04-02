@@ -1,9 +1,11 @@
 package com.controller;
 
 import com.entity.Cart;
+import com.entity.Comment;
 import com.entity.Product;
 import com.entity.User;
 import com.service.CartService;
+import com.service.CommentsService;
 import com.service.ShoppingService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class ShoppingController {
     private UserService userService;
     @Autowired
     private ShoppingService shoppingService;
+    @Autowired
+    private CommentsService commentService;
 
     @GetMapping("/")
     public String home() {
@@ -53,6 +57,56 @@ public class ShoppingController {
     public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
         return shoppingService.filterProducts(category, price);
     }
+    @GetMapping("/comments")
+    @ResponseBody
+    public List<Comment> getProductComments(@RequestParam String productName) {
+        return commentService.getCommentsByProductName(productName);
+    }
+
+    @GetMapping("/checkCollect")
+    @ResponseBody
+    public Map<String, Object> checkCollect(@RequestParam String productName, HttpSession session) {
+        System.out.println("111");
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+        // Check if the product is already in the favorite list
+        boolean isCollected = shoppingService.isProductCollected(user.getId(), productName);
+        response.put("status", "success");
+        response.put("isCollected", isCollected);
+        return response;
+    }
+
+
+    @GetMapping("/addToFavorite")
+    @ResponseBody
+    public Map<String , Object> addToFavorite(@RequestParam String productName,
+                                              @RequestParam Double productPrice,
+                                              @RequestParam String productImage,
+                                              HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        if (productPrice.isNaN() || productPrice.isInfinite()) {
+            response.put("status", "error");
+            response.put("message", "Invalid product price!");
+            return response;
+        }
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+        shoppingService.addToFavorite(user.getId().longValue(), productName, productPrice, productImage);
+        // Add product to favorite logic
+        response.put("status", "success");
+        response.put("message", "Product added to favorite successfully!");
+        return response;
+    }
+
     @PostMapping("/addToCart")
     @ResponseBody
     public Map<String, Object> addToCart(@RequestParam String productName,
@@ -85,6 +139,7 @@ public class ShoppingController {
         response.put("message", "Product added to cart successfully!");
         return response;
     }
+
 
     @RequestMapping("/order")
     public String order(HttpSession session, Model model) {

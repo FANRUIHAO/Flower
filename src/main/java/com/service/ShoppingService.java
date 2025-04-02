@@ -112,6 +112,18 @@ public Product identifyFlower(MultipartFile file) {
         return shoppingMapper.filterProducts(category, price);
     }
 
+    public void showComment(String comment, String cproduct) {
+        shoppingMapper.showComment(comment, cproduct);
+    }
+
+    public void addToFavorite(long l, String productName, Double productPrice, String productImage) {
+        shoppingMapper.addToFavorite(l, productName, productPrice, productImage);
+    }
+
+    public boolean isProductCollected(Integer l, String productName) {
+        return shoppingMapper.isProductCollected(l, productName) > 0;
+    }
+
 
 //    public String identifyFlower(MultipartFile file) {
 //        // 调用Python模型识别花卉名称的逻辑
