@@ -69,7 +69,6 @@ public class ShoppingController {
     @GetMapping("/checkCollect")
     @ResponseBody
     public Map<String, Object> checkCollect(@RequestParam String productName, HttpSession session) {
-        System.out.println("111");
         Map<String, Object> response = new HashMap<>();
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
@@ -78,25 +77,18 @@ public class ShoppingController {
             return response;
         }
         // Check if the product is already in the favorite list
-        System.out.println("222");
         boolean isCollected = shoppingService.isProductCollected(user.getUsername(), productName);
-        System.out.println("333");
         response.put("status", "success");
         response.put("isCollected", isCollected);
         return response;
     }
-    @GetMapping("/addToFavorite")
+
+    @PostMapping("/addToFavorite")
     @ResponseBody
-    public Map<String, Object> addToFavorite(@RequestParam String productName,
-                                              @RequestParam Integer productPrice,
-                                              @RequestParam String productImage,
-                                              HttpSession session) {
+    public Map<String, Object> addToFavorite(@RequestParam String productName, HttpSession session,
+                                             @RequestParam Integer productPrice,
+                                             @RequestParam String productImage) {
         Map<String, Object> response = new HashMap<>();
-        if (productPrice == null || productPrice <= 0) {
-            response.put("status", "error");
-            response.put("message", "Invalid product price!");
-            return response;
-        }
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             response.put("status", "redirect");
@@ -104,7 +96,6 @@ public class ShoppingController {
             return response;
         }
         shoppingService.addToFavorite(user.getUsername(), productName, productPrice, productImage);
-        // Add product to favorite logic
         response.put("status", "success");
         response.put("message", "Product added to favorite successfully!");
         return response;
@@ -121,12 +112,11 @@ public class ShoppingController {
         }
         // Remove product from favorite logic
         shoppingService.removeFromFavorite(user.getUsername(), productName);
+
         response.put("status", "success");
         response.put("message", "Product removed from favorite successfully!");
         return response;
     }
-
-
 
     @PostMapping("/addToCart")
     @ResponseBody
@@ -176,11 +166,6 @@ public class ShoppingController {
         }
         List<Collect> favoriteProducts = shoppingService.listcollect(user.getUsername());
         model.addAttribute("favoriteProducts", favoriteProducts);
-        for (Collect c : favoriteProducts) {
-            System.out.println("Product Name: " + c.getProduct());
-            System.out.println("Product Image Path: " + c.getImage());
-        }
-
         return "shopping/collect";
     }
 

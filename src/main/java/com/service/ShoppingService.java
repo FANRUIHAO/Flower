@@ -87,12 +87,12 @@ public Product identifyFlower(MultipartFile file) {
         shoppingMapper.showComment(comment, cproduct);
     }
 
-    public void addToFavorite(String arg1, String productName, Integer productPrice, String productImage) {
-        shoppingMapper.addToFavorite(arg1, productName, productPrice, productImage);
+    public void addToFavorite(String username, String productName, Integer productPrice, String productImage) {
+
+        shoppingMapper.addToFavorite(username, productName, productPrice, productImage);
     }
 
     public boolean isProductCollected(String arg1, String productName) {
-    System.out.println("123");
         return shoppingMapper.isProductCollected(arg1, productName) > 0;
     }
 
@@ -105,21 +105,5 @@ public Product identifyFlower(MultipartFile file) {
     }
 
 
-//    public String identifyFlower(MultipartFile file) {
-//        // 调用Python模型识别花卉名称的逻辑
-//        // 这里假设调用了一个外部服务并返回花卉名称
-//        String flowerName = callPythonModel(file);
-//        return flowerName;
-//    }
-//
-//    private String callPythonModel(MultipartFile file) {
-//        // 调用Python模型的具体实现
-//        // 这里可以使用HTTP请求或其他方式与Python服务进行通信
-//        // 返回识别出的花卉名称
-//        return "Rose"; // 示例返回值
-//    }
-//
-//    public Product getProductsByFlowerName(String flowerName) {
-//        return shoppingMapper.getProductsByFlowerName(flowerName);
-//    }
+
 }

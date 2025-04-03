@@ -336,3 +336,33 @@ nav ul li:hover::after {
     z-index: 1050;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.modal-content {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+#addToCartBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.minus-btn, .plus-btn {
+    transition: all 0.2s;
+}
+
+.minus-btn:hover, .plus-btn:hover {
+    background-color: #f8f9fa;
+}
+
+/* 评论区域滚动条样式 */
+#productReviews::-webkit-scrollbar {
+    width: 5px;
+}
+
+#productReviews::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#productReviews::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
