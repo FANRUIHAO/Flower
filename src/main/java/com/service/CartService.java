@@ -17,7 +17,7 @@ public class CartService {
     public void save(Cart cart) {
         cartMapper.save(cart);
     }
-    public List<Cart> getCartItemsByUserId(Long userId) {
+    public List<Cart> getCartItemsByUserId(Integer userId) {
         return cartMapper.findByUserId(userId);
     }
 
@@ -26,5 +26,37 @@ public class CartService {
     }
 
 
+    public boolean updateCartItemQuantity(Long id, Integer quantity) {
+        Cart cartItem = cartMapper.findById(id);
+        if (cartItem != null) {
+            cartItem.setCnum(quantity);
+            cartMapper.updateCartItem(cartItem);
+            return true;
+        }
+        return false;
+    }
+
+    public Cart findByUserIdAndProductName(Integer id, String productName) {
+        List<Cart> cartItems = cartMapper.findByUserId(id);
+        for (Cart cartItem : cartItems) {
+            if (cartItem.getCname().equals(productName)) {
+                return cartItem;
+            }
+        }
+        return null;
+    }
+
+    public void update(Cart existingItem) {
+        cartMapper.updateCartItem(existingItem);
+    }
+
+    public int getCartItemCount(Integer id) {
+        List<Cart> cartItems = cartMapper.findByUserId(id);
+        int count = 0;
+        for (Cart cartItem : cartItems) {
+            count += cartItem.getCnum();
+        }
+        return count;
+    }
 }
 

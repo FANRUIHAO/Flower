@@ -393,6 +393,69 @@
     }
 
     // 加载商品评价
+
+
+    // 数量加减按钮
+    $('.minus-btn').click(function() {
+        var quantity = parseInt($('#modalProductQuantity').val());
+        if(quantity > 1) {
+            $('#modalProductQuantity').val(quantity - 1);
+        }
+    });
+
+    $('.plus-btn').click(function() {
+        var quantity = parseInt($('#modalProductQuantity').val());
+        $('#modalProductQuantity').val(quantity + 1);
+    });
+
+    // 添加到购物车按钮点击事件
+    $('#addToCartBtn').click(function() {
+        const productName = $('#modalProductName').text();
+        const productPrice = parseFloat($('#modalProductPrice').text().substring(1));
+        const productImage = $('#modalProductImage').attr('src');
+        const quantity = parseInt($('#modalProductQuantity').val());
+
+        addToCart(productName, productPrice, productImage, quantity);
+    });
+
+// 改进后的添加到购物车函数
+    function addToCart(productName, productPrice, productImage, quantity) {
+        $.ajax({
+            url: '/shopping/addToCart',
+            type: 'POST',
+            data: {
+                productName: productName,
+                productPrice: productPrice,
+                productImage: productImage,
+                quantity: quantity
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    showAlert('成功加入购物车', 'success');
+                    // 关闭模态框
+
+                    // 可以在这里更新购物车图标上的数量
+                    updateCartCount(response.cartItemCount);
+                } else if (response.status === 'redirect') {
+                    window.location.href = response.url;
+                } else {
+                    showAlert('加入购物车失败: ' + response.message, 'danger');
+                }
+            },
+            error: function() {
+                showAlert('加入购物车时出错', 'danger');
+            }
+        });
+    }
+
+// 更新购物车数量显示
+    function updateCartCount(count) {
+        const cartCount = $('#cartItemCount');
+        if (cartCount.length) {
+            cartCount.text(count);
+            cartCount.fadeIn();
+        }
+    }
     function loadProductReviews(productName) {
         $.ajax({
             url: '/shopping/comments',
@@ -418,218 +481,6 @@
             }
         });
     }
-
-    // 数量加减按钮
-    $('.minus-btn').click(function() {
-        var quantity = parseInt($('#modalProductQuantity').val());
-        if(quantity > 1) {
-            $('#modalProductQuantity').val(quantity - 1);
-        }
-    });
-
-    $('.plus-btn').click(function() {
-        var quantity = parseInt($('#modalProductQuantity').val());
-        $('#modalProductQuantity').val(quantity + 1);
-    });
-
-    // 添加到购物车
-    $('#addToCartBtn').click(function() {
-        const productName = $('#modalProductName').text();
-        const productPrice = parseFloat($('#modalProductPrice').text().substring(1));
-        const productImage = $('#modalProductImage').attr('src');
-        const quantity = $('#modalProductQuantity').val();
-
-        addToCart(productName, productPrice, productImage, quantity);
-    });
-
-    function addToCart(productName, productPrice, productImage, quantity) {
-        $.ajax({
-            url: '/shopping/addToCart',
-            type: 'POST',
-            data: {
-                productName: productName,
-                productPrice: productPrice,
-                productImage: productImage,
-                quantity: quantity
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    showAlert('成功加入购物车', 'success');
-                } else if (response.status === 'redirect') {
-                    window.location.href = response.url;
-                } else {
-                    showAlert('加入购物车失败: ' + response.message, 'danger');
-                }
-            },
-            error: function() {
-                showAlert('加入购物车时出错', 'danger');
-            }
-        });
-    }
-    // $(document).ready(function() {
-    //     // 处理查看按钮点击事件
-    //     $('.view-product-btn').click(function() {
-    //         const productName = $(this).data('product-name');
-    //         const productPrice = $(this).data('product-price');
-    //         const productImage = $(this).data('product-image');
-    //
-    //         // 填充模态框内容
-    //         $('#modalProductImage').attr('src', productImage);
-    //         $('#modalProductName').text(productName);
-    //         $('#modalProductPrice').text('$' + productPrice);
-    //         $('#modalProductQuantity').val(1);
-    //
-    //         // 显示模态框
-    //         $('#productModal').modal('show');
-    //
-    //         // 加载商品评价
-    //         loadProductReviews(productName);
-    //
-    //         checkFavoriteStatus(productName);
-    //     });
-    //
-    //     function checkFavoriteStatus(productName, productPrice, productImage) {
-    //         $.ajax({
-    //             url: '/shopping/checkCollect',
-    //             type: 'GET',
-    //             data: { productName: productName,
-    //                     productPrice: productPrice,
-    //                     productImage: productImage
-    //             },
-    //             success: function(response) {
-    //                 const favoriteButton = $('#addToFavoritesBtn');
-    //                 if (response.isCollected) { // 使用 isCollected
-    //                     favoriteButton.text('已收藏');
-    //                     favoriteButton.off('click').on('click', function() {
-    //                         removeFromFavorite(productName);
-    //                     });
-    //                 } else {
-    //                     favoriteButton.text('收藏');
-    //                     favoriteButton.off('click').on('click', function() {
-    //                         addToFavorite(productName, productPrice, productImage);
-    //                     });
-    //                 }
-    //             },
-    //             error: function() {
-    //                 alert('An error occurred while checking the favorite status.');
-    //             }
-    //         });
-    //     }
-    //
-    //     function addToFavorite(productName, productPrice, productImage) {
-    //         $.ajax({
-    //             url: '/shopping/addToFavorite',
-    //             type: 'POST',
-    //             data: { productName: productName,
-    //                     productPrice: productPrice,
-    //                     productImage: productImage
-    //             },
-    //             success: function(response) {
-    //                 if (response.status === 'success') {
-    //                     checkFavoriteStatus(productName);
-    //                 } else {
-    //                     alert("Error: " + response.message);
-    //                 }
-    //             },
-    //             error: function() {
-    //                 alert('An error occurred while adding the item to favorites.');
-    //             }
-    //         });
-    //     }
-    //     $('.addToFavoritesBtn').click(function() {
-    //         const productName = $(this).data('product-name');
-    //         const productPrice = $(this).data('product-price');
-    //         const productImage = $(this).data('product-image');
-    //
-    //         addToFavorite(productName, productPrice, productImage);
-    //     });
-    //
-    //
-    //     function removeFromFavorite(productName) {
-    //         $.ajax({
-    //                 url: '/shopping/removeFromFavorite',
-    //             type: 'POST',
-    //             data: { productName: productName },
-    //             success: function(response) {
-    //                 if (response.status === 'success') {
-    //                     checkFavoriteStatus(productName);
-    //                 } else {
-    //                     alert("Error: " + response.message);
-    //                 }
-    //             },
-    //             error: function() {
-    //                 alert('An error occurred while removing the item from favorites.');
-    //             }
-    //         });
-    //     }
-    //     function loadProductReviews(productName) {
-    //         $.ajax({
-    //             url: '/shopping/comments',
-    //             type: 'GET',
-    //             data: { productName: productName },
-    //             success: function(comments) {
-    //                 const reviewsContainer = $('#productReviews');
-    //                 reviewsContainer.empty();
-    //                 comments.forEach(function(comment) {
-    //                     const reviewHtml = `
-    //                 <div class="review">
-    //                     <div>
-    //                         <h6>${comment.username}</h6>
-    //                         <p>${comment.comment}</p>
-    //                         <small>Product: ${comment.cproduct}</small>
-    //                     </div>
-    //                 </div>`;
-    //                     reviewsContainer.append(reviewHtml);
-    //                 });
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 console.error('Error loading product reviews:', status, error);
-    //                 alert('Failed to load product reviews.');
-    //             }
-    //         });
-    //     }
-    //     // 处理添加至购物车按钮点击事件
-    //     $('#addToCartBtn').click(function() {
-    //         const productName = $('#modalProductName').text();
-    //         const productPrice = parseFloat($('#modalProductPrice').text().substring(1));
-    //         const productImage = $('#modalProductImage').attr('src');
-    //         const quantity = $('#modalProductQuantity').val();
-    //
-    //         addToCart(productName, productPrice, productImage, quantity);
-    //     });
-    //     function addToCart(productName, productPrice, productImage, quantity) {
-    //         $.ajax({
-    //             url: '/shopping/addToCart',
-    //             type: 'POST',
-    //             data: {
-    //                 productName: productName,
-    //                 productPrice: productPrice,
-    //                 productImage: productImage,
-    //                 quantity: quantity
-    //             },
-    //             success: function(response) {
-    //                 if (response.status === 'success') {
-    //                     showFloatingAlert('Successfully added to cart!');
-    //                 } else if (response.status === 'redirect') {
-    //                     window.location.href = response.url;
-    //                 } else {
-    //                     alert("Error: " + response.message);
-    //                 }
-    //             },
-    //             error: function() {
-    //                 alert('An error occurred while adding the item to the cart.');
-    //             }
-    //         });
-    //     }
-        function showFloatingAlert(message) {
-            const alert = $('<div class="floating-alert"></div>').text(message);
-            $('#productModalLabel').append(alert);
-            setTimeout(function() {
-                alert.fadeOut(function() {
-                    $(this).remove();
-                });
-            }, 1000); // 1 second
-        }
     });
 </script>
 

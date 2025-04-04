@@ -5,16 +5,18 @@ import com.service.CartService;
 import com.service.CommentsService;
 import com.service.ShoppingService;
 import com.service.UserService;
-import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -38,7 +40,6 @@ public class ShoppingController {
     public String home() {
         return "redirect:/shopping/list"; // 根路径跳转到购物列表页面
     }
-
     @PostMapping("/identifyFlower")
     @ResponseBody
     public Product identifyFlower(@RequestParam("image") MultipartFile file) {
@@ -50,8 +51,6 @@ public class ShoppingController {
             return null;
         }
     }
-
-
     @GetMapping("/filter")
     @ResponseBody
     public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
@@ -62,10 +61,6 @@ public class ShoppingController {
     public List<Comment> getProductComments(@RequestParam String productName) {
         return commentService.getCommentsByProductName(productName);
     }
-
-
-
-
     @GetMapping("/checkCollect")
     @ResponseBody
     public Map<String, Object> checkCollect(@RequestParam String productName, HttpSession session) {
@@ -82,7 +77,6 @@ public class ShoppingController {
         response.put("isCollected", isCollected);
         return response;
     }
-
     @PostMapping("/addToFavorite")
     @ResponseBody
     public Map<String, Object> addToFavorite(@RequestParam String productName, HttpSession session,
@@ -117,7 +111,6 @@ public class ShoppingController {
         response.put("message", "Product removed from favorite successfully!");
         return response;
     }
-
     @PostMapping("/addToCart")
     @ResponseBody
     public Map<String, Object> addToCart(@RequestParam String productName,
@@ -126,31 +119,112 @@ public class ShoppingController {
                                          @RequestParam Integer quantity,
                                          HttpSession session) {
         Map<String, Object> response = new HashMap<>();
-        if (productPrice.isNaN() || productPrice.isInfinite()) {
+
+        // 验证价格
+        if (productPrice.isNaN() || productPrice.isInfinite() || productPrice <= 0) {
             response.put("status", "error");
             response.put("message", "Invalid product price!");
             return response;
         }
+
+        // 验证数量
+        if (quantity <= 0) {
+            response.put("status", "error");
+            response.put("message", "Quantity must be greater than 0!");
+            return response;
+        }
+
+        // 检查用户登录状态
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             response.put("status", "redirect");
             response.put("url", "/user/login");
             return response;
         }
-        // Add product to cart logic
-        Cart cartItem = new Cart();
-        cartItem.setUser_id(user.getId());
-        cartItem.setCname(productName);
-        cartItem.setCprice(new BigDecimal(productPrice).intValue());
-        cartItem.setImage_url(productImage);
-        cartItem.setCnum(quantity);
-        cartService.save(cartItem);
 
-        response.put("status", "success");
-        response.put("message", "Product added to cart successfully!");
+        try {
+            // 检查购物车中是否已有该商品
+            Cart existingItem = cartService.findByUserIdAndProductName(user.getId(), productName);
+
+            if (existingItem != null) {
+                // 如果已存在，更新数量
+                int newQuantity = existingItem.getCnum() + quantity;
+                existingItem.setCnum(newQuantity);
+                cartService.update(existingItem);
+                response.put("message", "Product quantity updated in cart!");
+            } else {
+                // 如果不存在，创建新条目
+                Cart cartItem = new Cart();
+                cartItem.setUser_id(user.getId());
+                cartItem.setCname(productName);
+                cartItem.setCprice(new BigDecimal(productPrice).intValue());
+                cartItem.setImage_url(productImage);
+                cartItem.setCnum(quantity);
+                cartService.save(cartItem);
+                response.put("message", "Product added to cart successfully!");
+            }
+
+            // 获取更新后的购物车商品总数
+            int cartItemCount = cartService.getCartItemCount(user.getId());
+
+            response.put("status", "success");
+            response.put("cartItemCount", cartItemCount);
+
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "Failed to update cart: " + e.getMessage());
+        }
+
         return response;
     }
-
+//    @PostMapping("/addToCart")
+//    @ResponseBody
+//    public Map<String, Object> addToCart(@RequestParam String productName,
+//                                         @RequestParam Double productPrice,
+//                                         @RequestParam String productImage,
+//                                         @RequestParam Integer quantity,
+//                                         HttpSession session) {
+//        Map<String, Object> response = new HashMap<>();
+//        if (productPrice.isNaN() || productPrice.isInfinite()) {
+//            response.put("status", "error");
+//            response.put("message", "Invalid product price!");
+//            return response;
+//        }
+//        User user = (User) session.getAttribute("currentUser");
+//        if (user == null) {
+//            response.put("status", "redirect");
+//            response.put("url", "/user/login");
+//            return response;
+//        }
+//        // Add product to cart logic
+//        Cart cartItem = new Cart();
+//        cartItem.setUser_id(user.getId());
+//        cartItem.setCname(productName);
+//        cartItem.setCprice(new BigDecimal(productPrice).intValue());
+//        cartItem.setImage_url(productImage);
+//        cartItem.setCnum(quantity);
+//        cartService.save(cartItem);
+//
+//        response.put("status", "success");
+//        response.put("message", "Product added to cart successfully!");
+//        return response;
+//    }
+    @PostMapping("/updateCartItemQuantity")
+    @ResponseBody
+    public ResponseEntity<Response> updateCartItemQuantity(@RequestParam Long id, @RequestParam Integer quantity) {
+        try {
+            boolean success = cartService.updateCartItemQuantity(id, quantity);
+            if(success) {
+                return ResponseEntity.ok(new Response("success", "Item quantity updated successfully."));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new Response("error", "Failed to update quantity"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Response("error", "Error occurred: " + e.getMessage()));
+        }
+    }
     @GetMapping("/collect")
     public String showCollectPage(HttpSession session, Model model) {
         User user = (User) session.getAttribute("currentUser");
@@ -168,8 +242,6 @@ public class ShoppingController {
         model.addAttribute("favoriteProducts", favoriteProducts);
         return "shopping/collect";
     }
-
-
     @RequestMapping("/order")
     public String order(HttpSession session, Model model) {
         // 从 Session 中获取当前用户
@@ -265,7 +337,7 @@ public class ShoppingController {
             return "redirect:/user/login";
         }
 
-        List<Cart> cartItems = cartService.getCartItemsByUserId(user.getId().longValue());
+        List<Cart> cartItems = cartService.getCartItemsByUserId(user.getId());
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("showAdminButton", user.getGrade() == User.Grade.ADMIN);
