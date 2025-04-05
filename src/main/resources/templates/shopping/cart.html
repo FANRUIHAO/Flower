@@ -302,8 +302,11 @@
     // 删除选中商品
     function deleteSelected() {
         const selectedIds = [];
+        const selectedItems = [];
+
         document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {
             selectedIds.push(checkbox.value);
+            selectedItems.push(checkbox.closest('.cart-item'));
         });
 
         if (selectedIds.length === 0) {
@@ -312,8 +315,40 @@
         }
 
         if (confirm('Are you sure you want to delete the selected items?')) {
-            // 这里实现批量删除逻辑
-            // 可以使用类似的AJAX请求
+            // 发送AJAX请求批量删除
+            $.ajax({
+                url: '/shopping/removeMultipleFromCart',
+                type: 'POST',
+                traditional: true,  // 确保数组正确序列化
+                data: {
+                    ids: selectedIds
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // 从前端移除已删除的商品
+                        selectedItems.forEach(item => {
+                            item.remove();
+                        });
+
+                        // 更新总价和选中数量
+                        updateTotalPrice();
+
+                        // 取消"全选"复选框的选中状态
+                        document.querySelectorAll('#selectAll, #selectAllFooter').forEach(checkbox => {
+                            checkbox.checked = false;
+                        });
+
+                        // 检查购物车是否为空
+                        checkEmptyCart();
+                    } else {
+                        alert(response.message || 'Failed to delete items');
+                    }
+                },
+                error: function(xhr) {
+                    alert('An error occurred while deleting items. Please try again.');
+                    console.error('Delete error:', xhr.responseText);
+                }
+            });
         }
     }
 
@@ -333,126 +368,6 @@
         window.location.href = '/shopping/checkout?items=' + selectedIds.join(',');
     }
 </script>
-<!--<script>-->
-<!--    // 数量增减功能-->
-<!--    function changeQuantity(btn, change) {-->
-<!--        const input = btn.parentElement.querySelector('.quantity-input');-->
-<!--        let quantity = parseInt(input.value) + change;-->
-<!--        if (quantity < 0) quantity = 0; // 允许减少到0-->
-<!--        input.value = quantity;-->
-
-<!--        // 更新小计-->
-<!--        updateSubtotal(btn.closest('.cart-item'));-->
-<!--        // 更新总价-->
-<!--        updateTotalPrice();-->
-
-<!--        // 这里应该发送AJAX请求到服务器更新商品数量-->
-<!--        // 示例代码，实际需要根据你的后端API调整-->
-<!--        const itemId = btn.closest('.cart-item').querySelector('.item-checkbox').value;-->
-<!--        updateCartItemQuantity(itemId, quantity);-->
-<!--    }-->
-<!--    function updateCartItemQuantity(itemId, quantity) {-->
-<!--        $.ajax({-->
-<!--            url: '/shopping/updateCartItem',-->
-<!--            type: 'POST',-->
-<!--            data: { id: itemId, quantity: quantity },-->
-<!--            success: function(response) {-->
-<!--                if (response.status !== 'success') {-->
-<!--                    alert("Error: " + response.message);-->
-<!--                }-->
-<!--            },-->
-<!--            error: function() {-->
-<!--                alert('An error occurred while updating the item quantity.');-->
-<!--            }-->
-<!--        });-->
-<!--    }-->
-
-<!--    // 更新单个商品小计-->
-<!--    function updateSubtotal(itemElement) {-->
-<!--        const priceText = itemElement.querySelector('.product-price').textContent;-->
-<!--        const price = parseFloat(priceText.replace('¥', ''));-->
-<!--        const quantity = parseInt(itemElement.querySelector('.quantity-input').value);-->
-<!--        const subtotal = (price * quantity).toFixed(2);-->
-<!--        itemElement.querySelector('.product-subtotal').textContent = '¥' + subtotal;-->
-<!--    }-->
-
-<!--    // 更新总价和选中数量-->
-<!--    function updateTotalPrice() {-->
-<!--        let total = 0;-->
-<!--        let selectedCount = 0;-->
-
-<!--        document.querySelectorAll('.cart-item').forEach(item => {-->
-<!--            const checkbox = item.querySelector('.item-checkbox');-->
-<!--            if (checkbox.checked) {-->
-<!--                const subtotalText = item.querySelector('.product-subtotal').textContent;-->
-<!--                const subtotal = parseFloat(subtotalText.replace('¥', ''));-->
-<!--                total += subtotal;-->
-<!--                selectedCount++;-->
-<!--            }-->
-<!--        });-->
-
-<!--        document.getElementById('total-price').textContent = '¥' + total.toFixed(2);-->
-<!--        document.getElementById('selected-count').textContent = selectedCount;-->
-<!--    }-->
-
-<!--    // 全选/取消全选-->
-<!--    function setupSelectAll() {-->
-<!--        const selectAllCheckboxes = document.querySelectorAll('#selectAll, #selectAllFooter');-->
-
-<!--        selectAllCheckboxes.forEach(checkbox => {-->
-<!--            checkbox.addEventListener('change', function() {-->
-<!--                const isChecked = this.checked;-->
-<!--                document.querySelectorAll('.item-checkbox').forEach(item => {-->
-<!--                    item.checked = isChecked;-->
-<!--                });-->
-<!--                updateTotalPrice();-->
-<!--            });-->
-<!--        });-->
-
-<!--        // 单个商品选中状态变化时检查是否需要取消全选-->
-<!--        document.querySelectorAll('.item-checkbox').forEach(checkbox => {-->
-<!--            checkbox.addEventListener('change', function() {-->
-<!--                const allChecked = [...document.querySelectorAll('.item-checkbox')].every(cb => cb.checked);-->
-<!--                selectAllCheckboxes.forEach(cb => cb.checked = allChecked);-->
-<!--                updateTotalPrice();-->
-<!--            });-->
-<!--        });-->
-<!--    }-->
-
-<!--    // 删除选中商品-->
-<!--    function deleteSelected() {-->
-<!--        const selectedIds = [];-->
-<!--        document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {-->
-<!--            selectedIds.push(checkbox.value);-->
-<!--        });-->
-
-<!--        if (selectedIds.length === 0) {-->
-<!--            alert('Please select at least one item to delete');-->
-<!--            return;-->
-<!--        }-->
-<!--    }-->
-
-<!--    // 结算选中商品-->
-<!--    function checkoutSelected() {-->
-<!--        const selectedIds = [];-->
-<!--        document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {-->
-<!--            selectedIds.push(checkbox.value);-->
-<!--        });-->
-
-<!--        if (selectedIds.length === 0) {-->
-<!--            alert('Please select at least one item to checkout');-->
-<!--            return;-->
-<!--        }-->
-
-<!--        alert('Checkout functionality would be implemented here for items: ' + selectedIds.join(', '));//bi-->
-<!--    }-->
-
-<!--    // 初始化-->
-<!--    $(document).ready(function() {-->
-<!--        setupSelectAll();-->
-<!--        updateTotalPrice();-->
-<!--    });-->
-<!--</script>-->
 </body>
 </html>
 

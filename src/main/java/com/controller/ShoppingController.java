@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/shopping")
@@ -55,6 +56,28 @@ public class ShoppingController {
     @ResponseBody
     public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
         return shoppingService.filterProducts(category, price);
+    }
+
+    @GetMapping("/filterProducts")
+    @ResponseBody
+    public List<Product> filterProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Double maxPrice) {
+
+        // 获取所有商品
+        List<Product> allProducts = shoppingService.getAllProducts();
+
+        // 应用筛选条件
+        return allProducts.stream()
+                .filter(product -> category == null || category.isEmpty() || product.getCategory().equals(category))
+                .filter(product -> maxPrice == null || product.getPrice() <= maxPrice)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/getAllProducts")
+    @ResponseBody
+    public List<Product> getAllProducts() {
+        return shoppingService.getAllProducts();
     }
     @GetMapping("/comments")
     @ResponseBody
@@ -177,38 +200,26 @@ public class ShoppingController {
 
         return response;
     }
-//    @PostMapping("/addToCart")
-//    @ResponseBody
-//    public Map<String, Object> addToCart(@RequestParam String productName,
-//                                         @RequestParam Double productPrice,
-//                                         @RequestParam String productImage,
-//                                         @RequestParam Integer quantity,
-//                                         HttpSession session) {
-//        Map<String, Object> response = new HashMap<>();
-//        if (productPrice.isNaN() || productPrice.isInfinite()) {
-//            response.put("status", "error");
-//            response.put("message", "Invalid product price!");
-//            return response;
-//        }
-//        User user = (User) session.getAttribute("currentUser");
-//        if (user == null) {
-//            response.put("status", "redirect");
-//            response.put("url", "/user/login");
-//            return response;
-//        }
-//        // Add product to cart logic
-//        Cart cartItem = new Cart();
-//        cartItem.setUser_id(user.getId());
-//        cartItem.setCname(productName);
-//        cartItem.setCprice(new BigDecimal(productPrice).intValue());
-//        cartItem.setImage_url(productImage);
-//        cartItem.setCnum(quantity);
-//        cartService.save(cartItem);
-//
-//        response.put("status", "success");
-//        response.put("message", "Product added to cart successfully!");
-//        return response;
-//    }
+    // Spring Boot 示例
+    @PostMapping("/removeMultipleFromCart")
+    @ResponseBody
+    public Map<String, Object> removeMultipleFromCart(@RequestParam("ids") List<Long> itemIds, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            // 获取用户ID
+            Integer userId = (Integer) session.getAttribute("userId");
+
+            // 批量删除购物车商品
+            cartService.removeMultipleItems(userId, itemIds);
+
+            result.put("status", "success");
+            return result;
+        } catch (Exception e) {
+            result.put("status", "error");
+            result.put("message", e.getMessage());
+            return result;
+        }
+    }
     @PostMapping("/updateCartItemQuantity")
     @ResponseBody
     public ResponseEntity<Response> updateCartItemQuantity(@RequestParam Long id, @RequestParam Integer quantity) {
@@ -346,7 +357,7 @@ public class ShoppingController {
     }
 
     @GetMapping("/removeFromCart")
-    public String removeFromCart(@RequestParam Long id, HttpSession session) {
+    public String removeFromCart(@RequestParam Integer id, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             return "redirect:/user/login";

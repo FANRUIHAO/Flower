@@ -149,10 +149,10 @@
     <!-- 左侧筛选区域 -->
     <div class="left-sidebar">
         <h4>筛选</h4>
-        <form>
+        <form id="filter-form">
             <div class="form-group">
                 <label for="category">分类</label>
-                <select id="category" class="form-control">
+                <select id="category" class="form-control" name="category">
                     <option value="">选择分类</option>
                     <option value="爱情">爱情</option>
                     <option value="友谊">友谊</option>
@@ -161,11 +161,17 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="price">价格</label>
-                <input type="range" id="price" class="form-control-range" min="0" max="1000" step="10">
-                <small>0 - 1000</small>
+                <label for="price-range">价格范围</label>
+                <div class="d-flex justify-content-between">
+                    <span id="price-min">0</span>
+                    <span id="price-max">1000</span>
+                </div>
+                <input type="range" id="price-range" class="form-control-range"
+                       min="0" max="1000" step="10" value="1000" name="maxPrice">
+                <small id="price-display">最高价格: ¥1000</small>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">应用筛选</button>
+            <button type="button" id="apply-filter" class="btn btn-primary btn-block">应用筛选</button>
+            <button type="button" id="reset-filter" class="btn btn-secondary btn-block">重置筛选</button>
         </form>
     </div>
 
@@ -483,7 +489,125 @@
     }
     });
 </script>
+<!--筛选部分-->
+<script>
+    $(document).ready(function() {
+        // 初始化价格范围显示
+        updatePriceDisplay();
 
+        // 价格滑块事件监听
+        $('#price-range').on('input', function() {
+            updatePriceDisplay();
+        });
+
+        // 应用筛选按钮
+        $('#apply-filter').click(function() {
+            applyFilters();
+        });
+
+        // 重置筛选按钮
+        $('#reset-filter').click(function() {
+            $('#category').val('');
+            $('#price-range').val(1000);
+            updatePriceDisplay();
+            applyFilters();
+        });
+
+        // 初始加载所有商品
+        loadProducts();
+    });
+
+    // 更新价格显示
+    function updatePriceDisplay() {
+        const maxPrice = $('#price-range').val();
+        $('#price-display').text(`最高价格: ¥${maxPrice}`);
+        $('#price-max').text(maxPrice);
+    }
+
+    // 应用筛选条件
+    function applyFilters() {
+        const category = $('#category').val();
+        const maxPrice = $('#price-range').val();
+
+        // 显示加载状态
+        $('#product-list').html('<div class="col-12 text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+
+        // 发送AJAX请求获取筛选后的商品
+        $.ajax({
+            url: '/shopping/filterProducts',
+            type: 'GET',
+            data: {
+                category: category,
+                maxPrice: maxPrice
+            },
+            success: function(products) {
+                renderProducts(products);
+                showAlert('筛选条件已应用', 'success');
+            },
+            error: function() {
+                showAlert('筛选失败，请重试', 'danger');
+                loadProducts(); // 失败时重新加载所有商品
+            }
+        });
+    }
+
+    // 加载所有商品
+    function loadProducts() {
+        $.ajax({
+            url: '/shopping/getAllProducts',
+            type: 'GET',
+            success: function(products) {
+                renderProducts(products);
+            },
+            error: function() {
+                showAlert('加载商品失败', 'danger');
+            }
+        });
+    }
+
+    // 渲染商品列表
+    function renderProducts(products) {
+        if (products.length === 0) {
+            $('#product-list').html('<div class="col-12 text-center py-5"><h5>没有找到符合条件的商品</h5></div>');
+            return;
+        }
+
+        let html = '';
+        products.forEach(product => {
+            html += `
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="${product.pro_image}" class="card-img-top" alt="${product.proname}">
+                <div class="card-body">
+                    <h5 class="card-title">${product.proname}</h5>
+                    <p class="card-text">¥${product.price}</p>
+                    <button class="btn btn-primary view-product-btn"
+                            data-product-name="${product.proname}"
+                            data-product-price="${product.price}"
+                            data-product-image="${product.pro_image}">
+                        查看
+                    </button>
+                </div>
+            </div>
+        </div>`;
+        });
+
+        $('#product-list').html(html);
+    }
+
+    // 显示提示消息
+    function showAlert(message, type) {
+        const alert = $('#alert-container');
+        alert.text(message)
+            .removeClass('bg-success bg-danger')
+            .addClass(type === 'success' ? 'bg-success' : 'bg-danger')
+            .fadeIn();
+
+        setTimeout(() => {
+            alert.fadeOut();
+        }, 3000);
+    }
+</script>
 <script>
     $(document).ready(function() {
         $('#flower-image').change(function() {

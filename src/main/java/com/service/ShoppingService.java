@@ -26,7 +26,7 @@ public class ShoppingService {
     private  ShoppingMapper shoppingMapper;
     private static final String FLASK_API_URL = "http://localhost:5000/predict";
 
-public Product identifyFlower(MultipartFile file) {
+    public Product identifyFlower(MultipartFile file) {
     try {
         // 构建请求体
         HttpHeaders headers = new HttpHeaders();

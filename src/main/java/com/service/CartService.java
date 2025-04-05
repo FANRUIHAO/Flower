@@ -21,7 +21,7 @@ public class CartService {
         return cartMapper.findByUserId(userId);
     }
 
-    public void deleteCartItem(Long id) {
+    public void deleteCartItem(Integer id) {
         cartMapper.deleteCartItem(id);
     }
 
@@ -57,6 +57,12 @@ public class CartService {
             count += cartItem.getCnum();
         }
         return count;
+    }
+
+    public void removeMultipleItems(Integer userId, List<Long> itemIds) {
+        for (Long itemId : itemIds) {
+            cartMapper.deleteCartItem(itemId.intValue());
+        }
     }
 }
 

@@ -14,7 +14,7 @@ public interface CartMapper {
     @Select("select * from cart where user_id=#{userId}")
     List<Cart> findByUserId(Integer userId);
     @Delete("delete from cart where id=#{id}")
-    void deleteCartItem(Long id);
+    void deleteCartItem(Integer id);
     @Select("select * from cart where id=#{id}")
     Cart findById(Long id);
     @Update("update cart set cnum=#{cnum} where id=#{id}")
