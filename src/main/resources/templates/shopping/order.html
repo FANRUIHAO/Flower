@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flower Order</title>
-    <link rel="stylesheet" href="/css/collect.css">
+    <link rel="stylesheet" href="/css/order.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -74,6 +74,124 @@
 
 <!-- 添加占位符 -->
 <div class="placeholder"></div>
+<!-- 在placeholder div之后添加以下代码 -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4" style="color: #ffb6c1;">我的订单</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover order-table">
+            <thead>
+            <tr>
+                <th>订单编号</th>
+                <th>商品信息</th>
+                <th>数量</th>
+                <th>总金额</th>
+                <th>收货地址</th>
+                <th>联系电话</th>
+                <th>订单状态</th>
+                <th>下单时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 动态订单数据将通过Thymeleaf渲染 -->
+            <tr th:each="order : ${orders}">
+                <td th:text="'#ORD' + ${order.orderId}"></td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img th:src="@{'/images/' + ${order.productImage}}"
+                             th:alt="${order.productName}"
+                             class="img-thumbnail order-img"
+                             style="width: 60px; height: 60px;">
+                        <div class="ml-2">
+                            <h6 class="mb-0" th:text="${order.productName}"></h6>
+                            <small th:text="${order.specification}"></small>
+                        </div>
+                    </div>
+                </td>
+                <td th:text="${order.quantity}"></td>
+                <td th:text="'¥' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></td>
+                <td th:text="${order.shippingAddress}"></td>
+                <td th:text="${order.phoneNumber}"></td>
+                <td>
+                        <span th:switch="${order.status}" class="badge">
+                            <span th:case="'PENDING'" class="badge badge-warning">待发货</span>
+                            <span th:case="'SHIPPED'" class="badge badge-primary">已发货</span>
+                            <span th:case="'DELIVERED'" class="badge badge-success">已送达</span>
+                            <span th:case="'CANCELLED'" class="badge badge-danger">已取消</span>
+                        </span>
+                </td>
+                <td th:text="${#temporals.format(order.orderTime, 'yyyy-MM-dd HH:mm')}"></td>
+                <td>
+                    <button th:switch="${order.status}" class="btn btn-sm">
+                            <span th:case="'PENDING'" class="btn btn-sm btn-pink-light"
+                                  th:onclick="'cancelOrder(' + ${order.orderId} + ')'">取消订单</span>
+                        <span th:case="'SHIPPED'" class="btn btn-sm btn-pink"
+                              th:onclick="'trackOrder(' + ${order.orderId} + ')'">查看物流</span>
+                        <span th:case="'DELIVERED'" class="btn btn-sm btn-pink-outline"
+                              th:onclick="'reorder(' + ${order.orderId} + ')'">再次购买</span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 分页控件 -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/shopping/orders(page=${currentPage-1})}">上一页</a>
+            </li>
+            <li th:each="page : ${#numbers.sequence(1, totalPages)}"
+                class="page-item" th:classappend="${page == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/shopping/orders(page=${page})}" th:text="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/shopping/orders(page=${currentPage+1})}">下一页</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+
+<script>
+    // 订单操作函数保持不变
+    function cancelOrder(orderId) {
+        if(confirm('确定要取消此订单吗？')) {
+            fetch('/api/orders/' + orderId + '/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if(response.ok) {
+                        location.reload();
+                    } else {
+                        alert('取消订单失败');
+                    }
+                });
+        }
+    }
+
+    function trackOrder(orderId) {
+        window.location.href = '/orders/' + orderId + '/tracking';
+    }
+
+    function reorder(orderId) {
+        fetch('/api/orders/' + orderId + '/reorder', {
+            method: 'POST'
+        })
+            .then(response => {
+                if(response.ok) {
+                    window.location.href = '/shopping/cart';
+                } else {
+                    alert('重新购买失败');
+                }
+            });
+    }
+</script>
 
 
 <div class="footer">

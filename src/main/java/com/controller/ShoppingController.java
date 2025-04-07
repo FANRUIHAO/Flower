@@ -57,7 +57,6 @@ public class ShoppingController {
     public List<Product> filterProducts(@RequestParam String category, @RequestParam double price) {
         return shoppingService.filterProducts(category, price);
     }
-
     @GetMapping("/filterProducts")
     @ResponseBody
     public List<Product> filterProducts(
@@ -73,7 +72,6 @@ public class ShoppingController {
                 .filter(product -> maxPrice == null || product.getPrice() <= maxPrice)
                 .collect(Collectors.toList());
     }
-
     @GetMapping("/getAllProducts")
     @ResponseBody
     public List<Product> getAllProducts() {
@@ -466,5 +464,14 @@ public class ShoppingController {
             response.put("error", "No avatar uploaded.");
         }
         return response;
+    }
+    @GetMapping("/orders")
+    @ResponseBody
+    public List<Order> getOrders(HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return null; // Or handle the case when the user is not logged in
+        }
+        return cartService.getOrdersByUserId(user.getId());
     }
 }

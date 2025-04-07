@@ -1,0 +1,345 @@
+.navtext {
+    color: inherit;
+    text-decoration: none;
+}
+.navtext:hover {
+    color: inherit;         /* 确保在 hover 时颜色不变 */
+    text-decoration: none;  /* 确保 hover 时不显示下划线 */
+}
+.card {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+.footer {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    text-align: center;
+}
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.cc {
+    background: #ffbdc9;
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 25px 20px -20px rgba(0, 0, 0, 0.4);
+}
+nav ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+nav ul li {
+    list-style: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fcfcfc;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+nav ul li::after {
+    content: "";
+    background: #f44566;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0;
+    transition: top 0.5s, opacity 0.5s;
+}
+nav ul li:hover {
+    color: #fff;
+}
+nav ul li:hover::after {
+    top: 50%;
+    opacity: 1;
+}
+.navbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+/* 更新了 navbar-right 部分的按钮样式 */
+
+
+/* 更新登录按钮样式 */
+.navbar-right .btn-primary {
+    background-color: #f44566; /* 使用与导航栏悬浮效果一致的背景色 */
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* 更新注销按钮样式 */
+.navbar-right .btn-danger,
+.navbar-right .btn-secondary {
+    background-color: #ff6f61; /* Set a consistent background color */
+    border: none;
+    color: #fff;
+    padding: 10px 20px; /* Increase padding for larger buttons */
+    font-size: 16px; /* Increase font size */
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 25px; /* Softer rounded corners */
+    margin-left: 10px; /* Add spacing between buttons */
+}
+.navbar-right .btn-secondary {
+    background-color: #6c757d; /* Set a consistent background color for the admin button */
+}
+/* 调整按钮在较小屏幕下的响应式布局 */
+.navbar-right .btn {
+    margin-left: 10px;
+    border-radius: 20px; /* 更柔和的圆角效果 */
+}
+
+.navbar-right .admin-buttons .btn {
+    background-color: #6c757d; /* 中性色按钮，与后台管理按钮样式一致 */
+    border: none;
+    color: #fff;
+}
+.navbar-right p {
+    margin: 0;
+    padding: 0 10px;
+    font-size: 1rem;
+    color: #f44566; /* 设置为主题粉色 */
+}
+
+.navbar-right p a {
+    color: #f44566; /* 修改链接颜色为主题粉色 */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.navbar-right p a:hover {
+    text-decoration: underline; /* 在 hover 时添加下划线 */
+}
+
+.navbar-right p span {
+    color: #f44566; /* 设置用户名称的颜色为主题粉色 */
+    font-weight: 600;
+}
+
+/* 添加占位符样式 */
+.placeholder {
+    height: 30vh; /* 与背景图片高度相同 */
+}
+.cart-button {
+    width: 50px; /* Adjust the width to match the height of the pink navigation bar */
+    height: 50px; /* Adjust the height to match the height of the pink navigation bar */
+    background-color: #f44566; /* Set the button background color to pink */
+    border-radius: 50%; /* Make the button round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    margin-left: 15px; /* Keep distance from other elements */
+}
+
+.cart-icon {
+    font-size: 24px; /* Shopping cart icon size */
+    color: #fff; /* Set the icon color to white */
+    display: block; /* Ensure the icon is treated as a block element */
+    line-height: 1; /* 确保图标垂直居中 */
+}
+.user-avatar {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    border-radius: 50%; /* Make the avatar circular */
+    margin-right: 10px;
+}
+.product-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 20px;
+}
+.product-item {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    text-align: center;
+}
+.product-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.product-item button {
+    margin-top: 10px;
+}
+.order-table {
+    background-color: rgba(255, 228, 236, 0.9); /* 浅粉色背景 */
+    color: #8b3a62; /* 深粉色文字 */
+    border-radius: 15px;
+    overflow: hidden;
+    border-collapse: separate;
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.4);
+}
+
+.order-table th {
+    background-color: #ffb6c1; /* 粉红色表头 */
+    color: #8b3a62;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.order-table td {
+    background-color: rgba(255, 228, 236, 0.8); /* 半透明浅粉色单元格 */
+    border-top: 1px solid #ffb6c1;
+    vertical-align: middle;
+}
+
+.order-table tr:hover td {
+    background-color: rgba(255, 182, 193, 0.6); /* 悬停时中等粉色 */
+}
+
+/* 图片样式 */
+.order-img {
+    border: 2px solid #ffb6c1;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(219, 112, 147, 0.2);
+}
+
+.order-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(219, 112, 147, 0.3);
+}
+
+/* 按钮样式 */
+.btn-pink {
+    background-color: #ff69b4; /* 亮粉色 */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(219, 112, 147, 0.3);
+}
+
+.btn-pink:hover {
+    background-color: #ff1493;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(219, 112, 147, 0.4);
+}
+
+.btn-pink-light {
+    background-color: #ffb6c1; /* 浅粉色 */
+    color: #8b3a62;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-pink-light:hover {
+    background-color: #ff69b4;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-pink-outline {
+    background-color: transparent;
+    color: #ff69b4;
+    border: 1px solid #ff69b4;
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-pink-outline:hover {
+    background-color: #ff69b4;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* 分页样式 */
+.page-link {
+    background-color: rgba(255, 182, 193, 0.7);
+    border-color: #ffb6c1;
+    color: #8b3a62;
+    margin: 0 5px;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+}
+
+.page-item.active .page-link {
+    background-color: #ff69b4;
+    border-color: #ff69b4;
+    color: white;
+    box-shadow: 0 2px 5px rgba(219, 112, 147, 0.3);
+}
+
+.page-item.disabled .page-link {
+    background-color: rgba(255, 182, 193, 0.3);
+    color: #c48b9f;
+}
+
+/* 徽章样式 */
+.badge-warning {
+    background-color: #ffa500;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.badge-primary {
+    background-color: #9370db;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.badge-success {
+    background-color: #3cb371;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.badge-danger {
+    background-color: #ff6b81;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+/* 新增动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.order-table tbody tr {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.order-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.order-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.order-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+/* 可以继续添加更多行的延迟 */

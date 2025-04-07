@@ -1,8 +1,11 @@
 package com.service;
 
 import com.entity.Cart;
+import com.entity.Order;
 import com.entity.Product;
+import com.entity.User;
 import com.mapper.CartMapper;
+import com.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.List;
 public class CartService {
     @Autowired
     private CartMapper cartMapper;
+    @Autowired
+    private UserMapper userMapper;
     public void save(Cart cart) {
         cartMapper.save(cart);
     }
@@ -63,6 +68,22 @@ public class CartService {
         for (Long itemId : itemIds) {
             cartMapper.deleteCartItem(itemId.intValue());
         }
+    }
+
+    public List<Order> getOrdersByUserId(Integer id) {
+        List<Cart> cartItems = cartMapper.findByUserId(id);
+        List<Order> orders = new ArrayList<>();
+        User user = userMapper.selectUserById(id);
+        for (Cart cartItem : cartItems) {
+            Order order = new Order();
+            order.setUsername(cartItem.getCname());
+            order.setSum(cartItem.getCprice());
+            order.setImage(cartItem.getImage_url());
+            order.setNum(cartItem.getCnum());
+            order.setPhone(user.getPhone());
+            orders.add(order);
+        }
+        return orders;
     }
 }
 
