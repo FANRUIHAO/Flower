@@ -1,4 +1,7 @@
+
+
 /* 重置一些默认样式 */
+
 * {
     margin: 0;
     padding: 0;
@@ -157,14 +160,17 @@ nav ul li:hover::after {
 /* 主容器样式 */
 .container {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start;     /* 保证左右顶对齐 */
     gap: 20px;
     padding: 20px;
 }
 
+
 /* 左侧筛选区域 */
 .left-sidebar {
     width: 25%;  /* 调整宽度 */
+    min-width: 250px; /* 设置最小宽度 */
+    max-width: 300px; /* 设置最大宽度 */
     background-color: #f8f8f8;
     padding: 15px;
     border-radius: 8px;
@@ -190,6 +196,7 @@ nav ul li:hover::after {
 .left-sidebar .form-control,
 .left-sidebar .form-control-range {
     width: 100%;
+    max-width: 300px;
     padding: 8px;
     font-size: 14px;
     border-radius: 4px;
@@ -264,9 +271,16 @@ nav ul li:hover::after {
     }
 
     .left-sidebar {
-        width: 100%;
-        margin-bottom: 20px;
+        width: 300px;            /* 固定宽度 */
+        flex-shrink: 0;          /* 防止在 flex 布局下被压缩 */
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;        /* 如果想让筛选框在页面滚动时固定 */
+        top: 80px;               /* 距离顶部的距离，根据你的导航栏高度调整 */
     }
+
 
     .right-content {
         width: 100%;

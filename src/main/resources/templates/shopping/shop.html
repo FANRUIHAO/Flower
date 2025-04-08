@@ -105,7 +105,7 @@
                     <li><a href="/shopping/list" class="navtext">首页</a></li>
                     <li><a href="/shopping/shop" class="navtext">选购</a></li>
                     <li><a href="/shopping/collect" class="navtext">收藏</a></li>
-                    <li><a href="/shopping/orders" class="navtext">订单</a></li>
+                    <li><a href="/order/list" class="navtext">订单</a></li>
                     <li><a href="/shopping/profile" class="navtext">个人中心</a></li>
                 </ul>
             </nav>
@@ -287,15 +287,18 @@
 </script>
 <script>$(document).ready(function() {
     // 处理查看按钮点击事件
-    $('.view-product-btn').click(function() {
+    // 修改这部分代码 - 使用事件委托来处理动态生成的查看按钮
+    $(document).on('click', '.view-product-btn', function() {
         const productName = $(this).data('product-name');
         const productPrice = $(this).data('product-price');
         const productImage = $(this).data('product-image');
 
+        console.log('查看按钮点击', productName, productPrice, productImage); // 调试用
+
         // 填充模态框内容
         $('#modalProductImage').attr('src', productImage);
         $('#modalProductName').text(productName);
-        $('#modalProductPrice').text('$' + productPrice);
+        $('#modalProductPrice').text('¥' + productPrice);
         $('#modalProductQuantity').val(1);
 
         // 显示模态框
@@ -756,29 +759,7 @@
         });
     });
 </script>
-<!--<script>-->
-<!--    function performSearch() {-->
-<!--        const query = $('#search-text').val();-->
-<!--        if (!query) {-->
-<!--            alert('请输入关键词进行搜索！');-->
-<!--            return;-->
-<!--        }-->
 
-<!--        $.ajax({-->
-<!--            url: '/shopping/research',-->
-<!--            type: 'GET',-->
-<!--            data: { keyword: query }, // 将query改为keyword-->
-<!--            success: function(response) {-->
-<!--                console.log('Search results:', response);-->
-<!--                // 处理结果-->
-<!--            },-->
-<!--            error: function(xhr, status, error) {-->
-<!--                console.error('Search error:', status, error);-->
-<!--                alert('搜索失败: ' + error);-->
-<!--            }-->
-<!--        });-->
-<!--    }-->
-<!--</script>-->
 <script>
     // 搜索功能
     function performSearch() {

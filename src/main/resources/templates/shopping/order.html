@@ -100,7 +100,7 @@
 <div class="background-image"></div>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4" style="color: #ffb6c1;">我的订单</h2>
+    <h2 class="text-center mb-4" style="color: #000000;">我的订单</h2>
 
     <div th:if="${#lists.isEmpty(orders)}" class="alert alert-info text-center">
         您还没有任何订单，<a href="/shopping/shop" class="alert-link">去选购商品</a>
@@ -110,58 +110,70 @@
         <table class="table table-striped table-hover order-table">
             <thead>
             <tr>
-                <th>订单编号</th>
-                <th>商品信息</th>
+                <th>商品名称</th>
+                <th>商品图片</th>
                 <th>数量</th>
                 <th>总金额</th>
-                <th>收货地址</th>
-                <th>联系电话</th>
                 <th>订单状态</th>
                 <th>下单时间</th>
+                <th>联系电话</th>
+                <th>收货地址</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="order : ${orders}">
-                <td th:text="'#ORD' + ${order.orderId}"></td>
+                <!-- 商品名称 -->
+                <td th:text="${order.product}"></td>
+
+                <!-- 商品图片 -->
                 <td>
-                    <div class="d-flex align-items-center">
-                        <img th:src="@{'/images/' + ${order.productImage}}"
-                             th:alt="${order.productName}"
-                             class="img-thumbnail order-img"
-                             style="width: 60px; height: 60px;">
-                        <div class="ml-2">
-                            <h6 class="mb-0" th:text="${order.productName}"></h6>
-                            <small th:text="${order.specification}"></small>
-                        </div>
-                    </div>
+                    <img th:src="@{${order.image}}"
+                         alt="商品图片"
+                         class="img-thumbnail order-img"
+                         style="width: 60px; height: 60px;">
                 </td>
-                <td th:text="${order.quantity}"></td>
-                <td th:text="'¥' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></td>
-                <td th:text="${order.shippingAddress}"></td>
-                <td th:text="${order.phoneNumber}"></td>
+
+                <!-- 数量 -->
+                <td th:text="${order.num}"></td>
+
+                <!-- 总金额 -->
+                <td th:text="'¥' + ${#numbers.formatDecimal(order.getSum(), 1, 2)}"></td>
+
+                <!-- 发货状态 -->
                 <td>
-                        <span th:switch="${order.status}" class="badge">
-                            <span th:case="'PENDING'" class="badge badge-warning">待发货</span>
-                            <span th:case="'SHIPPED'" class="badge badge-primary">已发货</span>
-                            <span th:case="'DELIVERED'" class="badge badge-success">已送达</span>
-                            <span th:case="'CANCELLED'" class="badge badge-danger">已取消</span>
-                        </span>
+            <span th:switch="${order.status}" class="badge">
+                <span th:case="'PENDING'" class="badge badge-warning">待发货</span>
+                <span th:case="'SHIPPED'" class="badge badge-primary">已发货</span>
+                <span th:case="'DELIVERED'" class="badge badge-success">已送达</span>
+                <span th:case="'CANCELLED'" class="badge badge-danger">已取消</span>
+            </span>
                 </td>
-                <td th:text="${#temporals.format(order.orderTime, 'yyyy-MM-dd HH:mm')}"></td>
+
+                <!-- 下单时间 -->
+                <td th:text="${order.ordertime}"></td>
+
+                <!-- 用户手机号 -->
+                <td th:text="${order.getPhone()}"></td>
+
+                <!-- 地址 -->
+                <td th:text="${order.getAddr()}"></td>
+
+                <!-- 操作按钮 -->
                 <td>
                     <button th:switch="${order.status}" class="btn btn-sm">
-                            <span th:case="'PENDING'" class="btn btn-sm btn-pink-light"
-                                  th:onclick="'cancelOrder(' + ${order.orderId} + ')'">取消订单</span>
+                <span th:case="'PENDING'" class="btn btn-sm btn-pink-light"
+                      th:onclick="'cancelOrder(' + ${order.id} + ')'">取消订单</span>
                         <span th:case="'SHIPPED'" class="btn btn-sm btn-pink"
-                              th:onclick="'trackOrder(' + ${order.orderId} + ')'">查看物流</span>
+                              th:onclick="'trackOrder(' + ${order.id} + ')'">查看物流</span>
                         <span th:case="'DELIVERED'" class="btn btn-sm btn-pink-outline"
-                              th:onclick="'reorder(' + ${order.orderId} + ')'">再次购买</span>
+                              th:onclick="'reorder(' + ${order.id} + ')'">再次购买</span>
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 
@@ -185,7 +197,7 @@
     }
 
     function trackOrder(orderId) {
-        alert('物流跟踪功能开发中，订单ID: ' + orderId);
+        alert('订单ID: ' + orderId);
     }
 
     function reorder(orderId) {

@@ -474,32 +474,95 @@ public class ShoppingController {
         System.out.println("Found " + results.size() + " products");
         return results;
     }
-//    @PostMapping("/addOrder")
-//    @ResponseBody
-//    public Map<String, Object> addOrder(@RequestParam String addr,
-//                                        @RequestParam String product,
-//                                        @RequestParam Integer num,
-//                                        @RequestParam String image,
-//                                        @RequestParam Double sum,
-//                                        @RequestParam Integer phone,
-//                                        HttpSession session) {
-//        Map<String, Object> response = new HashMap<>();
-//        User user = (User) session.getAttribute("currentUser");
-//        if (user == null) {
-//            response.put("status", "redirect");
-//            response.put("url", "/user/login");
-//            return response;
-//        }
-//        Order order = new Order();
-//        order.setAddr(addr);
-//        order.setProduct(product);
-//        order.setNum(num);
-//        order.setImage(image);
-//        order.setSum(sum);
-//        order.setPhone(phone);
-//        order.setUser_id(user.getId());
-//        shoppingService.addOrder(order);
-//        response.put("status", "success");
-//        return response;
-//    }
+    @PostMapping("/addOrder")
+    @ResponseBody
+    public Map<String, Object> addOrder(@RequestParam String addr,
+                                        @RequestParam String product,
+                                        @RequestParam Integer num,
+                                        @RequestParam String image,
+                                        @RequestParam Double sum,
+                                        @RequestParam Integer phone,
+                                        HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+        Order order = new Order();
+        order.setAddr(addr);
+        order.setProduct(product);
+        order.setNum(num);
+        order.setImage(image);
+        order.setSum(sum);
+        order.setPhone(phone);
+        order.setUser_id(user.getId());
+        order.setStatus("待发货");
+        order.setOrdertime(String.valueOf(System.currentTimeMillis()));
+        shoppingService.addOrder(order);
+        response.put("status", "success");
+        return response;
+    }
+    @GetMapping("/getUserBalance")
+    @ResponseBody
+    public Map<String, Object> getUserBalance(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.getAttribute("currentUser");
+
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+        } else {
+            response.put("status", "success");
+            response.put("balance", user.getBalance()); // 假设User类有balance字段
+        }
+
+        return response;
+    }
+    @PostMapping("/checkout")
+    @ResponseBody
+    public Map<String, Object> checkout(
+            @RequestBody Map<String, Object> requestData,
+            HttpSession session
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        User user = (User) session.getAttribute("currentUser");
+
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+
+        try {
+            List<Integer> itemIds = (List<Integer>) requestData.get("itemIds");
+            String address = (String) requestData.get("address");
+
+            // 1. 计算总金额
+            double totalAmount = shoppingService.calculateTotal(itemIds);
+
+            // 2. 检查余额
+            if (user.getBalance() < totalAmount) {
+                response.put("status", "error");
+                response.put("message", "Insufficient balance");
+                return response;
+            }
+
+            // 3. 创建订单
+            Order order = shoppingService.createOrder(user.getId(), itemIds, address, totalAmount);
+
+            // 4. 扣除余额
+            user.setBalance(user.getBalance() - totalAmount);
+            userService.updateUser(user); // 需要实现更新用户的方法
+
+            response.put("status", "success");
+            response.put("orderId", order.getId());
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+        }
+
+        return response;
+    }
 }

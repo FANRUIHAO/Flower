@@ -187,6 +187,27 @@
         </div>
     </div>
 </div>
+<!-- 结算确认模态框 -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Checkout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="checkoutMessage">Are you sure you want to checkout the selected items?</p>
+                <div id="balanceInfo" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-super-pink" id="confirmCheckout">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -197,7 +218,78 @@
         setupSelectAll();
         updateTotalPrice();
     });
+    // 结算选中商品
+    // 结算选中商品
+    function checkoutSelected() {
+        const selectedIds = [];
+        let totalAmount = 0;
 
+        document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {
+            const itemId = checkbox.value;
+            const itemElement = checkbox.closest('.cart-item');
+            const price = parseFloat(itemElement.querySelector('.product-price').textContent.replace('¥', ''));
+            const quantity = parseInt(itemElement.querySelector('.quantity-input').value);
+
+            selectedIds.push(itemId);
+            totalAmount += price * quantity;
+        });
+
+        if (selectedIds.length === 0) {
+            alert('Please select at least one item to checkout');
+            return;
+        }
+
+        // 显示确认模态框
+        $('#checkoutModal').modal('show');
+
+        // 获取用户余额信息
+        $.get('/shopping/getUserBalance', function(response) {
+            const balance = response.balance || 0;
+            const balanceInfo = $('#balanceInfo');
+
+            if (balance >= totalAmount) {
+                $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
+                balanceInfo.html(`
+                <div class="alert alert-success">
+                    Your balance: ¥${balance.toFixed(2)} (Sufficient)
+                </div>
+            `);
+                $('#confirmCheckout').prop('disabled', false);
+            } else {
+                $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
+                balanceInfo.html(`
+                <div class="alert alert-danger">
+                    Your balance: ¥${balance.toFixed(2)} (Insufficient)
+                </div>
+            `);
+                $('#confirmCheckout').prop('disabled', true);
+            }
+        });
+
+        // 确认结算按钮点击事件
+        $('#confirmCheckout').off('click').on('click', function() {
+            const data = {
+                itemIds: selectedIds,
+                address: prompt("Please enter your delivery address:") || ""
+            };
+
+            if (!data.address) {
+                alert("Delivery address is required!");
+                return;
+            }
+
+            $.post('/shopping/checkout', data, function(response) {
+                if (response.status === 'success') {
+                    alert('Order placed successfully!');
+                    location.reload(); // 刷新页面
+                } else {
+                    alert(response.message || 'Checkout failed');
+                }
+            }).fail(function() {
+                alert('Error processing your request');
+            });
+        });
+    }
     // 数量增减功能
     function changeQuantity(btn, change) {
         const input = btn.parentElement.querySelector('.quantity-input');
@@ -213,7 +305,6 @@
 
         updateCartItemQuantity(itemId, quantity, itemElement);
     }
-
     // 更新购物车商品数量
     function updateCartItemQuantity(itemId, quantity, itemElement) {
         $.ajax({
@@ -240,14 +331,12 @@
             }
         });
     }
-
     // 检查购物车是否为空
     function checkEmptyCart() {
         if ($('.cart-item').length === 0) {
             location.reload();
         }
     }
-
     // 更新单个商品小计
     function updateSubtotal(itemElement) {
         const priceText = itemElement.querySelector('.product-price').textContent;
@@ -256,7 +345,6 @@
         const subtotal = (price * quantity).toFixed(2);
         itemElement.querySelector('.product-subtotal').textContent = '¥' + subtotal;
     }
-
     // 更新总价和选中数量
     function updateTotalPrice() {
         let total = 0;
@@ -275,7 +363,6 @@
         document.getElementById('total-price').textContent = '¥' + total.toFixed(2);
         document.getElementById('selected-count').textContent = selectedCount;
     }
-
     // 全选/取消全选
     function setupSelectAll() {
         const selectAllCheckboxes = document.querySelectorAll('#selectAll, #selectAllFooter');
@@ -298,7 +385,6 @@
             });
         });
     }
-
     // 删除选中商品
     function deleteSelected() {
         const selectedIds = [];
@@ -350,22 +436,6 @@
                 }
             });
         }
-    }
-
-    // 结算选中商品
-    function checkoutSelected() {
-        const selectedIds = [];
-        document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {
-            selectedIds.push(checkbox.value);
-        });
-
-        if (selectedIds.length === 0) {
-            alert('Please select at least one item to checkout');
-            return;
-        }
-
-        // 跳转到结算页面或发送AJAX请求
-        window.location.href = '/shopping/checkout?items=' + selectedIds.join(',');
     }
 </script>
 </body>

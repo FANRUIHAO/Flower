@@ -25,8 +25,11 @@ public interface ShoppingMapper{
     void removeFromFavorite(@Param("username")String username, @Param("productName") String productName);
     @Select("select * from collect where username = #{username}")
     List<Collect> listcollect(String username);
-    @Insert("insert into order (user_id, addr, product, num, image, status, sum, ordertime, phone) values (#{user_id}, #{addr}, #{product}, #{num}, #{image}, #{status}, #{sum}, #{ordertime}, #{phone})")
-    void addOrder(Order order);
+
     @Select("select * from product where proname like concat('%', #{keyword}, '%')")
     List<Product> search(String keyword);
+
+    @Insert("insert into `order` (user_id, product, addr,  num, sum, status, ordertime, image, phone) " +
+            "values (#{user_id}, #{product}, #{addr},  #{num}, #{sum}, #{status}, #{ordertime}, #{image}, #{phone})")
+    void addOrder(Order or);
 }
