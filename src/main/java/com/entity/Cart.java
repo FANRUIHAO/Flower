@@ -1,13 +1,9 @@
 package com.entity;
 
 public class Cart {
-//    private Integer productId;
-//    private String productName;
-//    private Integer quantity;
-//    private Double price;
     private Integer id;
     private String cname;
-    private Integer cprice;
+    private Double cprice;
     private Integer cnum;
     private Integer user_id;
     private  String image_url;
@@ -36,7 +32,7 @@ public class Cart {
         return cname;
     }
 
-    public Integer getCprice() {
+    public Double getCprice() {
         return cprice;
     }
 
@@ -52,7 +48,7 @@ public class Cart {
         this.cname = cname;
     }
 
-    public void setCprice(Integer cprice) {
+    public void setCprice(Double cprice) {
         this.cprice = cprice;
     }
 

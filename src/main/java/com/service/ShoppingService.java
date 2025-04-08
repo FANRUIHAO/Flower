@@ -1,6 +1,7 @@
 package com.service;
 
 import com.entity.Collect;
+import com.entity.Order;
 import com.entity.Product;
 import com.entity.User;
 import com.mapper.ShoppingMapper;
@@ -105,5 +106,15 @@ public class ShoppingService {
     }
 
 
+    public void addOrder(Order order) {
+        shoppingMapper.addOrder(order);
+    }
 
+    public List<Product> search(String keyword) {
+        List<Product> products = shoppingMapper.search(keyword);
+        if (products == null || products.isEmpty()) {
+            throw new RuntimeException("No products found for the given keyword: " + keyword);
+        }
+        return products;
+    }
 }

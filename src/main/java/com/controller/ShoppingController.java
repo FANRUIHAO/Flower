@@ -178,7 +178,7 @@ public class ShoppingController {
                 Cart cartItem = new Cart();
                 cartItem.setUser_id(user.getId());
                 cartItem.setCname(productName);
-                cartItem.setCprice(new BigDecimal(productPrice).intValue());
+                cartItem.setCprice(productPrice);
                 cartItem.setImage_url(productImage);
                 cartItem.setCnum(quantity);
                 cartService.save(cartItem);
@@ -220,7 +220,7 @@ public class ShoppingController {
     }
     @PostMapping("/updateCartItemQuantity")
     @ResponseBody
-    public ResponseEntity<Response> updateCartItemQuantity(@RequestParam Long id, @RequestParam Integer quantity) {
+    public ResponseEntity<Response> updateCartItemQuantity(@RequestParam Integer id, @RequestParam Integer quantity) {
         try {
             boolean success = cartService.updateCartItemQuantity(id, quantity);
             if(success) {
@@ -465,13 +465,41 @@ public class ShoppingController {
         }
         return response;
     }
-    @GetMapping("/orders")
+    @GetMapping("/research")
     @ResponseBody
-    public List<Order> getOrders(HttpSession session) {
-        User user = (User) session.getAttribute("currentUser");
-        if (user == null) {
-            return null; // Or handle the case when the user is not logged in
-        }
-        return cartService.getOrdersByUserId(user.getId());
+    public List<Product> rsearch(@RequestParam String keyword) {
+        System.out.println("Searching for: " + keyword); // 添加参数值打印
+        System.out.println("Request received at /shopping/research");
+        List<Product> results = shoppingService.search(keyword);
+        System.out.println("Found " + results.size() + " products");
+        return results;
     }
+//    @PostMapping("/addOrder")
+//    @ResponseBody
+//    public Map<String, Object> addOrder(@RequestParam String addr,
+//                                        @RequestParam String product,
+//                                        @RequestParam Integer num,
+//                                        @RequestParam String image,
+//                                        @RequestParam Double sum,
+//                                        @RequestParam Integer phone,
+//                                        HttpSession session) {
+//        Map<String, Object> response = new HashMap<>();
+//        User user = (User) session.getAttribute("currentUser");
+//        if (user == null) {
+//            response.put("status", "redirect");
+//            response.put("url", "/user/login");
+//            return response;
+//        }
+//        Order order = new Order();
+//        order.setAddr(addr);
+//        order.setProduct(product);
+//        order.setNum(num);
+//        order.setImage(image);
+//        order.setSum(sum);
+//        order.setPhone(phone);
+//        order.setUser_id(user.getId());
+//        shoppingService.addOrder(order);
+//        response.put("status", "success");
+//        return response;
+//    }
 }

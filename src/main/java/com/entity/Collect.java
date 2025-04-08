@@ -5,13 +5,13 @@ public class Collect {
     String username;
     String product;
     String image;
-    Integer price;
+    Double price;
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -47,7 +47,7 @@ public class Collect {
         return product;
     }
 
-    public Collect(Integer id, String username, String product, String image, Integer price) {
+    public Collect(Integer id, String username, String product, String image, Double price) {
         this.id = id;
         this.username = username;
         this.product = product;

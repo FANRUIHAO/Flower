@@ -7,8 +7,24 @@ public class User {
     private String sex;
     private Integer grade;
     private String user_image = "/images/person/p1.jpg";
+    private Integer phone;
+    private String addr;
 
+    public String getAddr() {
+        return addr;
+    }
 
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
+
+    public Integer getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Integer phone) {
+        this.phone = phone;
+    }
 
     public static class Grade {
         public static final int ADMIN = 2; // 管理员
@@ -72,6 +88,8 @@ public class User {
                 ", sex='" + sex + '\'' +
                 ", grade=" + grade +
                 ", user_image='" + user_image + '\'' +
+                ", phone=" + phone +
+                ", addr='" + addr + '\'' +
                 '}';
     }
 }

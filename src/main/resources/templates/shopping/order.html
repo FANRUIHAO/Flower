@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,15 +15,43 @@
             color: #fff;
         }
         .background-image {
-            background: url('/images/f6.jpg') no-repeat center bottom; /* 图片底部对齐 */
-            background-size: cover;  /* 使图片覆盖整个容器 */
-            position: fixed;         /* 固定定位 */
-            top: 0;                  /* 顶部扩展到网页顶部 */
-            left: 0;                 /* 左侧对齐 */
-            width: 100%;             /* 宽度占满整个页面 */
-            height: 100vh;           /* 高度占满整个视口 */
-            z-index: -1;             /* 位于最下层 */
-            margin: 0;               /* 去除默认的外边距 */
+            background: url('/images/f6.jpg') no-repeat center bottom;
+            background-size: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            margin: 0;
+        }
+        .order-table {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        .btn-pink-light {
+            background-color: #ffb6c1;
+            color: white;
+        }
+        .btn-pink {
+            background-color: #ff69b4;
+            color: white;
+        }
+        .btn-pink-outline {
+            border: 1px solid #ff69b4;
+            color: #ff69b4;
+        }
+        .navtext {
+            color: white;
+            font-weight: 500;
+        }
+        .footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -43,11 +71,10 @@
                     <li><a href="/shopping/list" class="navtext">首页</a></li>
                     <li><a href="/shopping/shop" class="navtext">选购</a></li>
                     <li><a href="/shopping/collect" class="navtext">收藏</a></li>
-                    <li><a href="/shopping/orders" class="navtext">订单</a></li>
+                    <li><a href="/order/list" class="navtext">订单</a></li>
                     <li><a href="/shopping/profile" class="navtext">个人中心</a></li>
                 </ul>
             </nav>
-
         </div>
         <div class="navbar-right ml-auto d-flex align-items-center">
             <div th:if="${username == '游客' or username == null}">
@@ -72,12 +99,14 @@
 </nav>
 <div class="background-image"></div>
 
-<!-- 添加占位符 -->
-<div class="placeholder"></div>
-<!-- 在placeholder div之后添加以下代码 -->
 <div class="container mt-5">
     <h2 class="text-center mb-4" style="color: #ffb6c1;">我的订单</h2>
-    <div class="table-responsive">
+
+    <div th:if="${#lists.isEmpty(orders)}" class="alert alert-info text-center">
+        您还没有任何订单，<a href="/shopping/shop" class="alert-link">去选购商品</a>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(orders)}" class="table-responsive">
         <table class="table table-striped table-hover order-table">
             <thead>
             <tr>
@@ -93,7 +122,6 @@
             </tr>
             </thead>
             <tbody>
-            <!-- 动态订单数据将通过Thymeleaf渲染 -->
             <tr th:each="order : ${orders}">
                 <td th:text="'#ORD' + ${order.orderId}"></td>
                 <td>
@@ -135,72 +163,41 @@
             </tbody>
         </table>
     </div>
-
-    <!-- 分页控件 -->
-    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/shopping/orders(page=${currentPage-1})}">上一页</a>
-            </li>
-            <li th:each="page : ${#numbers.sequence(1, totalPages)}"
-                class="page-item" th:classappend="${page == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{/shopping/orders(page=${page})}" th:text="${page}"></a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/shopping/orders(page=${currentPage+1})}">下一页</a>
-            </li>
-        </ul>
-    </nav>
 </div>
-
-
-
-<script>
-    // 订单操作函数保持不变
-    function cancelOrder(orderId) {
-        if(confirm('确定要取消此订单吗？')) {
-            fetch('/api/orders/' + orderId + '/cancel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if(response.ok) {
-                        location.reload();
-                    } else {
-                        alert('取消订单失败');
-                    }
-                });
-        }
-    }
-
-    function trackOrder(orderId) {
-        window.location.href = '/orders/' + orderId + '/tracking';
-    }
-
-    function reorder(orderId) {
-        fetch('/api/orders/' + orderId + '/reorder', {
-            method: 'POST'
-        })
-            .then(response => {
-                if(response.ok) {
-                    window.location.href = '/shopping/cart';
-                } else {
-                    alert('重新购买失败');
-                }
-            });
-    }
-</script>
-
 
 <div class="footer">
     <p>&copy; 2025 Flower Shop. All rights reserved.</p>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+<script>
+    function cancelOrder(orderId) {
+        if(confirm('确定要取消此订单吗？')) {
+            $.post('/order/cancel', {orderId: orderId}, function() {
+                location.reload();
+            }).fail(function() {
+                alert('取消订单失败');
+            });
+        }
+    }
+
+    function trackOrder(orderId) {
+        alert('物流跟踪功能开发中，订单ID: ' + orderId);
+    }
+
+    function reorder(orderId) {
+        if(confirm('将此商品重新加入购物车？')) {
+            $.post('/order/reorder', {orderId: orderId}, function() {
+                window.location.href = '/shopping/cart';
+            }).fail(function() {
+                alert('操作失败');
+            });
+        }
+    }
+</script>
 
 </body>
 </html>

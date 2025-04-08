@@ -31,7 +31,7 @@ public class CartService {
     }
 
 
-    public boolean updateCartItemQuantity(Long id, Integer quantity) {
+    public boolean updateCartItemQuantity(Integer id, Integer quantity) {
         Cart cartItem = cartMapper.findById(id);
         if (cartItem != null) {
             cartItem.setCnum(quantity);
@@ -68,22 +68,6 @@ public class CartService {
         for (Long itemId : itemIds) {
             cartMapper.deleteCartItem(itemId.intValue());
         }
-    }
-
-    public List<Order> getOrdersByUserId(Integer id) {
-        List<Cart> cartItems = cartMapper.findByUserId(id);
-        List<Order> orders = new ArrayList<>();
-        User user = userMapper.selectUserById(id);
-        for (Cart cartItem : cartItems) {
-            Order order = new Order();
-            order.setUsername(cartItem.getCname());
-            order.setSum(cartItem.getCprice());
-            order.setImage(cartItem.getImage_url());
-            order.setNum(cartItem.getCnum());
-            order.setPhone(user.getPhone());
-            orders.add(order);
-        }
-        return orders;
     }
 }
 

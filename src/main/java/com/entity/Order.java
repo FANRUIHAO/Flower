@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 
 public class Order {
     private int id;
-    private String username;
+    private Integer user_id;
     private String addr;
     private String product;
     private Integer num;
@@ -12,14 +12,18 @@ public class Order {
     private String status;
     private Double sum;
     private String ordertime;
-    private String phone;
+    private Integer phone;
 
     public int getId() {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
     public String getAddr() {
@@ -50,12 +54,8 @@ public class Order {
         return ordertime;
     }
 
-    public String getPhone() {
+    public Integer getPhone() {
         return phone;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public void setAddr(String addr) {
@@ -86,15 +86,19 @@ public class Order {
         this.ordertime = ordertime;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(Integer phone) {
         this.phone = phone;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", user_id=" + user_id +
                 ", addr='" + addr + '\'' +
                 ", product='" + product + '\'' +
                 ", num=" + num +
@@ -102,8 +106,7 @@ public class Order {
                 ", status='" + status + '\'' +
                 ", sum=" + sum +
                 ", ordertime='" + ordertime + '\'' +
-                ", phone='" + phone + '\'' +
+                ", phone=" + phone +
                 '}';
     }
-
 }
