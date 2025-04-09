@@ -1,10 +1,7 @@
 package com.controller;
 
 import com.entity.*;
-import com.service.CartService;
-import com.service.CommentsService;
-import com.service.ShoppingService;
-import com.service.UserService;
+import com.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +33,8 @@ public class ShoppingController {
     private ShoppingService shoppingService;
     @Autowired
     private CommentsService commentService;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/")
     public String home() {
@@ -536,25 +535,29 @@ public class ShoppingController {
         }
 
         try {
+            // Get the selected item IDs from the request
             List<Integer> itemIds = (List<Integer>) requestData.get("itemIds");
             String address = (String) requestData.get("address");
 
-            // 1. 计算总金额
-            double totalAmount = shoppingService.calculateTotal(itemIds, user.getId());
+            // Query the cart table to calculate the total amount for the selected items
+            List<Cart> selectedItems = cartService.getSelectedCartItems(user.getId(), itemIds);
+            double totalAmount = selectedItems.stream()
+                    .mapToDouble(item -> item.getCprice() * item.getCnum())
+                    .sum();
 
-            // 2. 检查余额
+            // Check if the user has sufficient balance
             if (user.getAccount() < totalAmount) {
                 response.put("status", "error");
                 response.put("message", "Insufficient balance");
                 return response;
             }
 
-            // 3. 创建订单
-            Order order = shoppingService.createOrder(user.getId(), itemIds, address, totalAmount);
+            // 创建订单
+            Order order = orderService.createOrder(user.getId(), itemIds, address, totalAmount);
 
-            // 4. 扣除余额
+            // Deduct the total amount from the user's account
             user.setAccount((int) (user.getAccount() - totalAmount));
-            userService.updateUser(user); // 需要实现更新用户的方法
+            userService.updateUser(user);
 
             response.put("status", "success");
             response.put("orderId", order.getId());

@@ -1,8 +1,10 @@
 package com.service;
 
+import com.entity.Cart;
 import com.entity.Collect;
 import com.entity.Order;
 import com.entity.Product;
+import com.mapper.CartMapper;
 import com.mapper.ShoppingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,6 +24,8 @@ import java.util.Map;
 public class ShoppingService {
     @Autowired
     private  ShoppingMapper shoppingMapper;
+    @Autowired
+    private CartMapper cartMapper;
     private static final String FLASK_API_URL = "http://localhost:5000/predict";
 
     public Product identifyFlower(MultipartFile file) {
@@ -115,16 +119,6 @@ public class ShoppingService {
         return products;
     }
 
-    public double calculateTotal(List<Integer> itemIds, Integer id) {
-        double total = 0.0;
-        for (Integer itemId : itemIds) {
-            Product product = shoppingMapper.getProductsByFlowerName(itemId.toString());
-            if (product != null) {
-                total += product.getPrice();
-            } else {
-                throw new RuntimeException("Product not found for ID: " + itemId);
-            }
-        }
-        return total;
-    }
+
+
 }

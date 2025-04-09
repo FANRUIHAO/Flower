@@ -19,4 +19,13 @@ public interface CartMapper {
     Cart findById(Integer id);
     @Update("update cart set cnum=#{cnum} where id=#{id}")
     void updateCartItem(Cart cartItem);
+    @Select("<script>" +
+            "SELECT * FROM cart " +
+            "WHERE user_id = #{userId} " +
+            "AND id IN " +
+            "<foreach item='id' collection='itemIds' open='(' separator=',' close=')'>" +
+            "#{id}" +
+            "</foreach>" +
+            "</script>")
+    List<Cart> findSelectedItemsByUserId(@Param("userId") Integer userId, @Param("itemIds") List<Integer> itemIds);
 }

@@ -69,5 +69,8 @@ public class CartService {
             cartMapper.deleteCartItem(itemId.intValue());
         }
     }
+    public List<Cart> getSelectedCartItems(Integer userId, List<Integer> itemIds) {
+        return cartMapper.findSelectedItemsByUserId(userId, itemIds);
+    }
 }
 
