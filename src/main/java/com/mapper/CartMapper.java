@@ -28,4 +28,5 @@ public interface CartMapper {
             "</foreach>" +
             "</script>")
     List<Cart> findSelectedItemsByUserId(@Param("userId") Integer userId, @Param("itemIds") List<Integer> itemIds);
+
 }

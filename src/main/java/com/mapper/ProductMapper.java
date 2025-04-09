@@ -21,4 +21,6 @@ public interface ProductMapper {
 
     @Update("update product set proname=#{proname}, num=#{num}, price=#{price}, category=#{category}, pro_image=#{pro_image}, description=#{description} where id=#{id}")
     void updateProduct(Product p);
+    @Select("select * from product where proname=#{cname}")
+    Product selectProductByName(String cname);
 }

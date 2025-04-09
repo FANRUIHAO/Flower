@@ -200,6 +200,10 @@
             <div class="modal-body">
                 <p id="checkoutMessage">Are you sure you want to checkout the selected items?</p>
                 <div id="accountInfo" class="mt-3"></div>
+                <div class="form-group mt-3">
+                    <label for="checkoutPassword">Enter your login password to confirm:</label>
+                    <input type="password" class="form-control" id="checkoutPassword" placeholder="Password">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -218,7 +222,6 @@
         setupSelectAll();
         updateTotalPrice();
     });
-    // 结算选中商品
     // 结算选中商品
     function checkoutSelected() {
         const selectedIds = [];
@@ -242,21 +245,22 @@
         // 显示确认模态框
         $('#checkoutModal').modal('show');
 
+        // 显示总金额
+        $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
+
         // 获取用户余额信息
         $.get('/shopping/getUserAccount', function(response) {
             const account = response.account || 0;
             const accountInfo = $('#accountInfo');
 
             if (account >= totalAmount) {
-                $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
-                accounteInfo.html(`
+                accountInfo.html(`
                 <div class="alert alert-success">
                     Your account: ¥${account.toFixed(2)} (Sufficient)
                 </div>
             `);
                 $('#confirmCheckout').prop('disabled', false);
             } else {
-                $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
                 accountInfo.html(`
                 <div class="alert alert-danger">
                     Your account: ¥${account.toFixed(2)} (Insufficient)
@@ -266,30 +270,40 @@
             }
         });
 
-        // 确认结算按钮点击事件
-        $('#confirmCheckout').off('click').on('click', function() {
-            const data = {
-                itemIds: selectedIds,
-                address: prompt("Please enter your delivery address:") || ""
-            };
+        // 点击确认结算按钮
+        $('#confirmCheckout').off('click').on('click', function () {
+            const password = $('#checkoutPassword').val().trim();
 
-            if (!data.address) {
-                alert("Delivery address is required!");
+            if (!password) {
+                alert("Please enter your login password.");
                 return;
             }
 
-            $.post('/shopping/checkout', data, function(response) {
-                if (response.status === 'success') {
-                    alert('Order placed successfully!');
-                    location.reload(); // 刷新页面
-                } else {
-                    alert(response.message || 'Checkout failed');
+            const data = {
+                itemIds: selectedIds,
+                password: password
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/shopping/checkout',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Order placed successfully!');
+                        location.reload();
+                    } else {
+                        alert(response.message || 'Checkout failed');
+                    }
+                },
+                error: function() {
+                    alert('Error processing your request');
                 }
-            }).fail(function() {
-                alert('Error processing your request');
             });
         });
     }
+
     // 数量增减功能
     function changeQuantity(btn, change) {
         const input = btn.parentElement.querySelector('.quantity-input');

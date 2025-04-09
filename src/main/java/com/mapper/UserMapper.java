@@ -24,6 +24,8 @@ public interface UserMapper{
     void registUser(User u);
     @Update("update user set user_image=#{user_image} where id=#{id}")
     void updateUserImage(User user);
+
+
 }
 
 

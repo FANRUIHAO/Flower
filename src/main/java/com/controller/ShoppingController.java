@@ -535,32 +535,35 @@ public class ShoppingController {
         }
 
         try {
-            // Get the selected item IDs from the request
             List<Integer> itemIds = (List<Integer>) requestData.get("itemIds");
-            String address = (String) requestData.get("address");
+            String password = (String) requestData.get("password");
 
-            // Query the cart table to calculate the total amount for the selected items
+            if (!user.getPassword().equals(password)) {
+                response.put("status", "error");
+                response.put("message", "Incorrect password");
+                return response;
+            }
+
             List<Cart> selectedItems = cartService.getSelectedCartItems(user.getId(), itemIds);
             double totalAmount = selectedItems.stream()
                     .mapToDouble(item -> item.getCprice() * item.getCnum())
                     .sum();
 
-            // Check if the user has sufficient balance
             if (user.getAccount() < totalAmount) {
                 response.put("status", "error");
                 response.put("message", "Insufficient balance");
                 return response;
             }
 
-            // 创建订单
-            Order order = orderService.createOrder(user.getId(), itemIds, address, totalAmount);
+            // 创建订单（一个商品一个订单）
+            List<Order> orders = orderService.createOrder(user, selectedItems, user.getAddr());
 
-            // Deduct the total amount from the user's account
+            // 扣款并更新账户
             user.setAccount((int) (user.getAccount() - totalAmount));
             userService.updateUser(user);
 
             response.put("status", "success");
-            response.put("orderId", order.getId());
+            response.put("orderCount", orders.size());
         } catch (Exception e) {
             response.put("status", "error");
             response.put("message", e.getMessage());
@@ -568,4 +571,6 @@ public class ShoppingController {
 
         return response;
     }
+
+
 }
