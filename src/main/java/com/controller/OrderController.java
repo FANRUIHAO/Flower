@@ -22,7 +22,7 @@ public class OrderController {
     public String getOrders(HttpSession session, Model model) {
         User u = (User) session.getAttribute("currentUser");
         if (u != null) {
-//            System.out.println("当前用户ID: " + u.getId()); // 调试输出
+
 
             // 已登录用户
             model.addAttribute("username", u.getUsername());

@@ -144,7 +144,7 @@
                 <!--订单状态-->
 <!--                <td th:text="${order.getStatus()}"></td>-->
                 <td th:text="${order.status != null} ? ${order.status} : '未知状态'"></td>
-                <p th:text="${#objects.toString(orders)}"></p>
+<!--                <p th:text="${#objects.toString(orders)}"></p>-->
                 <!-- 下单时间 -->
                 <td th:text="${order.ordertime}"></td>
 
