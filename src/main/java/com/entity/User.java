@@ -7,7 +7,7 @@ public class User {
     private String sex;
     private Integer grade;
     private String user_image = "/images/person/p1.jpg";
-    private Integer phone;
+    private String phone;
     private String addr;
     private Integer account;
 
@@ -27,11 +27,11 @@ public class User {
         this.addr = addr;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

@@ -12,7 +12,7 @@ public class Order {
     private String status;
     private Double sum;
     private String ordertime;
-    private Integer phone;
+    private String phone;
 
     public int getId() {
         return id;
@@ -54,7 +54,7 @@ public class Order {
         return ordertime;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -86,7 +86,7 @@ public class Order {
         this.ordertime = ordertime;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

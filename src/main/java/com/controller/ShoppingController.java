@@ -480,7 +480,7 @@ public class ShoppingController {
                                         @RequestParam Integer num,
                                         @RequestParam String image,
                                         @RequestParam Double sum,
-                                        @RequestParam Integer phone,
+                                        @RequestParam String phone,
                                         HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         User user = (User) session.getAttribute("currentUser");
@@ -551,7 +551,7 @@ public class ShoppingController {
 
             if (user.getAccount() < totalAmount) {
                 response.put("status", "error");
-                response.put("message", "Insufficient balance");
+                response.put("message", "Insufficient account");
                 return response;
             }
 
@@ -571,6 +571,7 @@ public class ShoppingController {
 
         return response;
     }
+
 
 
 }

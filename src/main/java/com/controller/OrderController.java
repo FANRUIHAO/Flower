@@ -22,7 +22,7 @@ public class OrderController {
     public String getOrders(HttpSession session, Model model) {
         User u = (User) session.getAttribute("currentUser");
         if (u != null) {
-            System.out.println("当前用户ID: " + u.getId()); // 调试输出
+//            System.out.println("当前用户ID: " + u.getId()); // 调试输出
 
             // 已登录用户
             model.addAttribute("username", u.getUsername());
@@ -30,8 +30,8 @@ public class OrderController {
 
             // 获取用户订单
             List<Order> orders = orderService.getOrdersByUserId(u.getId());
-            System.out.println("查询到的订单数量: " + orders.size()); // 调试输出
-            System.out.println("订单列表详情: " + orders); // 调试输出
+//            System.out.println("查询到的订单数量: " + orders.size()); // 调试输出
+//            System.out.println("订单列表详情: " + orders); // 调试输出
 
             model.addAttribute("orders", orders);
         } else {

@@ -118,11 +118,12 @@
                 <th>下单时间</th>
                 <th>联系电话</th>
                 <th>收货地址</th>
-                <th>操作</th>
+                <th>评价</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="order : ${orders}">
+
                 <!-- 商品名称 -->
                 <td th:text="${order.product}"></td>
 
@@ -140,16 +141,10 @@
                 <!-- 总金额 -->
                 <td th:text="'¥' + ${#numbers.formatDecimal(order.getSum(), 1, 2)}"></td>
 
-                <!-- 发货状态 -->
-                <td>
-            <span th:switch="${order.status}" class="badge">
-                <span th:case="'PENDING'" class="badge badge-warning">待发货</span>
-                <span th:case="'SHIPPED'" class="badge badge-primary">已发货</span>
-                <span th:case="'DELIVERED'" class="badge badge-success">已送达</span>
-                <span th:case="'CANCELLED'" class="badge badge-danger">已取消</span>
-            </span>
-                </td>
-
+                <!--订单状态-->
+<!--                <td th:text="${order.getStatus()}"></td>-->
+                <td th:text="${order.status != null} ? ${order.status} : '未知状态'"></td>
+                <p th:text="${#objects.toString(orders)}"></p>
                 <!-- 下单时间 -->
                 <td th:text="${order.ordertime}"></td>
 
@@ -184,32 +179,30 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
-
-<script>
-    function cancelOrder(orderId) {
-        if(confirm('确定要取消此订单吗？')) {
-            $.post('/order/cancel', {orderId: orderId}, function() {
-                location.reload();
-            }).fail(function() {
-                alert('取消订单失败');
-            });
-        }
-    }
-
-    function trackOrder(orderId) {
-        alert('订单ID: ' + orderId);
-    }
-
-    function reorder(orderId) {
-        if(confirm('将此商品重新加入购物车？')) {
-            $.post('/order/reorder', {orderId: orderId}, function() {
-                window.location.href = '/shopping/cart';
-            }).fail(function() {
-                alert('操作失败');
-            });
-        }
-    }
-</script>
-
 </body>
 </html>
+<!--<script>&ndash;&gt;-->
+<!--&lt;!&ndash;    function cancelOrder(orderId) {&ndash;&gt;-->
+<!--&lt;!&ndash;        if(confirm('确定要取消此订单吗？')) {&ndash;&gt;-->
+<!--&lt;!&ndash;            $.post('/order/cancel', {orderId: orderId}, function() {&ndash;&gt;-->
+<!--&lt;!&ndash;                location.reload();&ndash;&gt;-->
+<!--&lt;!&ndash;            }).fail(function() {&ndash;&gt;-->
+<!--&lt;!&ndash;                alert('取消订单失败');&ndash;&gt;-->
+<!--&lt;!&ndash;            });&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    function trackOrder(orderId) {&ndash;&gt;-->
+<!--&lt;!&ndash;        alert('订单ID: ' + orderId);&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--&lt;!&ndash;    function reorder(orderId) {&ndash;&gt;-->
+<!--&lt;!&ndash;        if(confirm('将此商品重新加入购物车？')) {&ndash;&gt;-->
+<!--&lt;!&ndash;            $.post('/order/reorder', {orderId: orderId}, function() {&ndash;&gt;-->
+<!--&lt;!&ndash;                window.location.href = '/shopping/cart';&ndash;&gt;-->
+<!--&lt;!&ndash;            }).fail(function() {&ndash;&gt;-->
+<!--&lt;!&ndash;                alert('操作失败');&ndash;&gt;-->
+<!--&lt;!&ndash;            });&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;</script>-->

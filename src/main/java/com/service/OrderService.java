@@ -21,10 +21,6 @@ public class OrderService {
     private OrderMapper orderMapper;
     @Autowired
     private ProductMapper productMapper;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private CartMapper cartMapper;
     public List<Order> getOrdersByUserId(Integer id) {
         return orderMapper.findByUserId(id);
     }
@@ -51,7 +47,8 @@ public class OrderService {
             order.setOrdertime(datetime); // 设置当前时间为字符串格式
 
             order.setImage(product.getPro_image()); // 假设字段为 image（商品图片路径）
-
+//            System.out.println("订单详情: " + order); // 调试输出
+//            System.out.println("商品详情: " + product); // 调试输出
             // 保存订单
             orderMapper.addOrder(order);
 
