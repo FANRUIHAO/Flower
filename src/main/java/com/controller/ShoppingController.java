@@ -504,7 +504,7 @@ public class ShoppingController {
         response.put("status", "success");
         return response;
     }
-    @GetMapping("/getUserBalance")
+    @GetMapping("/getUserAccount")
     @ResponseBody
     public Map<String, Object> getUserBalance(HttpSession session) {
         Map<String, Object> response = new HashMap<>();
@@ -515,7 +515,7 @@ public class ShoppingController {
             response.put("url", "/user/login");
         } else {
             response.put("status", "success");
-            response.put("balance", user.getBalance()); // 假设User类有balance字段
+            response.put("account", user.getAccount()); // 假设User类有balance字段
         }
 
         return response;
@@ -540,10 +540,10 @@ public class ShoppingController {
             String address = (String) requestData.get("address");
 
             // 1. 计算总金额
-            double totalAmount = shoppingService.calculateTotal(itemIds);
+            double totalAmount = shoppingService.calculateTotal(itemIds, user.getId());
 
             // 2. 检查余额
-            if (user.getBalance() < totalAmount) {
+            if (user.getAccount() < totalAmount) {
                 response.put("status", "error");
                 response.put("message", "Insufficient balance");
                 return response;
@@ -553,7 +553,7 @@ public class ShoppingController {
             Order order = shoppingService.createOrder(user.getId(), itemIds, address, totalAmount);
 
             // 4. 扣除余额
-            user.setBalance(user.getBalance() - totalAmount);
+            user.setAccount((int) (user.getAccount() - totalAmount));
             userService.updateUser(user); // 需要实现更新用户的方法
 
             response.put("status", "success");

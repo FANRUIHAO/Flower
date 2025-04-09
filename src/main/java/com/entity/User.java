@@ -9,6 +9,15 @@ public class User {
     private String user_image = "/images/person/p1.jpg";
     private Integer phone;
     private String addr;
+    private Integer account;
+
+    public Integer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Integer account) {
+        this.account = account;
+    }
 
     public String getAddr() {
         return addr;
@@ -79,6 +88,7 @@ public class User {
         this.password = password;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
@@ -90,6 +100,7 @@ public class User {
                 ", user_image='" + user_image + '\'' +
                 ", phone=" + phone +
                 ", addr='" + addr + '\'' +
+                ", account=" + account +
                 '}';
     }
 }

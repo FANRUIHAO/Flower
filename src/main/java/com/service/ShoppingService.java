@@ -3,7 +3,6 @@ package com.service;
 import com.entity.Collect;
 import com.entity.Order;
 import com.entity.Product;
-import com.entity.User;
 import com.mapper.ShoppingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -16,8 +15,6 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -116,5 +113,18 @@ public class ShoppingService {
             throw new RuntimeException("No products found for the given keyword: " + keyword);
         }
         return products;
+    }
+
+    public double calculateTotal(List<Integer> itemIds, Integer id) {
+        double total = 0.0;
+        for (Integer itemId : itemIds) {
+            Product product = shoppingMapper.getProductsByFlowerName(itemId.toString());
+            if (product != null) {
+                total += product.getPrice();
+            } else {
+                throw new RuntimeException("Product not found for ID: " + itemId);
+            }
+        }
+        return total;
     }
 }
