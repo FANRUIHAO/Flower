@@ -17,8 +17,6 @@ public class OrderService {
     @Autowired
     private ProductMapper productMapper;
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private CommentMapper commentMapper;
     public List<Order> getOrdersByUserId(Integer id) {
         return orderMapper.findByUserId(id);
@@ -66,7 +64,6 @@ public class OrderService {
     public void save(Order order) {
         orderMapper.saveOrder(order);
     }
-
     public void confirmReceipt(Long id) {
         Order order = orderMapper.findById(id.intValue());
         if (order != null) {
@@ -83,7 +80,7 @@ public class OrderService {
     }
     public void addComment(String username, String product, String comment) {
         Comment newComment = new Comment(null, product, comment, username);
-        // Save the comment to the database
+
         commentMapper.addComment(newComment);
     }
 }

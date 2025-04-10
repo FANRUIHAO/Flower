@@ -251,9 +251,9 @@
                 }),
                 success: function(response) {
                     if (response.success) {
-                        alert('评价提交成功！');
                         $('#reviewModal').modal('hide');
                         $('.review-btn[data-id="' + orderId + '"]').remove();
+                        alert('评价提交成功！');
                     } else {
                         alert('评价提交失败: ' + (response.message || '未知错误'));
                     }

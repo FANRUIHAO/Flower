@@ -77,24 +77,10 @@ public class OrderController {
         }
         return response;
     }
-    @PostMapping("/review")
-    @ResponseBody
-    public Map<String, Object> review(@RequestParam Long id) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            orderService.reviewOrder(id);
-            response.put("success", true);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", e.getMessage());
-        }
-        return response;
-    }
     @PostMapping("/addComment")
     @ResponseBody
     public Map<String, Object> addComment(@RequestBody Map<String, Object> payload, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
-        System.out.println("11111111111111111");
         try {
             // Retrieve the current user from the session
             User currentUser = (User) session.getAttribute("currentUser");
@@ -113,7 +99,7 @@ public class OrderController {
 
             // Call the service to save the comment
             orderService.addComment(currentUser.getUsername(), order.getProduct(), comment);
-
+            orderService.reviewOrder(orderId);
             response.put("success", true);
         } catch (Exception e) {
             response.put("success", false);
