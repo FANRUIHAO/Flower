@@ -45,6 +45,7 @@ public class OrderService {
             orderMapper.addOrder(order);
 
             orders.add(order);
+            productMapper.incrementStar(product.getProname());
         }
 
         return orders;

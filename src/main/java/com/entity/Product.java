@@ -8,6 +8,15 @@ public class Product {
     private String category;
     private String description;
     private String pro_image;
+    private Integer star;
+
+    public Integer getStar() {
+        return star;
+    }
+
+    public void setStar(Integer star) {
+        this.star = star;
+    }
 
     public String getPro_image() {
         return pro_image;
@@ -65,6 +74,7 @@ public class Product {
         this.num = num;
     }
 
+
     @Override
     public String toString() {
         return "Product{" +
@@ -75,6 +85,7 @@ public class Product {
                 ", category='" + category + '\'' +
                 ", description='" + description + '\'' +
                 ", pro_image='" + pro_image + '\'' +
+                ", star=" + star +
                 '}';
     }
 }

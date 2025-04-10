@@ -23,4 +23,6 @@ public interface ProductMapper {
     void updateProduct(Product p);
     @Select("select * from product where proname=#{cname}")
     Product selectProductByName(String cname);
+    @Update("update product set star=COALESCE(star, 0) + 1 where proname=#{proname}")
+    void incrementStar(String proname);
 }

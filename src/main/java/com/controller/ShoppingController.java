@@ -523,6 +523,7 @@ public class ShoppingController {
 
         return response;
     }
+    //下单对应的代码
     @PostMapping("/checkout")
     @ResponseBody
     public Map<String, Object> checkout(
