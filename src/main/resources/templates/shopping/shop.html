@@ -287,7 +287,6 @@
 </script>
 <script>$(document).ready(function() {
     // 处理查看按钮点击事件
-    // 修改这部分代码 - 使用事件委托来处理动态生成的查看按钮
     $(document).on('click', '.view-product-btn', function() {
         const productName = $(this).data('product-name');
         const productPrice = $(this).data('product-price');
@@ -310,7 +309,6 @@
         // 检查收藏状态
         checkFavoriteStatus(productName, productPrice, productImage);
     });
-
     // 收藏按钮点击事件
     $('#addToFavoritesBtn').click(function() {
         const productName = $('#modalProductName').text();
@@ -324,7 +322,6 @@
             addToFavorite(productName, productPrice, productImage);
         }
     });
-
     // 检查收藏状态
     function checkFavoriteStatus(productName, productPrice, productImage) {
         $.ajax({
@@ -350,7 +347,6 @@
             }
         });
     }
-
     // 添加到收藏
     function addToFavorite(productName, productPrice, productImage) {
         $.ajax({
@@ -376,7 +372,6 @@
             }
         });
     }
-
     // 从收藏移除
     function removeFromFavorite(productName) {
         $.ajax({
@@ -398,7 +393,6 @@
             }
         });
     }
-
     // 显示提示消息
     function showAlert(message, type) {
         const alert = $('#alert-container');
@@ -406,10 +400,6 @@
         alert.text(message).fadeIn();
         setTimeout(() => alert.fadeOut(), 3000);
     }
-
-    // 加载商品评价
-
-
     // 数量加减按钮
     $('.minus-btn').click(function() {
         var quantity = parseInt($('#modalProductQuantity').val());
@@ -417,12 +407,10 @@
             $('#modalProductQuantity').val(quantity - 1);
         }
     });
-
     $('.plus-btn').click(function() {
         var quantity = parseInt($('#modalProductQuantity').val());
         $('#modalProductQuantity').val(quantity + 1);
     });
-
     // 添加到购物车按钮点击事件
     $('#addToCartBtn').click(function() {
         const productName = $('#modalProductName').text();
@@ -432,7 +420,6 @@
 
         addToCart(productName, productPrice, productImage, quantity);
     });
-
 // 改进后的添加到购物车函数
     function addToCart(productName, productPrice, productImage, quantity) {
         $.ajax({
@@ -462,7 +449,6 @@
             }
         });
     }
-
 // 更新购物车数量显示
     function updateCartCount(count) {
         const cartCount = $('#cartItemCount');

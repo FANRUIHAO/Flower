@@ -29,7 +29,7 @@ public interface ShoppingMapper{
     @Select("select * from product where proname like concat('%', #{keyword}, '%')")
     List<Product> search(String keyword);
 
-    @Insert("insert into `order` (user_id, product, addr,  num, sum, status, ordertime, image, phone) " +
-            "values (#{user_id}, #{product}, #{addr},  #{num}, #{sum}, #{status}, #{ordertime}, #{image}, #{phone})")
+    @Insert("insert into `order` (user_id, product, addr,  num, sum, status, ordertime, image, phone, username) " +
+            "values (#{user_id}, #{product}, #{addr},  #{num}, #{sum}, #{status}, #{ordertime}, #{image}, #{phone}, #{username})")
     void addOrder(Order or);
 }

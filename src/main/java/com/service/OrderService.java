@@ -4,6 +4,7 @@ import com.entity.Cart;
 import com.entity.Order;
 import com.entity.Product;
 import com.entity.User;
+import com.github.pagehelper.PageInfo;
 import com.mapper.CartMapper;
 import com.mapper.OrderMapper;
 import com.mapper.ProductMapper;
@@ -24,19 +25,17 @@ public class OrderService {
     public List<Order> getOrdersByUserId(Integer id) {
         return orderMapper.findByUserId(id);
     }
-
-
     public List<Order> createOrder(User user, List<Cart> selectedItems, String address) {
         List<Order> orders = new ArrayList<>();
 
         for (Cart item : selectedItems) {
             // 从商品表中查询商品详情
             Product product = productMapper.selectProductByName(item.getCname());
-
             Order order = new Order();
             order.setUser_id(user.getId());
             order.setPhone(user.getPhone());
             order.setAddr(address);
+            order.setUsername(user.getUsername());
             order.setProduct(item.getCname());
             order.setNum(item.getCnum());
             order.setSum(item.getCprice() * item.getCnum());
@@ -45,10 +44,7 @@ public class OrderService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String datetime = sdf.format(new Date(System.currentTimeMillis()));
             order.setOrdertime(datetime); // 设置当前时间为字符串格式
-
             order.setImage(product.getPro_image()); // 假设字段为 image（商品图片路径）
-//            System.out.println("订单详情: " + order); // 调试输出
-//            System.out.println("商品详情: " + product); // 调试输出
             // 保存订单
             orderMapper.addOrder(order);
 
@@ -57,7 +53,35 @@ public class OrderService {
 
         return orders;
     }
+    public PageInfo<Order> getAllOrdersWithPagination(int pageNum, int pageSize) {
+        // 设置分页参数
+        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        // 查询所有订单
+        List<Order> orders = orderMapper.findAllOrders();
+        // 使用 PageInfo 封装查询结果
+        PageInfo<Order> pageInfo = new PageInfo<>(orders);
+        return pageInfo;
+    }
+    public Order findById(Long id) {
+        return orderMapper.findById(id.intValue());
+    }
+    public void save(Order order) {
+        orderMapper.saveOrder(order);
+    }
 
+    public void confirmReceipt(Long id) {
+        Order order = orderMapper.findById(id.intValue());
+        if (order != null) {
+            order.setStatus("已收货");
+            orderMapper.updateOrder(order);
+        }
+    }
 
-
+    public void reviewOrder(Long id) {
+        Order order = orderMapper.findById(id.intValue());
+        if (order != null) {
+            order.setStatus("已评价");
+            orderMapper.updateOrder(order);
+        }
+    }
 }

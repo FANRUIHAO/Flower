@@ -473,36 +473,40 @@ public class ShoppingController {
         System.out.println("Found " + results.size() + " products");
         return results;
     }
-    @PostMapping("/addOrder")
-    @ResponseBody
-    public Map<String, Object> addOrder(@RequestParam String addr,
-                                        @RequestParam String product,
-                                        @RequestParam Integer num,
-                                        @RequestParam String image,
-                                        @RequestParam Double sum,
-                                        @RequestParam String phone,
-                                        HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
-        User user = (User) session.getAttribute("currentUser");
-        if (user == null) {
-            response.put("status", "redirect");
-            response.put("url", "/user/login");
-            return response;
-        }
-        Order order = new Order();
-        order.setAddr(addr);
-        order.setProduct(product);
-        order.setNum(num);
-        order.setImage(image);
-        order.setSum(sum);
-        order.setPhone(phone);
-        order.setUser_id(user.getId());
-        order.setStatus("待发货");
-        order.setOrdertime(String.valueOf(System.currentTimeMillis()));
-        shoppingService.addOrder(order);
-        response.put("status", "success");
-        return response;
-    }
+//    @PostMapping("/addOrder")
+//    @ResponseBody
+//    public Map<String, Object> addOrder(@RequestParam String addr,
+//                                        @RequestParam String product,
+//                                        @RequestParam Integer num,
+//                                        @RequestParam String image,
+//                                        @RequestParam Double sum,
+//                                        @RequestParam String phone,
+//                                        HttpSession session) {
+//        Map<String, Object> response = new HashMap<>();
+//        User user = (User) session.getAttribute("currentUser");
+//        if (user == null) {
+//            response.put("status", "redirect");
+//            response.put("url", "/user/login");
+//            return response;
+//        }
+//        String username = user.getUsername();
+//        System.out.println("Username: " + username);
+//        System.out.println(111);
+//        Order order = new Order();
+//        order.setAddr(addr);
+//        order.setProduct(product);
+//        order.setNum(num);
+//        order.setImage(image);
+//        order.setSum(sum);
+//        order.setUsername(username);
+//        order.setPhone(phone);
+//        order.setUser_id(user.getId());
+//        order.setStatus("待发货");
+//        order.setOrdertime(String.valueOf(System.currentTimeMillis()));
+//        shoppingService.addOrder(order);
+//        response.put("status", "success");
+//        return response;
+//    }
     @GetMapping("/getUserAccount")
     @ResponseBody
     public Map<String, Object> getUserBalance(HttpSession session) {

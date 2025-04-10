@@ -118,7 +118,7 @@
                 <th>下单时间</th>
                 <th>联系电话</th>
                 <th>收货地址</th>
-                <th>评价</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -171,38 +171,63 @@
 
     </div>
 </div>
-
 <div class="footer">
     <p>&copy; 2025 Flower Shop. All rights reserved.</p>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
+
+<script>
+    $(document).ready(function() {
+        // 点击确认收货按钮
+        $(document).on('click', '.confirm-receipt-btn', function() {
+            var orderId = $(this).data('id');
+            $.ajax({
+                url: '/order/confirmReceipt',
+                type: 'POST',
+                data: { id: orderId },
+                success: function(response) {
+                    if (response.success) {
+                        alert('确认收货成功！');
+                        // 隐藏确认收货按钮
+                        $('.confirm-receipt-btn[data-id="' + orderId + '"]').remove();
+                    } else {
+                        alert('确认收货失败: ' + (response.message || '未知错误'));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('确认收货时出错:', error);
+                    alert('请求失败，请稍后重试');
+                }
+            });
+        });
+
+        // 点击进行评价按钮
+        $(document).on('click', '.review-btn', function() {
+            var orderId = $(this).data('id');
+            // 打开评价模态框或跳转到评价页面
+            $.ajax({
+                url: '/order/review',
+                type: 'POST',
+                data: { id: orderId },
+                success: function(response) {
+                    if (response.success) {
+                        alert('评价成功！');
+                        // 隐藏评价按钮
+                        $('.review-btn[data-id="' + orderId + '"]').remove();
+                    } else {
+                        alert('评价失败: ' + (response.message || '未知错误'));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('评价时出错:', error);
+                    alert('请求失败，请稍后重试');
+                }
+            });
+        });
+    });
+</script>
+
 </html>
-<!--<script>&ndash;&gt;-->
-<!--&lt;!&ndash;    function cancelOrder(orderId) {&ndash;&gt;-->
-<!--&lt;!&ndash;        if(confirm('确定要取消此订单吗？')) {&ndash;&gt;-->
-<!--&lt;!&ndash;            $.post('/order/cancel', {orderId: orderId}, function() {&ndash;&gt;-->
-<!--&lt;!&ndash;                location.reload();&ndash;&gt;-->
-<!--&lt;!&ndash;            }).fail(function() {&ndash;&gt;-->
-<!--&lt;!&ndash;                alert('取消订单失败');&ndash;&gt;-->
-<!--&lt;!&ndash;            });&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-<!--&lt;!&ndash;    }&ndash;&gt;-->
-
-<!--&lt;!&ndash;    function trackOrder(orderId) {&ndash;&gt;-->
-<!--&lt;!&ndash;        alert('订单ID: ' + orderId);&ndash;&gt;-->
-<!--&lt;!&ndash;    }&ndash;&gt;-->
-
-<!--&lt;!&ndash;    function reorder(orderId) {&ndash;&gt;-->
-<!--&lt;!&ndash;        if(confirm('将此商品重新加入购物车？')) {&ndash;&gt;-->
-<!--&lt;!&ndash;            $.post('/order/reorder', {orderId: orderId}, function() {&ndash;&gt;-->
-<!--&lt;!&ndash;                window.location.href = '/shopping/cart';&ndash;&gt;-->
-<!--&lt;!&ndash;            }).fail(function() {&ndash;&gt;-->
-<!--&lt;!&ndash;                alert('操作失败');&ndash;&gt;-->
-<!--&lt;!&ndash;            });&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-<!--&lt;!&ndash;    }&ndash;&gt;-->
-<!--&lt;!&ndash;</script>-->
