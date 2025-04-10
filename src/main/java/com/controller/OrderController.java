@@ -17,10 +17,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-
     @Autowired
     private OrderService orderService;
-
     @GetMapping("/list")
     public String getOrders(HttpSession session, Model model) {
         User u = (User) session.getAttribute("currentUser");
@@ -53,7 +51,6 @@ public class OrderController {
     @ResponseBody
     public Map<String, Object> updateStatus(@RequestParam Long id, @RequestParam String status) {
         Map<String, Object> result = new HashMap<>();
-        System.out.println("111");
         try {
             // 根据id查找订单并更新状态
             Order order = orderService.findById(id);
@@ -80,7 +77,6 @@ public class OrderController {
         }
         return response;
     }
-
     @PostMapping("/review")
     @ResponseBody
     public Map<String, Object> review(@RequestParam Long id) {
@@ -94,4 +90,36 @@ public class OrderController {
         }
         return response;
     }
+    @PostMapping("/addComment")
+    @ResponseBody
+    public Map<String, Object> addComment(@RequestBody Map<String, Object> payload, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        System.out.println("11111111111111111");
+        try {
+            // Retrieve the current user from the session
+            User currentUser = (User) session.getAttribute("currentUser");
+            if (currentUser == null) {
+                throw new IllegalStateException("用户未登录");
+            }
+
+            Long orderId = Long.valueOf(payload.get("orderId").toString());
+            String comment = payload.get("comment").toString();
+
+            // Retrieve the order to get the product name
+            Order order = orderService.findById(orderId);
+            if (order == null) {
+                throw new IllegalStateException("订单不存在");
+            }
+
+            // Call the service to save the comment
+            orderService.addComment(currentUser.getUsername(), order.getProduct(), comment);
+
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
 }

@@ -123,10 +123,8 @@
             </thead>
             <tbody>
             <tr th:each="order : ${orders}">
-
                 <!-- 商品名称 -->
                 <td th:text="${order.product}"></td>
-
                 <!-- 商品图片 -->
                 <td>
                     <img th:src="@{${order.image}}"
@@ -134,41 +132,53 @@
                          class="img-thumbnail order-img"
                          style="width: 60px; height: 60px;">
                 </td>
-
                 <!-- 数量 -->
                 <td th:text="${order.num}"></td>
-
                 <!-- 总金额 -->
                 <td th:text="'¥' + ${#numbers.formatDecimal(order.getSum(), 1, 2)}"></td>
-
                 <!--订单状态-->
-<!--                <td th:text="${order.getStatus()}"></td>-->
                 <td th:text="${order.status != null} ? ${order.status} : '未知状态'"></td>
-<!--                <p th:text="${#objects.toString(orders)}"></p>-->
                 <!-- 下单时间 -->
                 <td th:text="${order.ordertime}"></td>
-
                 <!-- 用户手机号 -->
                 <td th:text="${order.getPhone()}"></td>
-
                 <!-- 地址 -->
                 <td th:text="${order.getAddr()}"></td>
-
                 <!-- 操作按钮 -->
                 <td>
-                    <button th:switch="${order.status}" class="btn btn-sm">
-                <span th:case="'PENDING'" class="btn btn-sm btn-pink-light"
-                      th:onclick="'cancelOrder(' + ${order.id} + ')'">取消订单</span>
-                        <span th:case="'SHIPPED'" class="btn btn-sm btn-pink"
-                              th:onclick="'trackOrder(' + ${order.id} + ')'">查看物流</span>
-                        <span th:case="'DELIVERED'" class="btn btn-sm btn-pink-outline"
-                              th:onclick="'reorder(' + ${order.id} + ')'">再次购买</span>
-                    </button>
+                    <!-- 确认收货按钮 -->
+                    <button th:if="${order.status == '已发货'}"
+                            class="btn btn-sm btn-success confirm-receipt-btn"
+                            th:data-id="${order.id}">确认收货</button>
+
+                    <!-- 进行评价按钮 -->
+                    <button th:if="${order.status == '已收货'}"
+                            class="btn btn-sm btn-primary review-btn"
+                            th:data-id="${order.id}">进行评价</button>
                 </td>
             </tr>
             </tbody>
         </table>
-
+    </div>
+</div>
+<!-- 模态框 -->
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">订单评价</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="reviewText" class="form-control" rows="4" placeholder="请输入您的评价"></textarea>
+                <input type="hidden" id="reviewOrderId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submitReview">提交评价</button>
+            </div>
+        </div>
     </div>
 </div>
 <div class="footer">
@@ -178,7 +188,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
-
 <script>
     $(document).ready(function() {
         // 点击确认收货按钮
@@ -193,6 +202,7 @@
                         alert('确认收货成功！');
                         // 隐藏确认收货按钮
                         $('.confirm-receipt-btn[data-id="' + orderId + '"]').remove();
+                        location.reload();
                     } else {
                         alert('确认收货失败: ' + (response.message || '未知错误'));
                     }
@@ -204,30 +214,56 @@
             });
         });
 
-        // 点击进行评价按钮
+        // 点击"进行评价"按钮，显示模态框
         $(document).on('click', '.review-btn', function() {
             var orderId = $(this).data('id');
-            // 打开评价模态框或跳转到评价页面
+            $('#reviewOrderId').val(orderId); // 设置订单ID到隐藏字段
+            $('#reviewText').val(''); // 清空之前的评价内容
+            $('#reviewModal').modal('show'); // 显示模态框
+        });
+
+        // 点击"提交评价"按钮，发送评价请求
+        $(document).on('click', '.review-btn', function() {
+            var orderId = $(this).data('id');
+            $('#reviewOrderId').val(orderId);
+            $('#reviewText').val('');
+            $('#reviewModal').modal('show');
+        });
+
+        // 点击"提交评价"按钮
+        $('#submitReview').click(function() {
+            var orderId = $('#reviewOrderId').val();
+            var reviewText = $('#reviewText').val();
+
+            if (!reviewText.trim()) {
+                alert('评价内容不能为空！');
+                return;
+            }
+
             $.ajax({
-                url: '/order/review',
+                url: '/order/addComment',
                 type: 'POST',
-                data: { id: orderId },
+                contentType: 'application/json', // 明确设置为JSON
+                data: JSON.stringify({ // 将对象转为JSON字符串
+                    orderId: orderId,
+                    comment: reviewText,
+                    _csrf: $("meta[name='_csrf']").attr("content")
+                }),
                 success: function(response) {
                     if (response.success) {
-                        alert('评价成功！');
-                        // 隐藏评价按钮
+                        alert('评价提交成功！');
+                        $('#reviewModal').modal('hide');
                         $('.review-btn[data-id="' + orderId + '"]').remove();
                     } else {
-                        alert('评价失败: ' + (response.message || '未知错误'));
+                        alert('评价提交失败: ' + (response.message || '未知错误'));
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('评价时出错:', error);
-                    alert('请求失败，请稍后重试');
+                    console.error('提交评价时出错:', xhr.responseText);
+                    alert('请求失败: ' + (xhr.responseJSON?.message || error));
                 }
             });
         });
     });
 </script>
-
 </html>

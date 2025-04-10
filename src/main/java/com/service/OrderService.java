@@ -1,14 +1,8 @@
 package com.service;
 
-import com.entity.Cart;
-import com.entity.Order;
-import com.entity.Product;
-import com.entity.User;
+import com.entity.*;
 import com.github.pagehelper.PageInfo;
-import com.mapper.CartMapper;
-import com.mapper.OrderMapper;
-import com.mapper.ProductMapper;
-import com.mapper.UserMapper;
+import com.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +16,10 @@ public class OrderService {
     private OrderMapper orderMapper;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private CommentMapper commentMapper;
     public List<Order> getOrdersByUserId(Integer id) {
         return orderMapper.findByUserId(id);
     }
@@ -76,12 +74,16 @@ public class OrderService {
             orderMapper.updateOrder(order);
         }
     }
-
     public void reviewOrder(Long id) {
         Order order = orderMapper.findById(id.intValue());
         if (order != null) {
             order.setStatus("已评价");
             orderMapper.updateOrder(order);
         }
+    }
+    public void addComment(String username, String product, String comment) {
+        Comment newComment = new Comment(null, product, comment, username);
+        // Save the comment to the database
+        commentMapper.addComment(newComment);
     }
 }
