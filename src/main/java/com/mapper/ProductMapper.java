@@ -25,4 +25,6 @@ public interface ProductMapper {
     Product selectProductByName(String cname);
     @Update("update product set star=COALESCE(star, 0) + 1 where proname=#{proname}")
     void incrementStar(String proname);
+    @Select("select * from product order by star desc limit 3")
+    List<Product> getTop3ProductsByStar();
 }

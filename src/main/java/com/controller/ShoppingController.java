@@ -38,7 +38,7 @@ public class ShoppingController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/shopping/list"; // 根路径跳转到购物列表页面
+        return "redirect:/product/list"; // 根路径跳转到购物列表页面
     }
     @PostMapping("/identifyFlower")
     @ResponseBody
@@ -594,7 +594,4 @@ public class ShoppingController {
 
         return response;
     }
-
-
-
 }

@@ -1,18 +1,17 @@
 package com.controller;
 
 import com.entity.Product;
+import com.entity.User;
 import com.github.pagehelper.PageInfo;
 import com.service.ProductService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -39,22 +38,15 @@ public class ProductController {
     public String save(Product p, @RequestParam("image") MultipartFile image) {
         if (!image.isEmpty()) {
             try {
-                // 设定上传目录为项目的静态资源路径
-//                String uploadDir = "src/main/resources/static/images"; // 这里不需要使用绝对路径，Spring Boot会自动识别静态资源目录
-//                File uploadDirFile = new File(uploadDir);
-
                 // 如果目录不存在，创建目录
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
-
                 // 生成目标文件路径
                 String filePath = uploadDir + File.separator + image.getOriginalFilename();
                 File dest = new File(filePath);
-
                 // 保存文件
                 image.transferTo(dest);
-
                 // 设置商品的图片路径（将路径存入数据库）
                 p.setPro_image("/images/" + image.getOriginalFilename());
                 System.out.println(p.getPro_image());
@@ -71,14 +63,12 @@ public class ProductController {
         // 跳转到商品列表页面
         return "redirect:/product/list";
     }
-
     @RequestMapping("/edit")
     public String edit(@RequestParam Integer id, Model model){
         Product p=productService.selectProductById(id);
         model.addAttribute("p", p);
         return "product/edit";
     }
-
     @RequestMapping("/update")
     public String update(Product p, @RequestParam("image") MultipartFile image) {
         if (!image.isEmpty()) {
@@ -119,6 +109,29 @@ public class ProductController {
         productService.deleteProduct(id);
 
         return "redirect:/product/list";
+    }
+    @GetMapping("/firstlist")
+    public String listProducts(HttpSession session, Model model, @RequestParam(value = "user_image", required = false, defaultValue = "/static/images/person/p1.jpg") String user_image) {
+        User u = (User) session.getAttribute("currentUser");
+        if (u != null) {
+            // 如果用户已登录，显示用户信息
+            model.addAttribute("username", u.getUsername());
+            model.addAttribute("userImage", u.getUser_image());
+            // 根据用户等级判断是否显示后台管理按钮
+            if (u.getGrade() == User.Grade.ADMIN) {
+                model.addAttribute("showAdminButton", true);
+            } else {
+                model.addAttribute("showAdminButton", false);
+            }
+        } else {
+            // 如果未登录，显示游客欢迎信息
+            model.addAttribute("username", "游客");
+            model.addAttribute("showAdminButton", false);
+        }
+        // 获取按 star 排序的前 3 个商品
+        List<Product> topProducts = productService.getTop3ProductsByStar();
+        model.addAttribute("products", topProducts);
+        return "shopping/list";
     }
 
 }

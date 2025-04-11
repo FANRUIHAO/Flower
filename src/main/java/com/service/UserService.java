@@ -82,6 +82,14 @@ public class UserService {
     public void updatePassword(User user) {
         userMapper.updateUserpassword(user);
     }
+
+    public User login(String username, String password) {
+        User user = userMapper.selectUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user; // 登录成功
+        }
+        return null; // 登录失败
+    }
 }
 
 

@@ -15,17 +15,14 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductMapper productMapper;
-
     public PageInfo<Product> selectProduct(String keyword,int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Product> list = productMapper.selectProduct(keyword);
         return new PageInfo<>(list);
     }
-
     public void deleteProduct(Integer id) {
         productMapper.deleteProduct(id);
     }
-
     public void saveProduct(Product p) {
         if (p.getId() != null) {
             productMapper.updateProduct(p);
@@ -33,15 +30,14 @@ public class ProductService {
             productMapper.insertProduct(p);
         }
     }
-
     public Product selectProductById(Integer id) {
         return productMapper.selectProductById(id);
 
     }
-
     public void updateProduct(Product p) {
         productMapper.updateProduct(p);
     }
-
-
+    public List<Product> getTop3ProductsByStar() {
+        return productMapper.getTop3ProductsByStar();
+    }
 }
