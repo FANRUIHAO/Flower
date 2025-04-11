@@ -12,7 +12,7 @@ public interface UserMapper{
     void deleteUser(Integer id);
     @Insert("insert into user(username,password,sex,grade,user_image) values(#{username},#{password},#{sex},#{grade},#{user_image})")
     void insertUser(User u);
-    @Update("update user set username=#{username}, password=#{password}, sex=#{sex}, grade=#{grade}, user_image=#{user_image} ,phone=#{phone} ,account=#{account} where id=#{id}")
+    @Update("update user set username=#{username}, password=#{password}, sex=#{sex}, grade=#{grade}, user_image=#{user_image} ,phone=#{phone} ,account=#{account} ,addr=#{addr} where id=#{id}")
     void updateUser(User u);
     @Select("select * from user where id=#{id}")
     User selectUserById(Integer id);
@@ -24,8 +24,8 @@ public interface UserMapper{
     void registUser(User u);
     @Update("update user set user_image=#{user_image} where id=#{id}")
     void updateUserImage(User user);
-
-
+    @Update("update user set password=#{password} where id=#{id}")
+    void updateUserpassword(User user);
 }
 
 

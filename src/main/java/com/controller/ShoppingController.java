@@ -385,13 +385,29 @@ public class ShoppingController {
 
         return "shopping/profile"; // 返回个人信息页面
     }
+    @PostMapping("/update-profile")
+    public String updateProfile(
+            @RequestParam(value = "avatar", required = false) MultipartFile avatar,
+            @RequestParam(value = "currentPassword", required = false) String currentPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam("phone") String phone,
+            @RequestParam("address") String address,
+            @RequestParam("gender") String gender,
+            HttpSession session,
+            Model model) {
 
-    @PostMapping("/update-avatar")
-    public String updateAvatar(@RequestParam("avatar") MultipartFile avatar, HttpSession session, Model model) {
-        if (!avatar.isEmpty()) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            throw new IllegalStateException("User is not found in session.");
+        }
+
+        boolean changesMade = false;
+        String message = "";
+
+        // 1. 处理头像上传
+        if (avatar != null && !avatar.isEmpty()) {
             try {
                 String fileName = avatar.getOriginalFilename();
-
                 String uploadDir = new File("target/classes/static/images/person/").getAbsolutePath();
                 File uploadDirFile = new File(uploadDir);
 
@@ -401,31 +417,67 @@ public class ShoppingController {
 
                 String filePath = uploadDir + File.separator + fileName;
                 File dest = new File(filePath);
-
                 avatar.transferTo(dest);
-
-                User user = (User) session.getAttribute("currentUser");
-                if (user == null) {
-                    throw new IllegalStateException("User is not found in session.");
-                }
 
                 String newAvatarPath = "/images/person/" + fileName + "?t=" + System.currentTimeMillis();
                 user.setUser_image(newAvatarPath);
-                userService.updateUserImage(user);
-                session.setAttribute("currentUser", user);
-
-                session.setAttribute("message", "Avatar updated successfully!");
-
-                model.addAttribute("newAvatarPath", newAvatarPath);
-
+                changesMade = true;
+                message += "头像更新成功！";
             } catch (IOException e) {
                 e.printStackTrace();
-                // Handle file upload error
                 return "redirect:/shopping/profile?error=upload";
             }
         }
-        return "redirect:/shopping/profile"; // If upload fails, redirect to the profile page
+
+        // 2. 处理密码修改
+        if (currentPassword != null && !currentPassword.isEmpty() &&
+                newPassword != null && !newPassword.isEmpty()) {
+
+            // 验证当前密码是否正确
+            if (!userService.verifyPassword(user.getUsername(), currentPassword)) {
+                session.setAttribute("message", "当前密码不正确！");
+                return "redirect:/shopping/profile";
+            }
+
+            // 更新密码
+            System.out.println(newPassword);
+            user.setPassword(newPassword);
+            userService.updatePassword(user);
+            changesMade = true;
+            message += " 密码更新成功！";
+        }
+
+        // 3. 更新其他信息
+        if (!phone.equals(user.getPhone())) {
+            user.setPhone(phone);
+            changesMade = true;
+            message += " 手机号更新成功！";
+        }
+
+        if (!address.equals(user.getAddr())) {
+            user.setAddr(address);
+            changesMade = true;
+            message += " 地址更新成功！";
+        }
+
+        if (!gender.equals(user.getSex())) {
+            user.setSex(gender);
+            changesMade = true;
+            message += " 性别更新成功！";
+        }
+
+        // 如果有任何更改，更新用户信息
+        if (changesMade) {
+            userService.updateUser(user);
+            session.setAttribute("currentUser", user);
+            session.setAttribute("message", message.trim());
+        } else {
+            session.setAttribute("message", "未检测到任何更改");
+        }
+
+        return "redirect:/shopping/profile";
     }
+
     @PostMapping("/uploadImage")
     @ResponseBody
     public Map<String, String> uploadImage(@RequestParam("uploadImage") MultipartFile uploadImage, HttpSession session) {
@@ -473,40 +525,6 @@ public class ShoppingController {
         System.out.println("Found " + results.size() + " products");
         return results;
     }
-//    @PostMapping("/addOrder")
-//    @ResponseBody
-//    public Map<String, Object> addOrder(@RequestParam String addr,
-//                                        @RequestParam String product,
-//                                        @RequestParam Integer num,
-//                                        @RequestParam String image,
-//                                        @RequestParam Double sum,
-//                                        @RequestParam String phone,
-//                                        HttpSession session) {
-//        Map<String, Object> response = new HashMap<>();
-//        User user = (User) session.getAttribute("currentUser");
-//        if (user == null) {
-//            response.put("status", "redirect");
-//            response.put("url", "/user/login");
-//            return response;
-//        }
-//        String username = user.getUsername();
-//        System.out.println("Username: " + username);
-//        System.out.println(111);
-//        Order order = new Order();
-//        order.setAddr(addr);
-//        order.setProduct(product);
-//        order.setNum(num);
-//        order.setImage(image);
-//        order.setSum(sum);
-//        order.setUsername(username);
-//        order.setPhone(phone);
-//        order.setUser_id(user.getId());
-//        order.setStatus("待发货");
-//        order.setOrdertime(String.valueOf(System.currentTimeMillis()));
-//        shoppingService.addOrder(order);
-//        response.put("status", "success");
-//        return response;
-//    }
     @GetMapping("/getUserAccount")
     @ResponseBody
     public Map<String, Object> getUserBalance(HttpSession session) {

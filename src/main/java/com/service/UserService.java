@@ -70,6 +70,18 @@ public class UserService {
     public void updateUser(User u) {
         userMapper.updateUser(u);
     }
+
+    public boolean verifyPassword(String username, String currentPassword) {
+        User user = userMapper.selectUserByUsername(username);
+        if (user == null) {
+            return false; // 用户不存在
+        }
+        return user.getPassword().equals(currentPassword); // 密码是否正确
+    }
+
+    public void updatePassword(User user) {
+        userMapper.updateUserpassword(user);
+    }
 }
 
 
