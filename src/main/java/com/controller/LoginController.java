@@ -18,17 +18,7 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private ProductController productController;
-//    @PostMapping("/login")
-//    public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-//        User user = userService.login(username, password);
-//        if (user != null) {
-//            session.setAttribute("currentUser", user);
-//            // 登录成功后跳转到 /product/firstlist
-//            return "redirect:/product/firstlist";
-//        } else {
-//            return "redirect:/user/login?error=true";
-//        }
-//    }
+
 @PostMapping("/login")
 public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
     User user = userService.login(username, password);

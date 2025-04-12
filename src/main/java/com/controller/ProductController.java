@@ -1,10 +1,11 @@
 package com.controller;
 
+import com.entity.Cart;
 import com.entity.Product;
 import com.entity.User;
 import com.github.pagehelper.PageInfo;
+import com.service.CartService;
 import com.service.ProductService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CartService cartService;
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize,
@@ -133,7 +137,67 @@ public class ProductController {
         model.addAttribute("products", topProducts);
         return "shopping/list";
     }
+    @PostMapping("/addToCart")
+    @ResponseBody
+    public Map<String, Object> addToCartFromHome(@RequestParam String productName,
+                                    @RequestParam Double productPrice,
+                                    @RequestParam String productImage,
+                                    @RequestParam Integer quantity,
+                                    HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
 
+        // Check if the user is logged in
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            response.put("status", "redirect");
+            response.put("url", "/user/login");
+            return response;
+        }
+
+        // Validate product price
+        if (productPrice == null || productPrice <= 0) {
+            response.put("status", "error");
+            response.put("message", "Invalid product price!");
+            return response;
+        }
+
+        // Validate quantity
+        if (quantity == null || quantity <= 0) {
+            response.put("status", "error");
+            response.put("message", "Quantity must be greater than 0!");
+            return response;
+        }
+
+        try {
+            // Check if the product already exists in the cart
+            Cart existingItem = cartService.findByUserIdAndProductName(user.getId(), productName);
+
+            if (existingItem != null) {
+                // Update the quantity if the product already exists
+                int newQuantity = existingItem.getCnum() + quantity;
+                existingItem.setCnum(newQuantity);
+                cartService.update(existingItem);
+                response.put("message", "Product quantity updated in cart!");
+            } else {
+                // Add a new product to the cart
+                Cart cartItem = new Cart();
+                cartItem.setUser_id(user.getId());
+                cartItem.setCname(productName);
+                cartItem.setCprice(productPrice);
+                cartItem.setImage_url(productImage);
+                cartItem.setCnum(quantity);
+                cartService.save(cartItem);
+                response.put("message", "Product added to cart successfully!");
+            }
+
+            response.put("status", "success");
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "Failed to add product to cart: " + e.getMessage());
+        }
+
+        return response;
+    }
 }
 
 
