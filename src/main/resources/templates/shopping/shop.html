@@ -642,50 +642,6 @@
         });
     }
 </script>
-<script>
-    $(document).ready(function() {
-        $('#filter-form').submit(function(event) {
-            event.preventDefault(); // 阻止表单默认提交
-
-            const category = $('#category').val();
-            const price = $('#price').val();
-
-            $.ajax({
-                url: '/shop/filter',
-                type: 'GET',
-                data: {
-                    category: category,
-                    price: price
-                },
-                success: function(products) {
-                    var productList = $('#product-list');
-                    productList.empty();
-                    products.forEach(function(product) {
-                        var productCard = `
-                            <div class="col-md-4">
-                                <div class="card mb-4">
-                                    <img src="${product.pro_image}" class="card-img-top" alt="Product Image">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.proname}</h5>
-                                        <p class="card-text">$${product.price}</p>
-                                        <button class="btn btn-primary add-to-cart-btn"
-                                                data-product-name="${product.proname}"
-                                                data-product-price="${product.price}"
-                                                data-product-image="${product.pro_image}"
-                                                data-quantity="1">Add to Cart</button>
-                                    </div>
-                                </div>
-                            </div>`;
-                        productList.append(productCard);
-                    });
-                },
-                error: function() {
-                    alert('Failed to load products.');
-                }
-            });
-        });
-    });
-</script>
 
 <script>
     // 搜索功能
