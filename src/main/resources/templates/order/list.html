@@ -19,10 +19,9 @@
 <form class="form-inline mb-4" action="/order/management">
     <div class="form-group mr-2">
         <label for="keyword" class="sr-only">User name</label>
-        <input type="text" name="keyword" class="form-control" id="keyword" placeholder="Product Name">
+        <input type="text" name="keyword" class="form-control" id="keyword" placeholder="请输入">
     </div>
-    <button type="submit" class="btn btn-primary mr-2">Search</button>
-    <button type="button" class="btn btn-success" id="addProductButton">Add New Product</button>
+    <button type="submit" class="btn btn-primary mr-2">搜索</button>
 </form>
 <table class="table table-striped">
     <thead>
@@ -161,41 +160,6 @@
             });
         });
     });
-    // $(document).ready(function() {
-    //     // 点击修改按钮时显示模态框
-    //     $(document).on('click', '.edit-status-btn', function() {
-    //         var orderId = $(this).data('id');
-    //         $('#orderId').val(orderId);
-    //         $('#editStatusModal').modal('show');
-    //     });
-    //
-    //     // 点击保存按钮时提交表单
-    //     $('#saveStatusBtn').click(function() {
-    //         var formData = $('#editStatusForm').serialize();
-    //
-    //         $.ajax({
-    //             url: '/order/updateStatus', // 你的后端处理URL
-    //             type: 'POST',
-    //             data: formData,
-    //             success: function(response) {
-    //                 if(response.success) {
-    //                     // 更新页面上的状态显示
-    //                     var newStatus = $('#status').val();
-    //                     $('.edit-status-btn[data-id="' + $('#orderId').val() + '"]')
-    //                         .closest('tr').find('td:eq(8)').text(newStatus);
-    //
-    //                     $('#editStatusModal').modal('hide');
-    //                     alert('状态更新成功');
-    //                 } else {
-    //                     alert('更新失败: ' + response.message);
-    //                 }
-    //             },
-    //             error: function() {
-    //                 alert('请求失败，请稍后重试');
-    //             }
-    //         });
-    //     });
-    // });
 </script>
 
 </html>

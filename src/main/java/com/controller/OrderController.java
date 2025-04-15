@@ -25,6 +25,7 @@ public class OrderController {
         if (u != null) {
             // 已登录用户
             model.addAttribute("username", u.getUsername());
+            model.addAttribute("userImage", u.getUser_image());
             model.addAttribute("showAdminButton", u.getGrade() == User.Grade.ADMIN);
             // 获取用户订单
             List<Order> orders = orderService.getOrdersByUserId(u.getId());

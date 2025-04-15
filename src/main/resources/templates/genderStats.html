@@ -13,14 +13,13 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
         $.get("/user/stat", function (result) {
-            // Assuming result is an array containing gender statistics data, e.g., [{name: 'male', value: 10}, {name: 'female', value: 20}]
             var categories = result.map(function(item) { return item.name; });
             var values = result.map(function(item) { return item.value; });
 
             // Specify the chart configuration and data
             var option = {
                 title: {
-                    text: 'Gender Statistics',
+                    text: '性别统计图',
                     left: 'center',
                     textStyle: {
                         color: '#333',
@@ -62,7 +61,7 @@
                 },
                 series: [
                     {
-                        name: 'Count',
+                        name: '数量',
                         type: 'bar',
                         data: values,
                         itemStyle: {

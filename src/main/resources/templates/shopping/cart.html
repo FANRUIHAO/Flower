@@ -109,9 +109,9 @@
 <body>
 <div class="container mt-5">
     <a href="/shopping/list" class="btn btn-super-pink mb-4">
-        <i class="fas fa-arrow-left"></i> Return to Home
+        <i class="fas fa-arrow-left"></i> 返回首页
     </a>
-    <h1 class="mb-4"><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+    <h1 class="mb-4"><i class="fas fa-shopping-cart"></i> 购物车</h1>
 
     <div th:if="${cartItems != null && !cartItems.isEmpty()}">
         <!-- Cart Header with Select All -->
@@ -119,14 +119,14 @@
             <div class="d-flex align-items-center">
                 <div class="form-check select-all">
                     <input class="form-check-input" type="checkbox" id="selectAll">
-                    <label class="form-check-label" for="selectAll">Select All</label>
+                    <label class="form-check-label" for="selectAll">选择全部</label>
                 </div>
-                <span>Product</span>
+                <span>商品</span>
             </div>
             <div class="text-right" style="width: 300px;">
-                <span>Quantity</span>
-                <span class="ml-4">Subtotal</span>
-                <span class="ml-4">Action</span>
+                <span>数量</span>
+                <span class="ml-4">总金额</span>
+                <span class="ml-4">删除</span>
             </div>
         </div>
 
@@ -137,7 +137,7 @@
             </div>
             <img th:src="${item.image_url}" alt="Product Image">
             <div class="product-info">
-                <h5 class="product-title" th:text="${item.cname}">Product Name</h5>
+                <h5 class="product-title" th:text="${item.cname}">商品名称</h5>
                 <div class="product-price" th:text="'¥' + ${item.cprice}">¥0.00</div>
             </div>
             <div class="quantity-control">
@@ -158,19 +158,19 @@
             <div class="d-flex align-items-center">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="selectAllFooter">
-                    <label class="form-check-label" for="selectAllFooter">Select All</label>
+                    <label class="form-check-label" for="selectAllFooter">全部选中</label>
                 </div>
                 <button class="btn btn-outline-danger btn-sm ml-3" onclick="deleteSelected()">
-                    <i class="fas fa-trash"></i> Delete Selected
+                    <i class="fas fa-trash"></i> 删除所选
                 </button>
             </div>
             <div class="d-flex align-items-center">
                 <div class="mr-4">
-                    Total (<span id="selected-count">0</span> items):
+                    共计 (<span id="selected-count">0</span> 件):
                     <span class="total-price" id="total-price">¥0.00</span>
                 </div>
                 <button class="btn btn-super-pink" onclick="checkoutSelected()">
-                    <i class="fas fa-shopping-bag"></i> Checkout Selected
+                    <i class="fas fa-shopping-bag"></i> 结算付款
                 </button>
             </div>
         </div>
