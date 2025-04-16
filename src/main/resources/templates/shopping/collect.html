@@ -64,7 +64,7 @@
                         </a>
                     </div>
                 </div>
-                <p class="mb-0 mr-3">欢迎回来，<span th:text="${username}"></span>！</p>
+                <p class="mb-0 mr-3" >欢迎回来，<span th:text="${username}"></span>！</p>
                 <img th:src="@{${userImage}}" alt="User Image" class="user-avatar">
                 <a href="/user/logout" class="btn btn-danger">注销</a>
                 <div class="admin-buttons mr-3" th:if="${showAdminButton}">
