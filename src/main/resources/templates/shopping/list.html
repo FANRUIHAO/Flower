@@ -51,7 +51,7 @@
         </div>
         <div class="navbar-right ml-auto d-flex align-items-center">
             <div th:if="${username == '游客' or username == null}">
-                <p class="mb-0 text-white">游客您好，请 <a href="/user/login" class="btn btn-primary btn-sm">登录</a> 以享受更多服务。</p>
+                <p class="mb-0 ">游客您好，请 <a href="/user/login" class="btn btn-primary btn-sm">登录</a> 以享受更多服务。</p>
             </div>
             <div th:if="${username != '游客' and username != null}" class="d-flex align-items-center">
                 <div class="navbar-right ml-auto d-flex align-items-center">
@@ -61,7 +61,7 @@
                         </a>
                     </div>
                 </div>
-                <p class="mb-0 mr-3 text-white">欢迎回来，<span th:text="${username}"></span>！</p>
+                <p class="mb-0 mr-3">欢迎回来，<span th:text="${username}"></span>！</p>
                 <img th:src="@{${userImage}}" alt="User Image" class="user-avatar">
                 <a href="/user/logout" class="btn btn-danger ml-2">注销</a>
                 <div class="admin-buttons ml-2" th:if="${showAdminButton}">
