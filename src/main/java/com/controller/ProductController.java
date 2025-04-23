@@ -1,10 +1,12 @@
 package com.controller;
 
 import com.entity.Cart;
+import com.entity.Comment;
 import com.entity.Product;
 import com.entity.User;
 import com.github.pagehelper.PageInfo;
 import com.service.CartService;
+import com.service.CommentsService;
 import com.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private CommentsService commentService;
     @RequestMapping("/list")
     public String list(@RequestParam(defaultValue = "1") int pageNum,
                        @RequestParam(defaultValue = "10") int pageSize,
@@ -198,6 +202,22 @@ public class ProductController {
 
         return response;
     }
+
+    @RequestMapping("/comments")
+    public String listComments(@RequestParam(defaultValue = "1") int pageNum,
+                               @RequestParam(defaultValue = "10") int pageSize,
+                               Model model) {
+        System.out.println("111");
+        PageInfo<Comment> pageInfo = commentService.getComments(pageNum, pageSize);
+
+        // Add data to the model
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("comments", pageInfo.getList());
+
+        // Return the view name
+        return "product/comment";
+    }
+
 }
 
 
