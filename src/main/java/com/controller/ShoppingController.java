@@ -594,4 +594,12 @@ public class ShoppingController {
 
         return response;
     }
+    @GetMapping("/notice")
+    @ResponseBody
+    public List<Notice> notice() {
+
+        List<Notice> notices = shoppingService.getAllNotices();
+        return notices;
+    }
+
 }

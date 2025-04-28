@@ -1,6 +1,7 @@
 package com.mapper;
 
 import com.entity.Collect;
+import com.entity.Notice;
 import com.entity.Order;
 import com.entity.Product;
 import org.apache.ibatis.annotations.*;
@@ -32,4 +33,6 @@ public interface ShoppingMapper{
     @Insert("insert into `order` (user_id, product, addr,  num, sum, status, ordertime, image, phone, username) " +
             "values (#{user_id}, #{product}, #{addr},  #{num}, #{sum}, #{status}, #{ordertime}, #{image}, #{phone}, #{username})")
     void addOrder(Order or);
+    @Select("select * from `notice` where id = 1")
+    List<Notice> getAllNotices();
 }

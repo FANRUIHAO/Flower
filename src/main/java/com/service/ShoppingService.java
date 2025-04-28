@@ -1,9 +1,6 @@
 package com.service;
 
-import com.entity.Cart;
-import com.entity.Collect;
-import com.entity.Order;
-import com.entity.Product;
+import com.entity.*;
 import com.mapper.CartMapper;
 import com.mapper.ShoppingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,5 +117,12 @@ public class ShoppingService {
     }
 
 
-
+    public List<Notice> getAllNotices() {
+        List<Notice> notices = shoppingMapper.getAllNotices();
+        if (notices == null || notices.isEmpty()) {
+            throw new RuntimeException("No notices found.");
+        }
+        System.out.println(notices);
+        return notices;
+    }
 }
