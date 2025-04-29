@@ -2,6 +2,7 @@ package com.mapper;
 
 import com.entity.Cart;
 import com.entity.Product;
+import com.entity.Record;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,5 +29,6 @@ public interface CartMapper {
             "</foreach>" +
             "</script>")
     List<Cart> findSelectedItemsByUserId(@Param("userId") Integer userId, @Param("itemIds") List<Integer> itemIds);
-
+    @Insert("insert into record (UserID, time, price) values (#{userId}, #{time}, #{price})")
+    void savePaymentRecord(Record paymentRecord);
 }

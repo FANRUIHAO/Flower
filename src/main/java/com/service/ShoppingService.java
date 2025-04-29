@@ -138,4 +138,9 @@ public class ShoppingService {
         }
         return phoneNumber;
     }
+
+    public void savePaymentRecord(Record paymentRecord) {
+        // Assuming you have a method in your mapper to save the payment record
+        cartMapper.savePaymentRecord(paymentRecord);
+    }
 }

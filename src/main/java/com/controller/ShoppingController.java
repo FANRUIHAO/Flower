@@ -17,10 +17,8 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -589,8 +587,13 @@ public class ShoppingController {
             List<Order> orders = orderService.createOrder(user, selectedItems, user.getAddr());
 
             // 扣款并更新账户
-            user.setAccount((int) (user.getAccount() - totalAmount));
-            userService.updateUser(user);
+            // 修改这部分代码
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Record paymentRecord = new Record();
+            paymentRecord.setUserId(user.getId());
+            paymentRecord.setPrice(totalAmount);
+            paymentRecord.setTime(sdf.format(new Date())); // 使用格式化字符串
+            shoppingService.savePaymentRecord(paymentRecord);
 
             response.put("status", "success");
             response.put("orderCount", orders.size());
@@ -614,15 +617,7 @@ public class ShoppingController {
         shoppingService.saveComplaint(complaint);
         return ResponseEntity.ok("Complaint submitted successfully");
     }
-//    @GetMapping("/contact")
-//    @ResponseBody
-//    public Map<String, String> getContactInfo() {
-//        Map<String, String> contactInfo = new HashMap<>();
-//        contactInfo.put("phone", "400-123-4567");
-//        contactInfo.put("email", "support@flowershop.com");
-//        contactInfo.put("workingHours", "周一至周五 9:00 - 18:00");
-//        return contactInfo;
-//    }
+
     @GetMapping("/contact")
     @ResponseBody
     public String getServicePhone() {
