@@ -115,12 +115,22 @@
                     <i class="fas fa-bullhorn"></i> 商城公告
                 </a>
         </div>
+        <div class="nav-contact">
+            <a href="#" class="navtext contact-btn-lg" data-toggle="modal" data-target="#contactModal">
+                <i class="fas fa-headset"></i> 联系客服
+            </a>
+        </div>
         <div class="navbar-right ml-auto d-flex align-items-center">
             <div th:if="${username == '游客' or username == null}">
                 <p class="mb-0 ">游客您好，请 <a href="/user/login" class="btn btn-primary btn-sm">登录</a> 以享受更多服务。</p>
             </div>
             <div th:if="${username != '游客' and username != null}" class="d-flex align-items-center">
                 <div class="navbar-right ml-auto d-flex align-items-center">
+                    <div class="complaint-button mr-3">
+                        <button class="btn btn-warning" data-toggle="modal" data-target="#complaintModal">
+                            <i class="fas fa-exclamation-circle"></i> 投诉
+                        </button>
+                    </div>
                     <div class="cart-button mr-3">
                         <a href="/shopping/cart">
                             <i class="fas fa-shopping-cart cart-icon"></i>
@@ -224,10 +234,61 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="complaintModal" tabindex="-1" role="dialog" aria-labelledby="complaintModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="complaintModalLabel">提交投诉</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="complaintContent">投诉内容</label>
+                <textarea class="form-control" id="complaintContent" name="content" rows="4" placeholder="请输入您的投诉内容"></textarea>
+            </div>
+            <div class="modal-footer"> <!-- 移到这里 -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="submitComplaint">提交投诉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 联系客服模态框 -->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">联系客服</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>客服电话：<strong id="servicePhone">加载中...</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 移除重复的jQuery加载，只保留这一个 -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+<script>
+    $('#contactModal').on('show.bs.modal', function () {
+        $.ajax({
+            url: '/shopping/contact',  // 你的后端Controller地址
+            method: 'GET',
+            success: function (data) {
+                $('#servicePhone').text(data); // 设置电话号码
+            },
+            error: function () {
+                $('#servicePhone').text('获取失败');
+            }
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
@@ -343,6 +404,33 @@
     // 当模态框显示时加载公告
     $('#announcementModal').on('show.bs.modal', function() {
         loadAnnouncements();
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#submitComplaint').click(function() {
+            const content = $('#complaintContent').val().trim();
+
+            if (!content) {
+                alert('投诉内容不能为空！');
+                return;
+            }
+
+            $.ajax({
+                url: '/shopping/complaint', // Backend endpoint for saving complaints
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ content: content }),
+                success: function(response) {
+                    alert('投诉提交成功！');
+                    $('#complaintModal').modal('hide');
+                    $('#complaintContent').val(''); // Clear the textarea
+                },
+                error: function() {
+                    alert('投诉提交失败，请稍后再试！');
+                }
+            });
+        });
     });
 </script>
 

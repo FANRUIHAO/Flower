@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -382,7 +383,11 @@ public class ShoppingController {
             model.addAttribute("username", "游客");
             model.addAttribute("showAdminButton", false);
         }
-
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+            model.addAttribute("message", message);
+            session.removeAttribute("message");  // 防止页面刷新重复显示
+        }
         return "shopping/profile"; // 返回个人信息页面
     }
     @PostMapping("/update-profile")
@@ -454,11 +459,13 @@ public class ShoppingController {
             message += " 手机号更新成功！";
         }
 
-        if (!address.equals(user.getAddr())) {
+        if (!Objects.equals(address, user.getAddr())) {
             user.setAddr(address);
             changesMade = true;
             message += " 地址更新成功！";
+
         }
+
 
         if (!gender.equals(user.getSex())) {
             user.setSex(gender);
@@ -601,5 +608,26 @@ public class ShoppingController {
         List<Notice> notices = shoppingService.getAllNotices();
         return notices;
     }
-
+    @PostMapping("/complaint")
+    @ResponseBody
+    public ResponseEntity<String> saveComplaint(@RequestBody Complaint complaint) {
+        shoppingService.saveComplaint(complaint);
+        return ResponseEntity.ok("Complaint submitted successfully");
+    }
+//    @GetMapping("/contact")
+//    @ResponseBody
+//    public Map<String, String> getContactInfo() {
+//        Map<String, String> contactInfo = new HashMap<>();
+//        contactInfo.put("phone", "400-123-4567");
+//        contactInfo.put("email", "support@flowershop.com");
+//        contactInfo.put("workingHours", "周一至周五 9:00 - 18:00");
+//        return contactInfo;
+//    }
+    @GetMapping("/contact")
+    @ResponseBody
+    public String getServicePhone() {
+        // Retrieve the phone number from the database using the service layer
+        String phoneNumber = shoppingService.getCustomerServicePhone();
+        return phoneNumber != null ? phoneNumber : "Phone number not available";
+    }
 }

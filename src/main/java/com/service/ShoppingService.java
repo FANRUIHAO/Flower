@@ -125,4 +125,17 @@ public class ShoppingService {
         System.out.println(notices);
         return notices;
     }
+
+    public void saveComplaint(Complaint complaint) {
+        // Assuming you have a method in your mapper to save the complaint
+        shoppingMapper.saveComplaint(complaint);
+    }
+    public String getCustomerServicePhone() {
+        // Assuming there is a method in the ShoppingMapper to fetch the phone number
+        String phoneNumber = shoppingMapper.getCustomerServicePhone();
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            throw new RuntimeException("Customer service phone number not found in the database.");
+        }
+        return phoneNumber;
+    }
 }

@@ -1,9 +1,6 @@
 package com.mapper;
 
-import com.entity.Collect;
-import com.entity.Notice;
-import com.entity.Order;
-import com.entity.Product;
+import com.entity.*;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 
@@ -35,4 +32,8 @@ public interface ShoppingMapper{
     void addOrder(Order or);
     @Select("select * from `notice` where id = 1")
     List<Notice> getAllNotices();
+    @Insert("insert into complaint (content) values (#{content})")
+    void saveComplaint(Complaint complaint);
+    @Select("select phone from service where id = 1")
+    String getCustomerServicePhone();
 }

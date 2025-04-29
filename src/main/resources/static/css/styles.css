@@ -223,3 +223,49 @@ nav ul li:hover::after {
     display: block; /* Ensure the icon is treated as a block element */
     line-height: 1; /* 确保图标垂直居中 */
 }
+.nav-contact {
+    margin-left: 15px;
+}
+
+.contact-btn-lg {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: rgba(40, 167, 69, 0.3);
+    border-radius: 20px;
+    color: white !important;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid #28a745;
+}
+
+.contact-btn-lg:hover {
+    background-color: #28a745;
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.contact-modal .modal-content {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    color: #000;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.contact-modal .modal-header {
+    border-bottom: none;
+}
+
+.contact-modal .modal-footer {
+    border-top: none;
+}
+
+.contact-modal .close {
+    color: #000;
+    opacity: 0.8;
+}
+
+.contact-modal .close:hover {
+    opacity: 1;
+}
