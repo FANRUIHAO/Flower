@@ -65,23 +65,23 @@
     <form class="form-inline mb-3" action="/user/list">
         <div class="form-group">
             <label for="exampleInputName2" class="sr-only">Name</label>
-            <input type="text" name="keyword" class="form-control mr-2" id="exampleInputName2" placeholder="Jane Doe">
+            <input type="text" name="keyword" class="form-control mr-2" id="exampleInputName2" placeholder="用户名">
         </div>
-        <button type="submit" class="btn-custom">Search</button>
-        <button type="button" class="btn-custom" id="addUserButton">Add</button>
+        <button type="submit" class="btn-custom">搜索</button>
+        <button type="button" class="btn-custom" id="addUserButton">添加</button>
     </form>
 
     <table class="table table-bordered">
         <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">UserImage</th>
-            <th scope="col">Username</th>
-            <th scope="col">Sex</th>
-            <th scope="col">Grade</th>
-            <th scope="col">Password</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col">用户头像</th>
+            <th scope="col">用户名</th>
+            <th scope="col">性别</th>
+            <th scope="col">账号等级</th>
+            <th scope="col">密码</th>
+            <th scope="col">编辑</th>
+            <th scope="col">删除</th>
         </tr>
         </thead>
         <tbody>
@@ -95,10 +95,10 @@
             <td th:text="${u.grade}"></td>
             <td th:text="${u.password}"></td>
             <td>
-                <a th:href="@{/user/edit(id=${u.id})}" class="btn-custom editUserButton" th:data-id="${u.id}">Edit</a>
+                <a th:href="@{/user/edit(id=${u.id})}" class="btn-custom editUserButton" th:data-id="${u.id}">编辑</a>
             </td>
             <td>
-                <a th:href="@{/user/delete(id=${u.id})}" class="btn-custom-red">Delete</a>
+                <a th:href="@{/user/delete(id=${u.id})}" class="btn-custom-red">删除</a>
             </td>
         </tr>
         </tbody>
