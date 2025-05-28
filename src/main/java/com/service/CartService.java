@@ -17,20 +17,15 @@ import java.util.List;
 public class CartService {
     @Autowired
     private CartMapper cartMapper;
-    @Autowired
-    private UserMapper userMapper;
     public void save(Cart cart) {
         cartMapper.save(cart);
     }
     public List<Cart> getCartItemsByUserId(Integer userId) {
         return cartMapper.findByUserId(userId);
     }
-
     public void deleteCartItem(Integer id) {
         cartMapper.deleteCartItem(id);
     }
-
-
     public boolean updateCartItemQuantity(Integer id, Integer quantity) {
         Cart cartItem = cartMapper.findById(id);
         if (cartItem != null) {

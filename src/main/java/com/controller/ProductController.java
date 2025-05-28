@@ -105,17 +105,14 @@ public class ProductController {
             Product existingProduct = productService.selectProductById(p.getId());
             p.setPro_image(existingProduct.getPro_image());
         }
-
         // 更新商品
         productService.updateProduct(p);
-
         // 跳转到商品列表页面
         return "redirect:/product/list";
     }
     @RequestMapping("/delete")
     public String delete(@RequestParam Integer id){
         productService.deleteProduct(id);
-
         return "redirect:/product/list";
     }
     @GetMapping("/firstlist")
@@ -150,7 +147,6 @@ public class ProductController {
                                     HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
-        // Check if the user is logged in
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             response.put("status", "redirect");
@@ -158,14 +154,12 @@ public class ProductController {
             return response;
         }
 
-        // Validate product price
         if (productPrice == null || productPrice <= 0) {
             response.put("status", "error");
             response.put("message", "Invalid product price!");
             return response;
         }
 
-        // Validate quantity
         if (quantity == null || quantity <= 0) {
             response.put("status", "error");
             response.put("message", "Quantity must be greater than 0!");
@@ -173,17 +167,14 @@ public class ProductController {
         }
 
         try {
-            // Check if the product already exists in the cart
             Cart existingItem = cartService.findByUserIdAndProductName(user.getId(), productName);
 
             if (existingItem != null) {
-                // Update the quantity if the product already exists
                 int newQuantity = existingItem.getCnum() + quantity;
                 existingItem.setCnum(newQuantity);
                 cartService.update(existingItem);
                 response.put("message", "Product quantity updated in cart!");
             } else {
-                // Add a new product to the cart
                 Cart cartItem = new Cart();
                 cartItem.setUser_id(user.getId());
                 cartItem.setCname(productName);
@@ -210,11 +201,10 @@ public class ProductController {
         System.out.println("111");
         PageInfo<Comment> pageInfo = commentService.getComments(pageNum, pageSize);
 
-        // Add data to the model
+
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("comments", pageInfo.getList());
 
-        // Return the view name
         return "product/comment";
     }
 

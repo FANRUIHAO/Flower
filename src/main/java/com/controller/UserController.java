@@ -52,27 +52,20 @@ public class UserController {
     }
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String sex,@RequestParam String confirmPassword, Model model) {
-        // Check if passwords match
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match");
             return "user/register";
         }
-
-        // Check if username already exists
         if (userService.findByUsername(username) != null) {
             model.addAttribute("error", "Username already exists");
             return "user/register";
         }
-
-        // Create new user and save to database
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setPassword(password); // Assuming password is already encrypted
         newUser.setSex(sex);
         newUser.setUser_image("/images/person/p1.jpg");
         userService.registerUser(newUser);
-
-        // Redirect to login page after successful registration
         return "redirect:/user/login";
 
     }
@@ -108,18 +101,21 @@ public class UserController {
         return "user/edit";
     }
     @RequestMapping("/update")
-    public String update(User u, @RequestParam("image") MultipartFile image, HttpSession session, Model model) {
+    public String update(User u, @RequestParam("image") MultipartFile image, HttpSession session) {
         if (!image.isEmpty()) {
             try {
-                String fileName = image.getOriginalFilename();
+                String fileName = image.getOriginalFilename();//获取文件名称，用于路径保存
+                //设置文件路径到文件夹下
                 String uploadDir = new File("target/classes/static/images/person/").getAbsolutePath();
+                //将文件路径转换为File对象，用于检查和创建目录
                 File uploadDirFile = new File(uploadDir);
-
+                //如果目录不存在，则创建目录
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
-
+                //设置完整的文件路径
                 String filePath = uploadDir + File.separator + fileName;
+                //将上传的文件image保存到指定路径
                 File dest = new File(filePath);
                 image.transferTo(dest);
 
@@ -133,9 +129,7 @@ public class UserController {
             User existingUser = userService.selectUserById(u.getId());
             u.setUser_image(existingUser.getUser_image());
         }
-
         userService.updateUser(u);
-
         // 仅当当前登录用户被更新时才更新会话
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null && currentUser.getId().equals(u.getId())) {

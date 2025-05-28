@@ -83,7 +83,7 @@ public class OrderController {
     public Map<String, Object> addComment(@RequestBody Map<String, Object> payload, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            // Retrieve the current user from the session
+
             User currentUser = (User) session.getAttribute("currentUser");
             if (currentUser == null) {
                 throw new IllegalStateException("用户未登录");
@@ -92,13 +92,11 @@ public class OrderController {
             Long orderId = Long.valueOf(payload.get("orderId").toString());
             String comment = payload.get("comment").toString();
 
-            // Retrieve the order to get the product name
             Order order = orderService.findById(orderId);
             if (order == null) {
                 throw new IllegalStateException("订单不存在");
             }
 
-            // Call the service to save the comment
             orderService.addComment(currentUser.getUsername(), order.getProduct(), comment);
             orderService.reviewOrder(orderId);
             response.put("success", true);

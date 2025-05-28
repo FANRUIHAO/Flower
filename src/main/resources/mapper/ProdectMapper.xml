@@ -7,7 +7,4 @@
             where instr(proname,#{keyword})>0
         </if>
     </select>
-<!--    <select id="selectall" resultType="com.entity.Product">-->
-<!--        select * from product-->
-<!--    </select>-->
 </mapper>

@@ -13,7 +13,7 @@ public class MyWebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         // 配置根路径跳转到 shopping/list.html
-        registry.addViewController("/").setViewName("shopping/list");
-        registry.addViewController("/user").setViewName("user/list");
+        registry.addViewController("/").setViewName("shopping/list");//用于配置根路径跳转到 shopping/list.html
+        registry.addViewController("/user").setViewName("user/list");//用于配置/user路径跳转到user/list.html
     }
 }

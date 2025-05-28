@@ -579,7 +579,7 @@
                     }
                 },
                 error: function() {
-                    alert('Failed to identify the flower.');
+                    alert('发生错误.');
                 }
             });
         });
@@ -594,7 +594,7 @@
 
         // 检查 productPrice 是否为有效数字
         if (isNaN(productPrice)) {
-            alert("Invalid product price!");
+            alert("发生错误!");
             return;
         }
         addToCart(productName, productPrice, productImage, quantity);
@@ -621,7 +621,7 @@
                 }
             },
             error: function(xhr, status, error) {
-                alert('An error occurred while adding the item to the cart: ' + error);
+                alert('发生错误: ' + error);
             }
         });
     }
@@ -638,7 +638,7 @@
         $.get("/cart/count", function(data) {
             $("#cart-count").text(data.count);
         }).fail(function() {
-            console.error("Failed to update cart count.");
+            console.error("发生错误.");
         });
     }
 </script>

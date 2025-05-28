@@ -19,13 +19,12 @@ public class CommentsService {
     }
 
     public PageInfo<Comment> getComments(int pageNum, int pageSize) {
-        // Start pagination
         PageHelper.startPage(pageNum, pageSize);
-
-        // Fetch all comments from the mapper
         List<Comment> comments = commentsMapper.getAllComments();
-
-        // Wrap the result in PageInfo for pagination metadata
         return new PageInfo<>(comments);
+    }
+
+    public void deleteCommentById(Long id) {
+        commentsMapper.deleteCommentById(id);
     }
 }

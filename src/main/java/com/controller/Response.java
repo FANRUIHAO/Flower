@@ -3,7 +3,7 @@ package com.controller;
 public class Response {
     private String status;
     private String message;
-    private Object data; // 可选，用于携带额外数据
+    private Object data;
 
     public Response(String status, String message) {
         this.status = status;
@@ -17,7 +17,6 @@ public class Response {
         this.data = data;
     }
 
-    // Getters and Setters
     public String getStatus() {
         return status;
     }

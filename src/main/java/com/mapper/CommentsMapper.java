@@ -10,4 +10,6 @@ public interface CommentsMapper {
     List<Comment> getCommentsByProductName(String productName);
     @Select("select * from comment")
     List<Comment> getAllComments();
+    @Select("delete from comment where id = #{id}")
+    void deleteCommentById(Long id);
 }

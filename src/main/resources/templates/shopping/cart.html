@@ -153,7 +153,6 @@
             </div>
         </div>
 
-        <!-- Cart Footer with Total and Checkout -->
         <div class="cart-footer d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <div class="form-check">
@@ -179,10 +178,10 @@
     <div th:if="${cartItems == null || cartItems.isEmpty()}">
         <div class="text-center py-5">
             <i class="fas fa-shopping-cart fa-4x mb-3" style="color: #ddd;"></i>
-            <h4>Your cart is empty</h4>
+            <h4>您的购物车是空的</h4>
             <p class="text-muted">You haven't added any items to your cart yet</p>
             <a href="/shopping/list" class="btn btn-super-pink mt-3">
-                <i class="fas fa-shopping-bag"></i> Start Shopping
+                <i class="fas fa-shopping-bag"></i> 开始购物
             </a>
         </div>
     </div>
@@ -192,22 +191,22 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirm Checkout</h5>
+                <h5 class="modal-title">验证支付</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="checkoutMessage">Are you sure you want to checkout the selected items?</p>
+                <p id="checkoutMessage">确定要结算所选的商品?</p>
                 <div id="accountInfo" class="mt-3"></div>
                 <div class="form-group mt-3">
-                    <label for="checkoutPassword">Enter your login password to confirm:</label>
+                    <label for="checkoutPassword">输入您的密码以验证:</label>
                     <input type="password" class="form-control" id="checkoutPassword" placeholder="Password">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-super-pink" id="confirmCheckout">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-super-pink" id="confirmCheckout">验证</button>
             </div>
         </div>
     </div>
@@ -238,7 +237,7 @@
         });
 
         if (selectedIds.length === 0) {
-            alert('Please select at least one item to checkout');
+            alert('至少选择一件商品');
             return;
         }
 
@@ -246,7 +245,7 @@
         $('#checkoutModal').modal('show');
 
         // 显示总金额
-        $('#checkoutMessage').html(`<strong>Total Amount: ¥${totalAmount.toFixed(2)}</strong>`);
+        $('#checkoutMessage').html(`<strong>总金额: ¥${totalAmount.toFixed(2)}</strong>`);
 
         // 获取用户余额信息
         $.get('/shopping/getUserAccount', function(response) {
@@ -256,14 +255,14 @@
             if (account >= totalAmount) {
                 accountInfo.html(`
                 <div class="alert alert-success">
-                    Your account: ¥${account.toFixed(2)} (Sufficient)
+                    您的余额: ¥${account.toFixed(2)} (充足)
                 </div>
             `);
                 $('#confirmCheckout').prop('disabled', false);
             } else {
                 accountInfo.html(`
                 <div class="alert alert-danger">
-                    Your account: ¥${account.toFixed(2)} (Insufficient)
+                    您的余额: ¥${account.toFixed(2)} (不足)
                 </div>
             `);
                 $('#confirmCheckout').prop('disabled', true);
@@ -275,7 +274,7 @@
             const password = $('#checkoutPassword').val().trim();
 
             if (!password) {
-                alert("Please enter your login password.");
+                alert("请输入您的密码.");
                 return;
             }
 
@@ -291,14 +290,14 @@
                 data: JSON.stringify(data),
                 success: function(response) {
                     if (response.status === 'success') {
-                        alert('Order placed successfully!');
+                        alert('下单成功!');
                         location.reload();
                     } else {
                         alert(response.message || 'Checkout failed');
                     }
                 },
                 error: function() {
-                    alert('Error processing your request');
+                    alert('失败');
                 }
             });
         });
@@ -340,7 +339,7 @@
                 }
             },
             error: function(xhr) {
-                alert('Failed to update quantity. Please try again.');
+                alert('更新数量失败，请重新尝试.');
                 location.reload();
             }
         });
@@ -410,11 +409,10 @@
         });
 
         if (selectedIds.length === 0) {
-            alert('Please select at least one item to delete');
+            alert('至少选中一件商品进行删除');
             return;
         }
-
-        if (confirm('Are you sure you want to delete the selected items?')) {
+        if (confirm('你确定要删除已选中的商品?')) {
             // 发送AJAX请求批量删除
             $.ajax({
                 url: '/shopping/removeMultipleFromCart',
@@ -429,15 +427,12 @@
                         selectedItems.forEach(item => {
                             item.remove();
                         });
-
                         // 更新总价和选中数量
                         updateTotalPrice();
-
                         // 取消"全选"复选框的选中状态
                         document.querySelectorAll('#selectAll, #selectAllFooter').forEach(checkbox => {
                             checkbox.checked = false;
                         });
-
                         // 检查购物车是否为空
                         checkEmptyCart();
                     } else {
@@ -445,7 +440,7 @@
                     }
                 },
                 error: function(xhr) {
-                    alert('An error occurred while deleting items. Please try again.');
+                    alert('发生错误.');
                     console.error('Delete error:', xhr.responseText);
                 }
             });
@@ -454,5 +449,3 @@
 </script>
 </body>
 </html>
-
-

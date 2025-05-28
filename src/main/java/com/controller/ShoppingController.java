@@ -90,7 +90,6 @@ public class ShoppingController {
             response.put("url", "/user/login");
             return response;
         }
-        // Check if the product is already in the favorite list
         boolean isCollected = shoppingService.isProductCollected(user.getUsername(), productName);
         response.put("status", "success");
         response.put("isCollected", isCollected);
@@ -123,7 +122,6 @@ public class ShoppingController {
             response.put("url", "/user/login");
             return response;
         }
-        // Remove product from favorite logic
         shoppingService.removeFromFavorite(user.getUsername(), productName);
 
         response.put("status", "success");
@@ -138,21 +136,18 @@ public class ShoppingController {
                                          @RequestParam Integer quantity,
                                          HttpSession session) {
         Map<String, Object> response = new HashMap<>();
-
         // 验证价格
         if (productPrice.isNaN() || productPrice.isInfinite() || productPrice <= 0) {
             response.put("status", "error");
             response.put("message", "Invalid product price!");
             return response;
         }
-
         // 验证数量
         if (quantity <= 0) {
             response.put("status", "error");
             response.put("message", "Quantity must be greater than 0!");
             return response;
         }
-
         // 检查用户登录状态
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
@@ -160,7 +155,6 @@ public class ShoppingController {
             response.put("url", "/user/login");
             return response;
         }
-
         try {
             // 检查购物车中是否已有该商品
             Cart existingItem = cartService.findByUserIdAndProductName(user.getId(), productName);
@@ -182,21 +176,16 @@ public class ShoppingController {
                 cartService.save(cartItem);
                 response.put("message", "Product added to cart successfully!");
             }
-
             // 获取更新后的购物车商品总数
             int cartItemCount = cartService.getCartItemCount(user.getId());
-
             response.put("status", "success");
             response.put("cartItemCount", cartItemCount);
-
         } catch (Exception e) {
             response.put("status", "error");
             response.put("message", "Failed to update cart: " + e.getMessage());
         }
-
         return response;
     }
-    // Spring Boot 示例
     @PostMapping("/removeMultipleFromCart")
     @ResponseBody
     public Map<String, Object> removeMultipleFromCart(@RequestParam("ids") List<Long> itemIds, HttpSession session) {
@@ -204,10 +193,8 @@ public class ShoppingController {
         try {
             // 获取用户ID
             Integer userId = (Integer) session.getAttribute("userId");
-
             // 批量删除购物车商品
             cartService.removeMultipleItems(userId, itemIds);
-
             result.put("status", "success");
             return result;
         } catch (Exception e) {
@@ -343,13 +330,11 @@ public class ShoppingController {
         if (user == null) {
             return "redirect:/user/login";
         }
-
         List<Cart> cartItems = cartService.getCartItemsByUserId(user.getId());
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("showAdminButton", user.getGrade() == User.Grade.ADMIN);
         return "shopping/cart";
-
     }
 
     @GetMapping("/removeFromCart")
@@ -396,8 +381,7 @@ public class ShoppingController {
             @RequestParam("phone") String phone,
             @RequestParam("address") String address,
             @RequestParam("gender") String gender,
-            HttpSession session,
-            Model model) {
+            HttpSession session) {
 
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
@@ -561,7 +545,6 @@ public class ShoppingController {
             response.put("url", "/user/login");
             return response;
         }
-
         try {
             List<Integer> itemIds = (List<Integer>) requestData.get("itemIds");
             String password = (String) requestData.get("password");
@@ -587,7 +570,6 @@ public class ShoppingController {
             List<Order> orders = orderService.createOrder(user, selectedItems, user.getAddr());
 
             // 扣款并更新账户
-            // 修改这部分代码
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Record paymentRecord = new Record();
             paymentRecord.setUserId(user.getId());
@@ -601,13 +583,11 @@ public class ShoppingController {
             response.put("status", "error");
             response.put("message", e.getMessage());
         }
-
         return response;
     }
     @GetMapping("/notice")
     @ResponseBody
     public List<Notice> notice() {
-
         List<Notice> notices = shoppingService.getAllNotices();
         return notices;
     }
@@ -615,14 +595,13 @@ public class ShoppingController {
     @ResponseBody
     public ResponseEntity<String> saveComplaint(@RequestBody Complaint complaint) {
         shoppingService.saveComplaint(complaint);
-        return ResponseEntity.ok("Complaint submitted successfully");
+        return ResponseEntity.ok("投诉提交成功");
     }
 
     @GetMapping("/contact")
     @ResponseBody
     public String getServicePhone() {
-        // Retrieve the phone number from the database using the service layer
         String phoneNumber = shoppingService.getCustomerServicePhone();
-        return phoneNumber != null ? phoneNumber : "Phone number not available";
+        return phoneNumber != null ? phoneNumber : "电话号码发生错误";
     }
 }
