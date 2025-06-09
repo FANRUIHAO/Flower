@@ -163,7 +163,7 @@
                     <p class="card-text text-muted" th:text="${product.description} ?: '暂无描述'"></p>
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <p class="card-text mb-0 font-weight-bold" style="font-size: 1.3rem; color: #e83e8c;" th:text="'$'+${product.price}"></p>
+                            <p class="card-text mb-0 font-weight-bold" style="font-size: 1.3rem; color: #e83e8c;" th:text="'¥'+${product.price}"></p>
                             <div class="rating">
                                 <span th:each="i : ${#numbers.sequence(1,5)}">
                                     <i th:class="${i <= product.star} ? 'fas fa-star text-warning' : 'far fa-star text-warning'"></i>
